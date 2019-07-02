@@ -8,7 +8,7 @@
         
         
         <link rel="shortcut icon" href="../../img/favicon.ico">
-        <title>Mkdocs - osljw</title>
+        <title>mkdocs - osljw</title>
         <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
@@ -241,7 +241,7 @@
 </li>
                                     
 <li class="active">
-    <a href="./">Mkdocs</a>
+    <a href="./">mkdocs</a>
 </li>
                                 </ul>
                             </li>
@@ -352,11 +352,29 @@
         <div class="container">
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#mkdocs">mkdocs</a></li>
+        <li class="main "><a href="#math">math</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-</div>
+<h1 id="mkdocs">mkdocs</h1>
+<pre><code>mkdocs gh-deploy
+</code></pre>
+
+<h1 id="math">math</h1>
+<pre><code>pip install https://github.com/mitya57/python-markdown-math/archive/master.zip
+</code></pre>
+
+<pre><code># test_math/config.yaml
+
+extra_javascript: 
+    - https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML
+
+markdown_extensions:
+    - mdx_math
+        enable_dollar_delimiter: True
+</code></pre></div>
         </div>
 
         <footer class="col-md-12">
