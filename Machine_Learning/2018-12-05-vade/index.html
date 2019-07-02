@@ -8,7 +8,7 @@
         
         
         <link rel="shortcut icon" href="../../img/favicon.ico">
-        <title>vade - My Docs</title>
+        <title>vade - osljw</title>
         <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
@@ -39,7 +39,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="../..">My Docs</a>
+                    <a class="navbar-brand" href="../..">osljw</a>
                 </div>
 
                 <!-- Expanded navigation -->
@@ -239,6 +239,10 @@
 <li >
     <a href="../../jekyll/2018-11-19-jekyll blog/">jekyll blog</a>
 </li>
+                                    
+<li >
+    <a href="../../jekyll/mkdocs/">Mkdocs</a>
+</li>
                                 </ul>
                             </li>
                             <li class="dropdown">
@@ -378,12 +382,14 @@
 </code></pre>
 
 <p>p_c_z的计算， 将z带入到高斯混合模型中， 高斯混合模型中的每个多元高斯分布这里是按照各维度不相关进行计算的(变成概率乘积，在exp里变成求和)， 把theta_p即高斯混合模型中每个高斯分布前的系数提到exp里进行计算。</p>
-<p>$$
+<p>
+<script type="math/tex; mode=display">
 \begin{aligned}
-f(x) &amp;=\theta*\frac{1}{\sqrt{{2\pi}}\times\sigma}e^{\frac{1}{2}(\frac{x-\mu}{\sigma})^2} \
-&amp;= e^{\Big[log\theta - log(\sqrt{{2\pi}}\times\sigma) - \frac{1}{2}(\frac{x-\mu}{\sigma})^2 \Big]}
+f(x) &=\theta*\frac{1}{\sqrt{{2\pi}}\times\sigma}e^{\frac{1}{2}(\frac{x-\mu}{\sigma})^2} \\
+&= e^{\Big[log\theta - log(\sqrt{{2\pi}}\times\sigma) - \frac{1}{2}(\frac{x-\mu}{\sigma})^2 \Big]}
 \end{aligned}
-$$</p>
+</script>
+</p>
 <ul>
 <li>q_c_x: shape为(batch_size, n_centroid)， 每个样本x属于各个类的概率， </li>
 <li>z： shape为(batch_size, latent_dim, n_centroid)</li>
@@ -391,53 +397,63 @@ $$</p>
 </ul>
 <p>多元高斯分布推导和计算： https://zhuanlan.zhihu.com/p/36522776</p>
 <p>vae</p>
-<p>$$
+<p>
+<script type="math/tex; mode=display">
 \begin{aligned}
-ELBO &amp;=\mathcal{L} \
-&amp;= E_{q(z|x^{(i)})} \big[ \log p(x^{(i)} \vert z) \big] \
-&amp;+ E_{q(z|x^{(i)})} \big[ \log p(z) \big] \
-&amp;- E_{q(z|x^{(i)})} \big[ \log q(z |x^{(i)}) \big]
+ELBO &=\mathcal{L} \\
+&= E_{q(z|x^{(i)})} \big[ \log p(x^{(i)} \vert z) \big] \\
+&+ E_{q(z|x^{(i)})} \big[ \log p(z) \big] \\
+&- E_{q(z|x^{(i)})} \big[ \log q(z |x^{(i)}) \big]
 \end{aligned}
-$$</p>
+</script>
+</p>
 <p>vade</p>
-<p>$$
+<p>
+<script type="math/tex; mode=display">
 \begin{aligned}
-ELBO &amp;=\mathcal{L} \
-&amp;= E_{q(z,c|x^{(i)})} \big[ \log p(x^{(i)} \vert z) \big] \
-&amp;+ E_{q(z,c|x^{(i)})} \big[ \log p(z|c) \big] \
-&amp;+ E_{q(z,c|x^{(i)})} \big[ \log p(c) \big] \
-&amp;- E_{q(z,c|x^{(i)})} \big[ \log q(z|x^{(i)}) \big] \
-&amp;- E_{q(z,c|x^{(i)})} \big[ \log q(c|x^{(i)}) \big] \
+ELBO &=\mathcal{L} \\
+&= E_{q(z,c|x^{(i)})} \big[ \log p(x^{(i)} \vert z) \big] \\
+&+ E_{q(z,c|x^{(i)})} \big[ \log p(z|c) \big] \\
+&+ E_{q(z,c|x^{(i)})} \big[ \log p(c) \big] \\
+&- E_{q(z,c|x^{(i)})} \big[ \log q(z|x^{(i)}) \big] \\
+&- E_{q(z,c|x^{(i)})} \big[ \log q(c|x^{(i)}) \big] \\
 \end{aligned}
-$$</p>
+</script>
+</p>
 <ul>
 <li>$q(c|x^{(i)})$ 求解</li>
 </ul>
-<p>$$
+<p>
+<script type="math/tex; mode=display">
 q(c|x) = E_{q(z|x^{(i)})}[p(c|z])]
-$$</p>
+</script>
+</p>
 <ul>
 <li>
 <p>$E_{q(z,c|x^{(i)})} \big[ \log p(z|c) \big]$求解</p>
-<p>$$
+<p>
+<script type="math/tex; mode=display">
 \begin{aligned}
 E_{q(z,c|x^{(i)})} \big[ \log p(z|c) \big] 
-&amp;= \int \sum_{c=1}^{K} q(c|x)q(z|x) \log p(z|c)dz \
-&amp;= \sum_{c=1}^{K} [q(c|x) \int q(z|x) \log p(z|c)dz] \
-&amp;= 
+&= \int \sum_{c=1}^{K} q(c|x)q(z|x) \log p(z|c)dz \\
+&= \sum_{c=1}^{K} [q(c|x) \int q(z|x) \log p(z|c)dz] \\
+&= 
 \end{aligned}
-$$</p>
+</script>
+</p>
 </li>
 <li>
 <p>$E_{q(z,c|x^{(i)})} \big[ \log p(c) \big]$求解</p>
-<p>$$
+<p>
+<script type="math/tex; mode=display">
 \begin{aligned}
 E_{q(z,c|x^{(i)})} \big[ \log p(z|c) \big]
-&amp;= \int \sum_{c=1}^{K} q(z|x)q(c|x) \log p(c)dz \
-&amp;= \int q(z|x) \sum_{c=1}^{K} \big[q(c|x) \log p(c)]dz \
-&amp;= \sum_{c=1}^{K} \big[q(c|x) \log p(c)]
+&= \int \sum_{c=1}^{K} q(z|x)q(c|x) \log p(c)dz \\
+&= \int q(z|x) \sum_{c=1}^{K} \big[q(c|x) \log p(c)]dz \\
+&= \sum_{c=1}^{K} \big[q(c|x) \log p(c)]
 \end{aligned}
-$$</p>
+</script>
+</p>
 </li>
 </ul></div>
         </div>
@@ -451,6 +467,7 @@ $$</p>
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
         <script src="../../js/base.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" defer></script>
         <script src="../../search/main.js" defer></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
