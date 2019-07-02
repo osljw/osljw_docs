@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Markdown学习笔记 - My Docs</title>
+        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+
+                <!-- Collapsed navigation -->
+                <div class="navbar-header">
+                    <!-- Expander button -->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="../..">My Docs</a>
+                </div>
+
+                <!-- Expanded navigation -->
+                <div class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li >
+                                <a href="../..">Welcome to MkDocs</a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Machine Learning <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../Machine_Learning/2018-11-19-tensorflow_estimator/">Tensorflow Estimator</a>
+</li>
+                                    
+<li >
+    <a href="../../Machine_Learning/2018-11-22-vae/">vae</a>
+</li>
+                                    
+<li >
+    <a href="../../Machine_Learning/2018-11-27-unsupervised learning/">Unsupervised Clustering</a>
+</li>
+                                    
+<li >
+    <a href="../../Machine_Learning/2018-12-03-tensorflow_test/">tensorflow test</a>
+</li>
+                                    
+<li >
+    <a href="../../Machine_Learning/2018-12-05-vade/">vade</a>
+</li>
+                                    
+<li >
+    <a href="../../Machine_Learning/2019-03-01-data input/">data input</a>
+</li>
+                                    
+<li >
+    <a href="../../Machine_Learning/2019-06-20-tensorflow/">2019 06 20 tensorflow</a>
+</li>
+                                    
+<li >
+    <a href="../../Machine_Learning/2019-06-21-tensorflow_eager/">2019 06 21 tensorflow eager</a>
+</li>
+                                    
+<li >
+    <a href="../../Machine_Learning/2019-11-19-keras tensorflow/">Tensorflow Keras</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Algorithm <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../algorithm/2018-12-11-binary tree/">jekyll blog</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Android <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../android/2019-04-21-scrcpy/">2019 04 21 scrcpy</a>
+</li>
+                                    
+<li >
+    <a href="../../android/2019-05-11-android/">2019 05 11 android</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Bigdata <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../bigdata/2019-06-04-hive/">2019 06 04 hive</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Cpp <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../cpp/2019-04-17-build_system/">����</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-04-17-regress_test/">2019 04 17 regress test</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-04-18-project/">����</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-04-22-time/">2019 04 22 time</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-04-23-thrift/">2019 04 23 thrift</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-04-29-multi thread/">2019 04 29 multi thread</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-05-07-ptmalloc/">2019 05 07 ptmalloc</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-05-10-inotify/">2019 05 10 inotify</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-05-20-boost/">2019 05 20 boost</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-05-20-smart_ptr/">2019 05 20 smart ptr</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-05-21-google/">2019 05 21 google</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-06-10-stl/">2019 06 10 stl</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Ctr <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../ctr/2019-02-17-xdeepfm/">xdeepfm</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Domain algo <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../domain algo/2019-01-08-bandit/">bandit</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Gcc <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../gcc/2019-04-18-ldd/">����</a>
+</li>
+                                    
+<li >
+    <a href="../../gcc/2019-04-19-gdb/">2019 04 19 gdb</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hack <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../hack/2019-06-12-sql inject/">2019 06 12 sql inject</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Illusion <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../illusion/2019-06-26-illusion/">2019 06 26 illusion</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Java <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../java/2019-05-13-reflection/">2019 05 13 reflection</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Jekyll <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../jekyll/2018-11-19-jekyll blog/">jekyll blog</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Linux <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../linux/2018-12-29-shell/">shell</a>
+</li>
+                                    
+<li >
+    <a href="../../linux/2019-05-05-route/">2019 05 05 route</a>
+</li>
+                                    
+<li >
+    <a href="../../linux/2019-05-17-vim/">2019 05 17 vim</a>
+</li>
+                                    
+<li >
+    <a href="../../linux/2019-05-18-network/">2019 05 18 network</a>
+</li>
+                                    
+<li >
+    <a href="../../linux/2019-05-30-git/">2019 05 30 git</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown active">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Notes <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li class="active">
+    <a href="./">Markdown学习笔记</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Python <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../python/2019-02-01-pandas/">pandas</a>
+</li>
+                                    
+<li >
+    <a href="../../python/2019-05-05-pip/">2019 05 05 pip</a>
+</li>
+                                    
+<li >
+    <a href="../../python/2019-05-17-os/">2019 05 17 os</a>
+</li>
+                                    
+<li >
+    <a href="../../python/2019-05-22-mouse_keyboard/">2019 05 22 mouse keyboard</a>
+</li>
+                                    
+<li >
+    <a href="../../python/2020-03-01-sns/">sns</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Spark <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../spark/2018-12-29-pyspark/">spark</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Web <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../web/2019-05-24-electron/">2019 05 24 electron</a>
+</li>
+                                    
+<li >
+    <a href="../../web/2019-05-31-d3/">2019 05 31 d3</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li >
+                                <a rel="next" href="../../linux/2019-05-30-git/">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li >
+                                <a rel="prev" href="../../python/2019-02-01-pandas/">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#vscode-markdown">vscode markdown</a></li>
+        <li class="main "><a href="#1">1.标题</a></li>
+        <li class="main "><a href="#2">2.段落和换行</a></li>
+        <li class="main "><a href="#3">3.引用</a></li>
+        <li class="main "><a href="#4">4.列表</a></li>
+        <li class="main "><a href="#5">5.链接</a></li>
+        <li class="main "><a href="#6">6.强调</a></li>
+        <li class="main "><a href="#7">7.数学公式</a></li>
+            <li><a href="#_1">行内数学公式</a></li>
+            <li><a href="#_2">数据公式</a></li>
+            <li><a href="#_3">分式</a></li>
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<blockquote>
+<p>We believe that writing is about content, about what you want to say – not about fancy formatting.
+我们坚信写作写的是内容，所思所想，而不是花样格式。
+                                               — Ulysses for Mac</p>
+</blockquote>
+<h2 id="vscode-markdown">vscode markdown</h2>
+<ul>
+<li>插件： markdown + math</li>
+<li>实时预览： ctrl + shift + v</li>
+</ul>
+<h2 id="1">1.标题</h2>
+<pre><code># 一级标题, 也可以使用====(至少使用两个=)
+## 二级标题 也可以使用----(至少使用两个-)
+### 三级标题
+#### 四级标题
+##### 五级标题
+</code></pre>
+
+<h2 id="2">2.段落和换行</h2>
+<ul>
+<li>
+<p>空行代表段落</p>
+</li>
+<li>
+<p>若某一行只包含空格和制表符，则该行也会被视为空行</p>
+</li>
+<li>
+<p>段落内可以使用\<br>换行</p>
+</li>
+</ul>
+<h2 id="3">3.引用</h2>
+<ul>
+<li>
+<p>>表示引用，eg：</p>
+<blockquote>
+<p>要有最朴素的生活与最爱搜索的梦想。</p>
+</blockquote>
+</li>
+<li>
+<p>区块引用可以嵌套（例如：引用内的引用），只要根据层次加上不同数量的 >,eg:</p>
+<blockquote>
+<p>《论语》有云：</p>
+<blockquote>
+<p>"有朋自远方来，不亦乐乎？"</p>
+</blockquote>
+</blockquote>
+</li>
+<li>
+<p>引用的区块内也可使用其他的 Markdown 语法，包括标题、列表、代码区块等，但是每行都要在前面加上对应的引用符号，eg:</p>
+</li>
+</ul>
+<blockquote>
+<p>开始引用</p>
+<blockquote>
+<p><code>def print_num(num):
+   for i in range(100):
+       print(i)</code></p>
+</blockquote>
+</blockquote>
+<ul>
+<li>代码块引用方法：三个反引号(反引号位于键盘1的左边，即~键)或者四个空格或者Tab</li>
+</ul>
+<h2 id="4">4.列表</h2>
+<ul>
+<li>Markdown 支持有序列表和无序列表。</li>
+<li>无序列表使用星号、加号或是减号作为列表标记</li>
+<li>有序列表则使用数字接着一个英文句点：</li>
+<li>列表项目可以包含多个段落，每个项目下的段落都必须缩进 4 个空格或是 1 个制表符</li>
+</ul>
+<h2 id="5">5.链接</h2>
+<ul>
+<li>Markdown 支持两种形式的链接语法： 行内式和参考式两种形式。不管是哪一种，链接文字都是用 [方括号] 来标记</li>
+<li>
+<p>行内式：只要在方块括号后面紧接着圆括号并插入网址链接即可，
+  如果你还想要加上链接的 title 文字，只要在网址后面，用双引号把 title 文字包起来即可，例如：
+  <code>[夜雨微寒的博客](https://xugongli.github.io)
+  [夜雨微寒的博客](https://xugongli.github.io, "Soaringsoul's Blog")</code>
+  效果如下：
+  <a href="https://xugongli.github.io">夜雨微寒的博客</a>
+  <a href="https://xugongli.github.io" title="Soaringsoul's Blog">夜雨微寒的博客</a>
+  也可以使用相对路径：
+  eg:
+  <code>[素年锦时](/life)
+  [读书笔记](/booknotes)</code>
+  效果如下：
+  <a href="/life">素年锦时</a>
+  <a href="/booknotes">读书笔记</a></p>
+</li>
+<li>
+<p>参考式：</p>
+<p>链接文字的括号后面再接上另一个方括号,而在第二个方括号里面要填入用以辨识链接的标记，</p>
+<p>接着，在文件的任意处，你可以把这个标记的链接内容定义出来：eg:
+<code>这是[夜雨微寒][id]的博客
+[id]: https://xugongli.github.io  "夜雨微寒的博客"</code></p>
+<p>效果如下：
+这是[夜雨微寒][id]的博客</p>
+<p>[id]: https://xugongli.github.io  "夜雨微寒的博客"</p>
+</li>
+</ul>
+<h2 id="6">6.强调</h2>
+<pre><code>将 *文字* 变成斜体
+将 _文字_ 变成斜体
+</code></pre>
+
+<blockquote>
+<p>将 <em>文字</em> 变成斜体</p>
+</blockquote>
+<pre><code>将**文字**变成加粗
+将__文字__变成加粗
+</code></pre>
+
+<blockquote>
+<p>将 <strong>文字</strong> 变成加粗</p>
+</blockquote>
+<h2 id="7">7.数学公式</h2>
+<h3 id="_1">行内数学公式</h3>
+<pre><code>$a \ne 0$
+</code></pre>
+
+<p>行内数学公式$a \ne 0$</p>
+<h3 id="_2">数据公式</h3>
+<pre><code>$$a \ne 0$$
+</code></pre>
+
+<p>$$a \ne 0$$ </p>
+<h3 id="_3">分式</h3>
+<pre><code>$$ a = \frac{\hat{A}}{2} $$
+</code></pre>
+
+<p>$$ a = \frac{\hat{A}}{2} $$</p></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js" defer></script>
+        <script src="../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

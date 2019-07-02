@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>2019 04 19 gdb - My Docs</title>
+        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+
+                <!-- Collapsed navigation -->
+                <div class="navbar-header">
+                    <!-- Expander button -->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="../..">My Docs</a>
+                </div>
+
+                <!-- Expanded navigation -->
+                <div class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li >
+                                <a href="../..">Welcome to MkDocs</a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Machine Learning <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../Machine_Learning/2018-11-19-tensorflow_estimator/">Tensorflow Estimator</a>
+</li>
+                                    
+<li >
+    <a href="../../Machine_Learning/2018-11-22-vae/">vae</a>
+</li>
+                                    
+<li >
+    <a href="../../Machine_Learning/2018-11-27-unsupervised learning/">Unsupervised Clustering</a>
+</li>
+                                    
+<li >
+    <a href="../../Machine_Learning/2018-12-03-tensorflow_test/">tensorflow test</a>
+</li>
+                                    
+<li >
+    <a href="../../Machine_Learning/2018-12-05-vade/">vade</a>
+</li>
+                                    
+<li >
+    <a href="../../Machine_Learning/2019-03-01-data input/">data input</a>
+</li>
+                                    
+<li >
+    <a href="../../Machine_Learning/2019-06-20-tensorflow/">2019 06 20 tensorflow</a>
+</li>
+                                    
+<li >
+    <a href="../../Machine_Learning/2019-06-21-tensorflow_eager/">2019 06 21 tensorflow eager</a>
+</li>
+                                    
+<li >
+    <a href="../../Machine_Learning/2019-11-19-keras tensorflow/">Tensorflow Keras</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Algorithm <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../algorithm/2018-12-11-binary tree/">jekyll blog</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Android <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../android/2019-04-21-scrcpy/">2019 04 21 scrcpy</a>
+</li>
+                                    
+<li >
+    <a href="../../android/2019-05-11-android/">2019 05 11 android</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Bigdata <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../bigdata/2019-06-04-hive/">2019 06 04 hive</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Cpp <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../cpp/2019-04-17-build_system/">����</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-04-17-regress_test/">2019 04 17 regress test</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-04-18-project/">����</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-04-22-time/">2019 04 22 time</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-04-23-thrift/">2019 04 23 thrift</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-04-29-multi thread/">2019 04 29 multi thread</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-05-07-ptmalloc/">2019 05 07 ptmalloc</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-05-10-inotify/">2019 05 10 inotify</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-05-20-boost/">2019 05 20 boost</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-05-20-smart_ptr/">2019 05 20 smart ptr</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-05-21-google/">2019 05 21 google</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-06-10-stl/">2019 06 10 stl</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Ctr <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../ctr/2019-02-17-xdeepfm/">xdeepfm</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Domain algo <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../domain algo/2019-01-08-bandit/">bandit</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown active">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Gcc <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../2019-04-18-ldd/">����</a>
+</li>
+                                    
+<li class="active">
+    <a href="./">2019 04 19 gdb</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hack <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../hack/2019-06-12-sql inject/">2019 06 12 sql inject</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Illusion <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../illusion/2019-06-26-illusion/">2019 06 26 illusion</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Java <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../java/2019-05-13-reflection/">2019 05 13 reflection</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Jekyll <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../jekyll/2018-11-19-jekyll blog/">jekyll blog</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Linux <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../linux/2018-12-29-shell/">shell</a>
+</li>
+                                    
+<li >
+    <a href="../../linux/2019-05-05-route/">2019 05 05 route</a>
+</li>
+                                    
+<li >
+    <a href="../../linux/2019-05-17-vim/">2019 05 17 vim</a>
+</li>
+                                    
+<li >
+    <a href="../../linux/2019-05-18-network/">2019 05 18 network</a>
+</li>
+                                    
+<li >
+    <a href="../../linux/2019-05-30-git/">2019 05 30 git</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Notes <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../notes/2018-04-24-leran_markdown/">Markdown学习笔记</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Python <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../python/2019-02-01-pandas/">pandas</a>
+</li>
+                                    
+<li >
+    <a href="../../python/2019-05-05-pip/">2019 05 05 pip</a>
+</li>
+                                    
+<li >
+    <a href="../../python/2019-05-17-os/">2019 05 17 os</a>
+</li>
+                                    
+<li >
+    <a href="../../python/2019-05-22-mouse_keyboard/">2019 05 22 mouse keyboard</a>
+</li>
+                                    
+<li >
+    <a href="../../python/2020-03-01-sns/">sns</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Spark <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../spark/2018-12-29-pyspark/">spark</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Web <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../web/2019-05-24-electron/">2019 05 24 electron</a>
+</li>
+                                    
+<li >
+    <a href="../../web/2019-05-31-d3/">2019 05 31 d3</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li >
+                                <a rel="next" href="../2019-04-18-ldd/">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li >
+                                <a rel="prev" href="../../hack/2019-06-12-sql inject/">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#symbol-table">symbol table</a></li>
+        <li class="main "><a href="#libc">查看libc版本</a></li>
+        <li class="main "><a href="#_1">多线程</a></li>
+        <li class="main "><a href="#_2">调试信息输出到文件</a></li>
+        <li class="main "><a href="#_3">打印内存</a></li>
+        <li class="main "><a href="#debugging-information-in-separate-files">Debugging Information in Separate Files</a></li>
+        <li class="main "><a href="#pretty-printing">Pretty printing</a></li>
+        <li class="main "><a href="#libheap">Libheap</a></li>
+        <li class="main "><a href="#chap">chap</a></li>
+        <li class="main "><a href="#_4">性能分析</a></li>
+            <li><a href="#gnu-gprof">gnu Gprof</a></li>
+            <li><a href="#google-gperftools">google gperftools</a></li>
+        <li class="main "><a href="#bin">bin</a></li>
+        <li class="main "><a href="#valgrind">valgrind</a></li>
+        <li class="main "><a href="#_5">内存泄露</a></li>
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<p>title</p>
+<p>soaringsoul</p>
+<p>2019-04-19 16:00:23</p>
+<h1 id="symbol-table">symbol table</h1>
+<p>-g set are debugging symbols ELF linking symbols</p>
+<p># core debug -g build backtrace(bt) 查看调用栈信息 frame 查看栈帧</p>
+<pre><code>print std::shared_ptr ad_account;
+print ((AdAccount*)ad_account)-&gt;cache_flag
+</code></pre>
+
+<p>查看共享链接库是否有符号表</p>
+<p>info sharedlibrary</p>
+<p>~/.gdbinit中设置 set verbose on， 当启动gdb时输出信息会打印是否找到了共享库的符号表</p>
+<p>Reading symbols from /lib/x86_64-linux-gnu/libc.so.6...(no debugging symbols found)...done</p>
+<p>查看分离符号表加载路径</p>
+<pre><code>show debug-file-directory
+set debug-file-directory &lt;dir&gt;
+</code></pre>
+
+<h1 id="libc">查看libc版本</h1>
+<p>ls -l /lib/x86_64-linux-gnu/libc.so.6</p>
+<h1 id="_1">多线程</h1>
+<p>info threads thread 切换到目标线程</p>
+<h1 id="_2">调试信息输出到文件</h1>
+<p>set logging file thread.txt</p>
+<p>set logging on</p>
+<p>thread apply all bt</p>
+<p>set logging off</p>
+<h1 id="_3">打印内存</h1>
+<p>x/6000sb <addr>
+打印6000字节， s表示按字符串打印， b表示字节</p>
+<h1 id="debugging-information-in-separate-files">Debugging Information in Separate Files</h1>
+<p>/usr/lib/debug</p>
+<h1 id="pretty-printing">Pretty printing</h1>
+<p>(gdb) python execfile("printers.py")</p>
+<p>Python scripting is not supported in this copy of GDB
+重新编译gdb http://tromey.com/blog/?p=494</p>
+<p>part1 http://tromey.com/blog/?p=524
+part2 http://tromey.com/blog/?p=546</p>
+<h1 id="libheap">Libheap</h1>
+<p>https://github.com/cloudburst/libheap/blob/master/docs/UserGuide.md</p>
+<h1 id="chap">chap</h1>
+<p>https://github.com/vmware/chap/blob/master/USERGUIDE.md</p>
+<h1 id="_4">性能分析</h1>
+<h2 id="gnu-gprof">gnu Gprof</h2>
+<p>https://sourceware.org/binutils/docs/gprof/index.html</p>
+<h2 id="google-gperftools">google gperftools</h2>
+<h1 id="bin">bin</h1>
+<p>objdump</p>
+<pre><code># 查看符号表
+objdump -t &lt;bin&gt;
+
+SYMBOL TABLE:
+0000000000400238 l    d  .interp    0000000000000000              .interp
+0000000000400254 l    d  .note.ABI-tag  0000000000000000              .note.ABI-tag
+0000000000400278 l    d  .hash  0000000000000000              .hash
+0000000000409208 l    d  .dynsym    0000000000000000              .dynsym
+0000000000426ef0 l    d  .dynstr    0000000000000000              .dynstr
+00000000004673ea l    d  .gnu.version   0000000000000000              .gnu.version
+
+# 第一个域为符号地址, eg: 0000000000400238
+# 第二个域为符号的flag，用多个字符表示，eg: l    d
+# 第三个域为符号所在的section, eg: .interp
+# 第四个域为符号的对齐或者大小
+# 第五个域为符号的名称
+</code></pre>
+
+<p>readelf</p>
+<p>addr2line</p>
+<p>代码段位于低地址内存，</p>
+<p>.so共享链接库位于高地址内存， 共享库代码在物理内存中只会被装载一次， 不同进程将虚拟地址映射到相同的物理地址实现共享，
+共享库中存在全局变量时，通过copy on write模式拷贝受影响的页面到新的物理内存，将虚拟地址重新映射到新的物理地址上</p>
+<p><img alt="" src="../media/03216a183d0c3bb4732ce979a2af6770.png" /></p>
+<h1 id="valgrind">valgrind</h1>
+<p>Invalid read of size 1 表明非法内存访问</p>
+<p>Address 0xf5bc3f0 is 0 bytes inside a block of size 33 free'd
+表明内存之前是如何被释放的</p>
+<p>Block was alloc'd at 表明内存之前是如何被分配的</p>
+<p><img alt="" src="../media/9883f9af131f85c4309bd326428321dd.png" /></p>
+<p>Warning: set address range perms:</p>
+<p>触发示例： mprotect， mmap， munmap</p>
+<p>undefined – most likely a new allocation</p>
+<p>noaccess – relates to deallocation</p>
+<h1 id="_5">内存泄露</h1>
+<p>https://unix.stackexchange.com/questions/36450/how-can-i-find-a-memory-leak-of-a-running-process</p>
+<p>1 Find out the PID of the process which causing memory leak.</p>
+<p>2 capture the /proc/PID/smaps and save into some file like BeforeMemInc.txt.</p>
+<p>3 wait till memory gets increased.</p>
+<p>4 capture again /proc/PID/smaps and save it has afterMemInc.txt</p>
+<p>5 find the difference between first smaps and 2nd smaps, e. g. with</p>
+<p><code>diff -u beforeMemInc.txt afterMemInc.txt</code></p>
+<p>6 note down the address range where memory got increased, for example:</p>
+<pre><code>  beforeMemInc.txt            afterMemInc.txt
+---------------------------------------------------
+2b3289290000-2b3289343000   2b3289290000-2b3289343000  #ADDRESS
+Shared_Clean:    0 kB       Shared_Clean:    0 kB          
+Shared_Dirty:    0 kB       Shared_Dirty:    0 kB
+Private_Clean:   0 kB       Private_Clean:   0 kB
+Private_Dirty:  28 kB       Private_Dirty:  36 kB  
+Referenced:     28 kB       Referenced:     36 kB
+Anonymous:      28 kB       Anonymous:      36 kB  #INCREASE MEM
+AnonHugePages:   0 kB       AnonHugePages:   0 kB
+Swap:            0 kB       Swap:            0 kB
+KernelPageSize:  4 kB       KernelPageSize:  4 kB
+MMUPageSize:     4 kB       MMUPageSize:     4 kB
+Locked:          0 kB       Locked:          0 kB
+VmFlags: rd wr mr mw me ac  VmFlags: rd wr mr mw me ac
+</code></pre>
+
+<p>7 use GDB to dump memory on running process or get the coredump using gcore -o process</p>
+<p>8 I used gdb on running process to dump the memory to some file.</p>
+<pre><code>gdb -p PID
+dump memory ./dump_outputfile.dump 0x2b3289290000 0x2b3289343000
+</code></pre>
+
+<p>9 now, use strings command or hexdump -C to print the dump_outputfile.dump</p>
+<p>10 You get readable form where you can locate those strings into your source code.</p></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js" defer></script>
+        <script src="../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

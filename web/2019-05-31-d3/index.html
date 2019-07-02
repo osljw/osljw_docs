@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>2019 05 31 d3 - My Docs</title>
+        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+
+                <!-- Collapsed navigation -->
+                <div class="navbar-header">
+                    <!-- Expander button -->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="../..">My Docs</a>
+                </div>
+
+                <!-- Expanded navigation -->
+                <div class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li >
+                                <a href="../..">Welcome to MkDocs</a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Machine Learning <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../Machine_Learning/2018-11-19-tensorflow_estimator/">Tensorflow Estimator</a>
+</li>
+                                    
+<li >
+    <a href="../../Machine_Learning/2018-11-22-vae/">vae</a>
+</li>
+                                    
+<li >
+    <a href="../../Machine_Learning/2018-11-27-unsupervised learning/">Unsupervised Clustering</a>
+</li>
+                                    
+<li >
+    <a href="../../Machine_Learning/2018-12-03-tensorflow_test/">tensorflow test</a>
+</li>
+                                    
+<li >
+    <a href="../../Machine_Learning/2018-12-05-vade/">vade</a>
+</li>
+                                    
+<li >
+    <a href="../../Machine_Learning/2019-03-01-data input/">data input</a>
+</li>
+                                    
+<li >
+    <a href="../../Machine_Learning/2019-06-20-tensorflow/">2019 06 20 tensorflow</a>
+</li>
+                                    
+<li >
+    <a href="../../Machine_Learning/2019-06-21-tensorflow_eager/">2019 06 21 tensorflow eager</a>
+</li>
+                                    
+<li >
+    <a href="../../Machine_Learning/2019-11-19-keras tensorflow/">Tensorflow Keras</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Algorithm <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../algorithm/2018-12-11-binary tree/">jekyll blog</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Android <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../android/2019-04-21-scrcpy/">2019 04 21 scrcpy</a>
+</li>
+                                    
+<li >
+    <a href="../../android/2019-05-11-android/">2019 05 11 android</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Bigdata <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../bigdata/2019-06-04-hive/">2019 06 04 hive</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Cpp <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../cpp/2019-04-17-build_system/">����</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-04-17-regress_test/">2019 04 17 regress test</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-04-18-project/">����</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-04-22-time/">2019 04 22 time</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-04-23-thrift/">2019 04 23 thrift</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-04-29-multi thread/">2019 04 29 multi thread</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-05-07-ptmalloc/">2019 05 07 ptmalloc</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-05-10-inotify/">2019 05 10 inotify</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-05-20-boost/">2019 05 20 boost</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-05-20-smart_ptr/">2019 05 20 smart ptr</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-05-21-google/">2019 05 21 google</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-06-10-stl/">2019 06 10 stl</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Ctr <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../ctr/2019-02-17-xdeepfm/">xdeepfm</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Domain algo <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../domain algo/2019-01-08-bandit/">bandit</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Gcc <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../gcc/2019-04-18-ldd/">����</a>
+</li>
+                                    
+<li >
+    <a href="../../gcc/2019-04-19-gdb/">2019 04 19 gdb</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hack <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../hack/2019-06-12-sql inject/">2019 06 12 sql inject</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Illusion <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../illusion/2019-06-26-illusion/">2019 06 26 illusion</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Java <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../java/2019-05-13-reflection/">2019 05 13 reflection</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Jekyll <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../jekyll/2018-11-19-jekyll blog/">jekyll blog</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Linux <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../linux/2018-12-29-shell/">shell</a>
+</li>
+                                    
+<li >
+    <a href="../../linux/2019-05-05-route/">2019 05 05 route</a>
+</li>
+                                    
+<li >
+    <a href="../../linux/2019-05-17-vim/">2019 05 17 vim</a>
+</li>
+                                    
+<li >
+    <a href="../../linux/2019-05-18-network/">2019 05 18 network</a>
+</li>
+                                    
+<li >
+    <a href="../../linux/2019-05-30-git/">2019 05 30 git</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Notes <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../notes/2018-04-24-leran_markdown/">Markdown学习笔记</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Python <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../python/2019-02-01-pandas/">pandas</a>
+</li>
+                                    
+<li >
+    <a href="../../python/2019-05-05-pip/">2019 05 05 pip</a>
+</li>
+                                    
+<li >
+    <a href="../../python/2019-05-17-os/">2019 05 17 os</a>
+</li>
+                                    
+<li >
+    <a href="../../python/2019-05-22-mouse_keyboard/">2019 05 22 mouse keyboard</a>
+</li>
+                                    
+<li >
+    <a href="../../python/2020-03-01-sns/">sns</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Spark <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../spark/2018-12-29-pyspark/">spark</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown active">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Web <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../2019-05-24-electron/">2019 05 24 electron</a>
+</li>
+                                    
+<li class="active">
+    <a href="./">2019 05 31 d3</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li >
+                                <a rel="next" href="../2019-05-24-electron/">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="disabled">
+                                <a rel="prev" >
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#selection">selection</a></li>
+        <li class="main "><a href="#updateenterexit">update、enter、exit</a></li>
+        <li class="main "><a href="#call">call</a></li>
+        <li class="main "><a href="#brush">brush</a></li>
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<hr />
+<p>layout:     post
+title:      "d3"
+subtitle:   "d3"
+date:       2019-05-31 14:27:18
+author:     "none"
+header-img: "img/posts/default_post.jpg"
+catalog: true
+tags:
+    - tag</p>
+<hr />
+<p>https://github.com/d3/d3/blob/master/API.md</p>
+<h1 id="selection">selection</h1>
+<pre><code>append  添加html元素
+attr    添加或修改元素属性
+</code></pre>
+
+<p>使用示例</p>
+<pre><code class="javascript">d3.select(&quot;#timeline3&quot;)
+.append(&quot;svg&quot;)
+.attr(&quot;width&quot;, 500)
+
+// 添加了svg标签，并设定了属性
+&lt;div id=&quot;timeline3&quot;&gt;
+    &lt;svg witdth=&quot;500&quot;&gt; &lt;/svg&gt; 
+&lt;/div&gt;
+</code></pre>
+
+<h1 id="updateenterexit">update、enter、exit</h1>
+<p>update 选中有数据对应的元素</p>
+<p>enter 选中有数据但没有的元素，可以append添加相应的元素</p>
+<p>exit 选中没有数据对应的元素， 可以使用remove删除元素</p>
+<h1 id="call">call</h1>
+<p>call的参数为函数， 函数的第一个参数为selection</p>
+<pre><code class="javascript">// 函数定义
+function name(selection, first, last) {
+  selection
+      .attr(&quot;first-name&quot;, first)
+      .attr(&quot;last-name&quot;, last);
+}
+
+d3.selectAll(&quot;div&quot;).call(name, &quot;John&quot;, &quot;Snow&quot;);
+// This is roughly equivalent to:
+name(d3.selectAll(&quot;div&quot;), &quot;John&quot;, &quot;Snow&quot;);
+</code></pre>
+
+<h1 id="brush">brush</h1>
+<p>Select a one- or two-dimensional region using the mouse or touch</p>
+<p>https://github.com/d3/d3-brush</p>
+<pre><code>var x = d3.scale.linear()
+        .domain([timeBegin, timeEnd])
+        .range([0, w]);
+
+var brush = d3.svg.brush()
+                    .x(x)
+                    .on(&quot;brush&quot;, display);
+</code></pre>
+
+<p>.(x)</p>
+<pre><code class="javascript">        &lt;script type=&quot;text/javascript&quot;&gt;
+        // lanes 三个时间线
+        var lanes = [&quot;Chinese&quot;,&quot;Japanese&quot;,&quot;Korean&quot;],
+            laneLength = lanes.length,
+            timeBegin = 0,
+            timeEnd = 2000;
+
+        // margin
+        // miniHeight, 每个时间线占12个单位高度， 
+        var m = [20, 15, 15, 120], //top right bottom left
+            w = 960 - m[1] - m[3],
+            h = 500 - m[0] - m[2],
+            miniHeight = laneLength * 12 + 50,
+            mainHeight = h - miniHeight - 50;
+
+        // w=960， miniHeight=3*12+50, mainHeight=500-miniHeight-50
+        // scales 坐标轴 (x1, y1) 为main, (x, y2)为mini
+        // main 的坐标轴x1在display中使用， mini的x在设置画刷时使用
+        // y轴映射时间线的id
+        var x = d3.scale.linear()
+                .domain([timeBegin, timeEnd])
+                .range([0, w]);
+        var x1 = d3.scale.linear()
+                .range([0, w]);
+        var y1 = d3.scale.linear()
+                .domain([0, laneLength])
+                .range([0, mainHeight]);
+        var y2 = d3.scale.linear()
+                .domain([0, laneLength])
+                .range([0, miniHeight]);
+
+        // svg标签， width=960， height=500
+        var chart = d3.select(&quot;body&quot;)
+                    .append(&quot;svg&quot;)
+                    .attr(&quot;width&quot;, w + m[1] + m[3])
+                    .attr(&quot;height&quot;, h + m[0] + m[2])
+                    .attr(&quot;class&quot;, &quot;chart&quot;);
+
+        // defs 定义svg的预定义元素， 
+        chart.append(&quot;defs&quot;).append(&quot;clipPath&quot;)
+            .attr(&quot;id&quot;, &quot;clip&quot;)
+            .append(&quot;rect&quot;)
+            .attr(&quot;width&quot;, w)
+            .attr(&quot;height&quot;, mainHeight);
+
+        // main chart, 坐标系translate(120, 20)
+        var main = chart.append(&quot;g&quot;)
+                    .attr(&quot;transform&quot;, &quot;translate(&quot; + m[3] + &quot;,&quot; + m[0] + &quot;)&quot;)
+                    .attr(&quot;width&quot;, w)
+                    .attr(&quot;height&quot;, mainHeight)
+                    .attr(&quot;class&quot;, &quot;main&quot;);
+
+        // mini chart, 坐标系translate(120, 349)
+        var mini = chart.append(&quot;g&quot;)
+                    .attr(&quot;transform&quot;, &quot;translate(&quot; + m[3] + &quot;,&quot; + (mainHeight + m[0]) + &quot;)&quot;)
+                    .attr(&quot;width&quot;, w)
+                    .attr(&quot;height&quot;, miniHeight)
+                    .attr(&quot;class&quot;, &quot;mini&quot;);
+
+        // items的每个数据为字典，
+        // main char 根据数据构建line， line将main chart 三条时间线分隔
+        // 分割线的起点为(x1,y1), 终点为(x2, y2)
+        // m[1]为right margin
+        //main lanes and texts
+        main.append(&quot;g&quot;).selectAll(&quot;.laneLines&quot;)
+            .data(items)
+            .enter().append(&quot;line&quot;)
+            .attr(&quot;x1&quot;, m[1])
+            .attr(&quot;y1&quot;, function(d) {return y1(d.lane);})
+            .attr(&quot;x2&quot;, w)
+            .attr(&quot;y2&quot;, function(d) {return y1(d.lane);})
+            .attr(&quot;stroke&quot;, &quot;lightgray&quot;)
+
+        // main chart 时间线的名称标签
+        main.append(&quot;g&quot;).selectAll(&quot;.laneText&quot;)
+            .data(lanes)
+            .enter().append(&quot;text&quot;)
+            .text(function(d) {return d;})
+            .attr(&quot;x&quot;, -m[1])
+            .attr(&quot;y&quot;, function(d, i) {return y1(i + .5);})
+            .attr(&quot;dy&quot;, &quot;.5ex&quot;)
+            .attr(&quot;text-anchor&quot;, &quot;end&quot;)
+            .attr(&quot;class&quot;, &quot;laneText&quot;);
+
+        //mini lanes and texts
+        mini.append(&quot;g&quot;).selectAll(&quot;.laneLines&quot;)
+            .data(items)
+            .enter().append(&quot;line&quot;)
+            .attr(&quot;x1&quot;, m[1])
+            .attr(&quot;y1&quot;, function(d) {return y2(d.lane);})
+            .attr(&quot;x2&quot;, w)
+            .attr(&quot;y2&quot;, function(d) {return y2(d.lane);})
+            .attr(&quot;stroke&quot;, &quot;lightgray&quot;);
+
+        mini.append(&quot;g&quot;).selectAll(&quot;.laneText&quot;)
+            .data(lanes)
+            .enter().append(&quot;text&quot;)
+            .text(function(d) {return d;})
+            .attr(&quot;x&quot;, -m[1])
+            .attr(&quot;y&quot;, function(d, i) {return y2(i + .5);})
+            .attr(&quot;dy&quot;, &quot;.5ex&quot;)
+            .attr(&quot;text-anchor&quot;, &quot;end&quot;)
+            .attr(&quot;class&quot;, &quot;laneText&quot;);
+
+        var itemRects = main.append(&quot;g&quot;)
+                            .attr(&quot;clip-path&quot;, &quot;url(#clip)&quot;);
+
+        // 矩形背景 和 文字标签
+        //mini item rects
+        mini.append(&quot;g&quot;).selectAll(&quot;miniItems&quot;)
+            .data(items)
+            .enter().append(&quot;rect&quot;)
+            .attr(&quot;class&quot;, function(d) {return &quot;miniItem&quot; + d.lane;})
+            .attr(&quot;x&quot;, function(d) {return x(d.start);})
+            .attr(&quot;y&quot;, function(d) {return y2(d.lane + .5) - 5;})
+            .attr(&quot;width&quot;, function(d) {return x(d.end - d.start);})
+            .attr(&quot;height&quot;, 10);
+
+        //mini labels
+        mini.append(&quot;g&quot;).selectAll(&quot;.miniLabels&quot;)
+            .data(items)
+            .enter().append(&quot;text&quot;)
+            .text(function(d) {return d.id;})
+            .attr(&quot;x&quot;, function(d) {return x(d.start);})
+            .attr(&quot;y&quot;, function(d) {return y2(d.lane + .5);})
+            .attr(&quot;dy&quot;, &quot;.5ex&quot;);
+
+        //brush
+        var brush = d3.svg.brush()
+                            .x(x)
+                            .on(&quot;brush&quot;, display);
+
+        // mini chart 上设置brush
+        mini.append(&quot;g&quot;)
+            .attr(&quot;class&quot;, &quot;x brush&quot;)
+            .call(brush)
+            .selectAll(&quot;rect&quot;)
+            .attr(&quot;y&quot;, 1)
+            .attr(&quot;height&quot;, miniHeight - 1);
+
+        display();
+
+        // 当brush的&quot;brush&quot;事件发生是, 调用该函数
+        function display() {
+            // brush.extent() 获取画刷范围， 过滤数据
+            var rects, labels,
+                minExtent = brush.extent()[0],
+                maxExtent = brush.extent()[1],
+                visItems = items.filter(function(d) {return d.start &lt; maxExtent &amp;&amp; d.end &gt; minExtent;});
+
+            mini.select(&quot;.brush&quot;)
+                .call(brush.extent([minExtent, maxExtent]));
+
+            // 设置main chart的横坐标轴
+            x1.domain([minExtent, maxExtent]);
+
+            //update main item rects
+            // itemRects 设置有clip-path， 
+            rects = itemRects.selectAll(&quot;rect&quot;)
+                    .data(visItems, function(d) { return d.id; })
+                .attr(&quot;x&quot;, function(d) {return x1(d.start);})
+                .attr(&quot;width&quot;, function(d) {return x1(d.end) - x1(d.start);});
+
+            rects.enter().append(&quot;rect&quot;)
+                .attr(&quot;class&quot;, function(d) {return &quot;miniItem&quot; + d.lane;})
+                .attr(&quot;x&quot;, function(d) {return x1(d.start);})
+                .attr(&quot;y&quot;, function(d) {return y1(d.lane) + 10;})
+                .attr(&quot;width&quot;, function(d) {return x1(d.end) - x1(d.start);})
+                .attr(&quot;height&quot;, function(d) {return .8 * y1(1);});
+
+            rects.exit().remove();
+
+            //update the item labels
+            labels = itemRects.selectAll(&quot;text&quot;)
+                .data(visItems, function (d) { return d.id; })
+                .attr(&quot;x&quot;, function(d) {return x1(Math.max(d.start, minExtent) + 2);});
+
+            // d.id 为文本标签
+            labels.enter().append(&quot;text&quot;)
+                .text(function(d) {return d.id;})
+                .attr(&quot;x&quot;, function(d) {return x1(Math.max(d.start, minExtent));})
+                .attr(&quot;y&quot;, function(d) {return y1(d.lane + .5);})
+                .attr(&quot;text-anchor&quot;, &quot;start&quot;);
+
+            labels.exit().remove();
+
+        }
+</code></pre></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js" defer></script>
+        <script src="../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

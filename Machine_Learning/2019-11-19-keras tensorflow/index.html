@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Tensorflow Keras - My Docs</title>
+        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+
+                <!-- Collapsed navigation -->
+                <div class="navbar-header">
+                    <!-- Expander button -->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="../..">My Docs</a>
+                </div>
+
+                <!-- Expanded navigation -->
+                <div class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li >
+                                <a href="../..">Welcome to MkDocs</a>
+                            </li>
+                            <li class="dropdown active">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Machine Learning <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../2018-11-19-tensorflow_estimator/">Tensorflow Estimator</a>
+</li>
+                                    
+<li >
+    <a href="../2018-11-22-vae/">vae</a>
+</li>
+                                    
+<li >
+    <a href="../2018-11-27-unsupervised learning/">Unsupervised Clustering</a>
+</li>
+                                    
+<li >
+    <a href="../2018-12-03-tensorflow_test/">tensorflow test</a>
+</li>
+                                    
+<li >
+    <a href="../2018-12-05-vade/">vade</a>
+</li>
+                                    
+<li >
+    <a href="../2019-03-01-data input/">data input</a>
+</li>
+                                    
+<li >
+    <a href="../2019-06-20-tensorflow/">2019 06 20 tensorflow</a>
+</li>
+                                    
+<li >
+    <a href="../2019-06-21-tensorflow_eager/">2019 06 21 tensorflow eager</a>
+</li>
+                                    
+<li class="active">
+    <a href="./">Tensorflow Keras</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Algorithm <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../algorithm/2018-12-11-binary tree/">jekyll blog</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Android <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../android/2019-04-21-scrcpy/">2019 04 21 scrcpy</a>
+</li>
+                                    
+<li >
+    <a href="../../android/2019-05-11-android/">2019 05 11 android</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Bigdata <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../bigdata/2019-06-04-hive/">2019 06 04 hive</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Cpp <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../cpp/2019-04-17-build_system/">����</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-04-17-regress_test/">2019 04 17 regress test</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-04-18-project/">����</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-04-22-time/">2019 04 22 time</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-04-23-thrift/">2019 04 23 thrift</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-04-29-multi thread/">2019 04 29 multi thread</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-05-07-ptmalloc/">2019 05 07 ptmalloc</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-05-10-inotify/">2019 05 10 inotify</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-05-20-boost/">2019 05 20 boost</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-05-20-smart_ptr/">2019 05 20 smart ptr</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-05-21-google/">2019 05 21 google</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-06-10-stl/">2019 06 10 stl</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Ctr <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../ctr/2019-02-17-xdeepfm/">xdeepfm</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Domain algo <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../domain algo/2019-01-08-bandit/">bandit</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Gcc <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../gcc/2019-04-18-ldd/">����</a>
+</li>
+                                    
+<li >
+    <a href="../../gcc/2019-04-19-gdb/">2019 04 19 gdb</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hack <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../hack/2019-06-12-sql inject/">2019 06 12 sql inject</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Illusion <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../illusion/2019-06-26-illusion/">2019 06 26 illusion</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Java <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../java/2019-05-13-reflection/">2019 05 13 reflection</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Jekyll <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../jekyll/2018-11-19-jekyll blog/">jekyll blog</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Linux <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../linux/2018-12-29-shell/">shell</a>
+</li>
+                                    
+<li >
+    <a href="../../linux/2019-05-05-route/">2019 05 05 route</a>
+</li>
+                                    
+<li >
+    <a href="../../linux/2019-05-17-vim/">2019 05 17 vim</a>
+</li>
+                                    
+<li >
+    <a href="../../linux/2019-05-18-network/">2019 05 18 network</a>
+</li>
+                                    
+<li >
+    <a href="../../linux/2019-05-30-git/">2019 05 30 git</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Notes <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../notes/2018-04-24-leran_markdown/">Markdown学习笔记</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Python <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../python/2019-02-01-pandas/">pandas</a>
+</li>
+                                    
+<li >
+    <a href="../../python/2019-05-05-pip/">2019 05 05 pip</a>
+</li>
+                                    
+<li >
+    <a href="../../python/2019-05-17-os/">2019 05 17 os</a>
+</li>
+                                    
+<li >
+    <a href="../../python/2019-05-22-mouse_keyboard/">2019 05 22 mouse keyboard</a>
+</li>
+                                    
+<li >
+    <a href="../../python/2020-03-01-sns/">sns</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Spark <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../spark/2018-12-29-pyspark/">spark</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Web <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../web/2019-05-24-electron/">2019 05 24 electron</a>
+</li>
+                                    
+<li >
+    <a href="../../web/2019-05-31-d3/">2019 05 31 d3</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li >
+                                <a rel="next" href="../2019-06-21-tensorflow_eager/">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li >
+                                <a rel="prev" href="../../algorithm/2018-12-11-binary tree/">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#keras-session">keras session</a></li>
+        <li class="main "><a href="#keras-compile">keras compile</a></li>
+        <li class="main "><a href="#keras-fit_generator-train_on_batch">keras fit_generator, train_on_batch</a></li>
+        <li class="main "><a href="#keras">keras 变量共享</a></li>
+        <li class="main "><a href="#keras-batch">keras batch 训练</a></li>
+        <li class="main "><a href="#keras-input">keras Input</a></li>
+        <li class="main "><a href="#keras-embedding">keras embedding</a></li>
+        <li class="main "><a href="#keras-gpu">keras GPU</a></li>
+            <li><a href="#keras-gpu_1">keras gpu 内存使用大小限制</a></li>
+            <li><a href="#keras-multi-gpu">keras multi GPU</a></li>
+        <li class="main "><a href="#keras-layers">keras layers</a></li>
+        <li class="main "><a href="#model-weights">model weights</a></li>
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="keras-session">keras session</h1>
+<p>当设置log_device_placement=True时</p>
+<pre><code>import tensorflow as tf
+import tensorflow.keras.backend as K
+
+config = tf.ConfigProto()
+config.gpu_options.allow_growth = True  # dynamically grow the memory used on the GPU
+config.log_device_placement = True  # to log device placement (on which device the operation ran)
+                                    # (nothing gets printed in Jupyter, only if you run it standalone)config.allow_soft_placement = True  # to log device placement (on which device the operation ran)
+sess = tf.Session(config=config)
+K.set_session(sess)  # set this TensorFlow session as the default session for Keras
+</code></pre>
+
+<h1 id="keras-compile">keras compile</h1>
+<p>class Model(Netword)
+https://github.com/keras-team/keras/blob/master/keras/engine/training.py
+model compile 被调用时，主要完成loss function， optimizer， metrics部分的定义
+仅仅使用model进行predict时， 不需要进行compile
+当改变变量trainable状态后再次进行训练之前， 也需要进行compile</p>
+<h1 id="keras-fit_generator-train_on_batch">keras fit_generator, train_on_batch</h1>
+<p>https://github.com/keras-team/keras/blob/master/keras/engine/training_generator.py
+fit_generator 内部调用的是train_on_batch完成batch数据的训练</p>
+<p>fit_generator, train_on_batch的时候， 当self.train_function为None时（即第一次train_on_batch时）， 会在_make_train_function中调用optimizer的get_updates， 定义变量的梯度更新参数
+train_on_batch
+  _make_train_function # 从optimizer中获得梯度更新op， 构建Keras function， train_function
+  outputs = self.train_function(ins) #使用train_function, 把输入变成输出</p>
+<h1 id="keras">keras 变量共享</h1>
+<p>keras是通过面向对象来共享变量的， 在对象的build方法中定义变量(使用tf.Variable而不是tf.get_variable), 在对象的call方法中使用变量</p>
+<h1 id="keras-batch">keras batch 训练</h1>
+<h1 id="keras-input">keras Input</h1>
+<pre><code>x = Input(shape=(2,), dtype='string')
+y = x
+model = tf.keras.models.Model(x, y)
+sess = tf.Session()
+with sess.as_default():
+  sess.run(tf.global_variables_initializer())
+  print(sess.run(y, feed_dict={x:[[1,-5]]}))
+
+ret = model.predict(data)
+
+https://stackoverflow.com/questions/38972380/keras-how-to-use-fit-generator-with-multiple-outputs-of-different-type
+x = Convolution2D(8, 5, 5, subsample=(1, 1))(image_input)
+x = Activation('relu')(x)
+x = Flatten()(x)
+x = Dense(50, W_regularizer=l2(0.0001))(x)
+x = Activation('relu')(x)
+
+output1 = Dense(1, activation='linear', name='output1')(x)
+output2 = Dense(1, activation='linear', name='output2')(x)
+
+model = Model(input=image_input, output=[output1, output2])
+model.compile(optimizer='adam', loss={'output1': 'mean_squared_error', 'output2': 'mean_squared_error'})
+
+batch_generator(x, y, batch_size):
+        ....transform images
+        ....generate batch batch of size: batch_size 
+        yield(X_batch, {'output1': y1, 'output2': y2} ))
+
+model.fit_generator(batch_generator(X_train, y_train, batch_size))
+</code></pre>
+
+<h1 id="keras-embedding">keras embedding</h1>
+<p>输入到Embedding层的id索引需要在[0, input_dim) 区间内</p>
+<h1 id="keras-gpu">keras GPU</h1>
+<h2 id="keras-gpu_1">keras gpu 内存使用大小限制</h2>
+<pre><code class="python">import tensorflow as tf
+from keras.backend.tensorflow_backend import set_session
+config = tf.ConfigProto()
+config.gpu_options.allow_growth = True  # dynamically grow the memory used on the GPU
+config.log_device_placement = True  # to log device placement (on which device the operation ran)
+                                    # (nothing gets printed in Jupyter, only if you run it standalone)
+sess = tf.Session(config=config)
+set_session(sess)  # set this TensorFlow session as the default session for Keras
+</code></pre>
+
+<h2 id="keras-multi-gpu">keras multi GPU</h2>
+<p>https://keras.io/utils/#multi_gpu_model
+模型能够在GPU上放下， 使用数据并行
+使用multi_gpu_model构建</p>
+<h1 id="keras-layers">keras layers</h1>
+<p>keras layers 的call方法必须含有inputs参数， inputs参数为keras tensor或者keras tensor list，
+keras tensor包含_keras_history属性， Layer类的<strong>call</strong>方法调用子类的call方法后， 会根据inputs里的_keras_history为子类返回的tensor添加_keras_history.</p>
+<h1 id="model-weights">model weights</h1>
+<p>keras/engine/base_layer.py
+add_weight方法使用K.variable定义变量，
+regularizer参数控制是否使用正则化</p>
+<pre><code>for layer in model.layers:
+    print(&quot;weights:&quot;, layer.get_weights())
+</code></pre></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js" defer></script>
+        <script src="../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

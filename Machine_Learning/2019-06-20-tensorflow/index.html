@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>2019 06 20 tensorflow - My Docs</title>
+        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+
+                <!-- Collapsed navigation -->
+                <div class="navbar-header">
+                    <!-- Expander button -->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="../..">My Docs</a>
+                </div>
+
+                <!-- Expanded navigation -->
+                <div class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li >
+                                <a href="../..">Welcome to MkDocs</a>
+                            </li>
+                            <li class="dropdown active">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Machine Learning <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../2018-11-19-tensorflow_estimator/">Tensorflow Estimator</a>
+</li>
+                                    
+<li >
+    <a href="../2018-11-22-vae/">vae</a>
+</li>
+                                    
+<li >
+    <a href="../2018-11-27-unsupervised learning/">Unsupervised Clustering</a>
+</li>
+                                    
+<li >
+    <a href="../2018-12-03-tensorflow_test/">tensorflow test</a>
+</li>
+                                    
+<li >
+    <a href="../2018-12-05-vade/">vade</a>
+</li>
+                                    
+<li >
+    <a href="../2019-03-01-data input/">data input</a>
+</li>
+                                    
+<li class="active">
+    <a href="./">2019 06 20 tensorflow</a>
+</li>
+                                    
+<li >
+    <a href="../2019-06-21-tensorflow_eager/">2019 06 21 tensorflow eager</a>
+</li>
+                                    
+<li >
+    <a href="../2019-11-19-keras tensorflow/">Tensorflow Keras</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Algorithm <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../algorithm/2018-12-11-binary tree/">jekyll blog</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Android <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../android/2019-04-21-scrcpy/">2019 04 21 scrcpy</a>
+</li>
+                                    
+<li >
+    <a href="../../android/2019-05-11-android/">2019 05 11 android</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Bigdata <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../bigdata/2019-06-04-hive/">2019 06 04 hive</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Cpp <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../cpp/2019-04-17-build_system/">����</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-04-17-regress_test/">2019 04 17 regress test</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-04-18-project/">����</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-04-22-time/">2019 04 22 time</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-04-23-thrift/">2019 04 23 thrift</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-04-29-multi thread/">2019 04 29 multi thread</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-05-07-ptmalloc/">2019 05 07 ptmalloc</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-05-10-inotify/">2019 05 10 inotify</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-05-20-boost/">2019 05 20 boost</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-05-20-smart_ptr/">2019 05 20 smart ptr</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-05-21-google/">2019 05 21 google</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/2019-06-10-stl/">2019 06 10 stl</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Ctr <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../ctr/2019-02-17-xdeepfm/">xdeepfm</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Domain algo <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../domain algo/2019-01-08-bandit/">bandit</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Gcc <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../gcc/2019-04-18-ldd/">����</a>
+</li>
+                                    
+<li >
+    <a href="../../gcc/2019-04-19-gdb/">2019 04 19 gdb</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Hack <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../hack/2019-06-12-sql inject/">2019 06 12 sql inject</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Illusion <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../illusion/2019-06-26-illusion/">2019 06 26 illusion</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Java <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../java/2019-05-13-reflection/">2019 05 13 reflection</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Jekyll <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../jekyll/2018-11-19-jekyll blog/">jekyll blog</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Linux <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../linux/2018-12-29-shell/">shell</a>
+</li>
+                                    
+<li >
+    <a href="../../linux/2019-05-05-route/">2019 05 05 route</a>
+</li>
+                                    
+<li >
+    <a href="../../linux/2019-05-17-vim/">2019 05 17 vim</a>
+</li>
+                                    
+<li >
+    <a href="../../linux/2019-05-18-network/">2019 05 18 network</a>
+</li>
+                                    
+<li >
+    <a href="../../linux/2019-05-30-git/">2019 05 30 git</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Notes <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../notes/2018-04-24-leran_markdown/">Markdown学习笔记</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Python <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../python/2019-02-01-pandas/">pandas</a>
+</li>
+                                    
+<li >
+    <a href="../../python/2019-05-05-pip/">2019 05 05 pip</a>
+</li>
+                                    
+<li >
+    <a href="../../python/2019-05-17-os/">2019 05 17 os</a>
+</li>
+                                    
+<li >
+    <a href="../../python/2019-05-22-mouse_keyboard/">2019 05 22 mouse keyboard</a>
+</li>
+                                    
+<li >
+    <a href="../../python/2020-03-01-sns/">sns</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Spark <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../spark/2018-12-29-pyspark/">spark</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Web <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../web/2019-05-24-electron/">2019 05 24 electron</a>
+</li>
+                                    
+<li >
+    <a href="../../web/2019-05-31-d3/">2019 05 31 d3</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li >
+                                <a rel="next" href="../2019-03-01-data input/">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li >
+                                <a rel="prev" href="../2019-06-21-tensorflow_eager/">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#register_op">REGISTER_OP</a></li>
+        <li class="main "><a href="#opdefbuilderreceiver">OpDefBuilderReceiver</a></li>
+        <li class="main "><a href="#opdefbuilderwrapper">OpDefBuilderWrapper</a></li>
+        <li class="main "><a href="#opdefbuilder">OpDefBuilder</a></li>
+        <li class="main "><a href="#opregistry">OpRegistry</a></li>
+        <li class="main "><a href="#opregistrationdata">OpRegistrationData</a></li>
+        <li class="main "><a href="#opdef">OpDef</a></li>
+        <li class="main "><a href="#nodedef">NodeDef</a></li>
+        <li class="main "><a href="#graphdef">GraphDef</a></li>
+        <li class="main "><a href="#loadlibrary">LoadLibrary</a></li>
+        <li class="main "><a href="#variable">Variable</a></li>
+        <li class="main "><a href="#tensor">Tensor</a></li>
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<hr />
+<p>layout:     post
+title:      "tensorflow"
+subtitle:   "tensorflow"
+date:       2019-06-20 15:58:24
+author:     "none"
+header-img: "img/posts/default_post.jpg"
+catalog: true
+tags:
+    - tag</p>
+<hr />
+<h2 id="register_op">REGISTER_OP</h2>
+<p>REGISTER_OP 本质定义了一个::tensorflow::register_op::OpDefBuilderReceiver类的对象， 这个对象是一个全局变量，该对象的构造参数为一个模板类::tensorflow::register_op::OpDefBuilderWrapper<SHOULD_REGISTER_OP(name)>生成的对象， </p>
+<ol>
+<li>REGISTER_OP 最终生成了两个对象，分别为OpDefBuilderReceiver类和OpDefBuilderWrapper模板类的对象，OpDefBuilderReceiver类在赋值符号(=)的右边，OpDefBuilderWrapper模板类对象在赋值符号(=)的左边，</li>
+<li>REGISTER_OP宏后可以继续调用OpDefBuilderWrapper模板类的方法，如Input，Attr等</li>
+</ol>
+<p>tensorflow\core\framework\op.h</p>
+<pre><code class="c++">#define REGISTER_OP(name) REGISTER_OP_UNIQ_HELPER(__COUNTER__, name)
+
+#define REGISTER_OP_UNIQ_HELPER(ctr, name) REGISTER_OP_UNIQ(ctr, name)
+
+#define REGISTER_OP_UNIQ(ctr, name)                                          \
+  static ::tensorflow::register_op::OpDefBuilderReceiver register_op##ctr    \
+      TF_ATTRIBUTE_UNUSED =                                                  \
+          ::tensorflow::register_op::OpDefBuilderWrapper&lt;SHOULD_REGISTER_OP( \
+              name)&gt;(name)
+</code></pre>
+
+<p>TF_ATTRIBUTE_UNUSED 修饰变量，当变量未被使用时，编译器不需要给出警告信息</p>
+<p>tensorflow\core\platform\macros.h</p>
+<pre><code class="c++">#if (defined(__GNUC__) || defined(__APPLE__)) &amp;&amp; !defined(SWIG)
+#define TF_ATTRIBUTE_UNUSED __attribute__((unused))
+#elif defined(_MSC_VER)
+#define TF_ATTRIBUTE_UNUSED
+</code></pre>
+
+<h2 id="opdefbuilderreceiver">OpDefBuilderReceiver</h2>
+<p>::tensorflow::register_op::OpDefBuilderReceiver 类对象在构造时，会调用OpRegistry::Global() 获取到一个OpRegistry类对象的指针, 然后调用其Register方法。OpRegistry类对象负责收集所有注册的op</p>
+<p>tensorflow\core\framework\op.h</p>
+<pre><code class="c++">struct OpDefBuilderReceiver {
+  // To call OpRegistry::Global()-&gt;Register(...), used by the
+  // REGISTER_OP macro below.
+  // Note: These are implicitly converting constructors.
+  OpDefBuilderReceiver(
+      const OpDefBuilderWrapper&lt;true&gt;&amp; wrapper);  // NOLINT(runtime/explicit)
+  constexpr OpDefBuilderReceiver(const OpDefBuilderWrapper&lt;false&gt;&amp;) {
+  }  // NOLINT(runtime/explicit)
+};
+</code></pre>
+
+<p>tensorflow\core\framework\op.cc</p>
+<pre><code class="c++">namespace register_op {
+OpDefBuilderReceiver::OpDefBuilderReceiver(
+    const OpDefBuilderWrapper&lt;true&gt;&amp; wrapper) {
+  OpRegistry::Global()-&gt;Register(
+      [wrapper](OpRegistrationData* op_reg_data) -&gt; Status {
+        return wrapper.builder().Finalize(op_reg_data);
+      });
+}
+}  // namespace register_op
+</code></pre>
+
+<h2 id="opdefbuilderwrapper">OpDefBuilderWrapper</h2>
+<p>OpDefBuilderWrapper是一个模板类，其模板参数为true或false， 通过模板参数来控制op是否进行注册</p>
+<p>tensorflow\core\framework\op.h</p>
+<pre><code class="c++">// Template specialization that forwards all calls to the contained builder.
+template &lt;&gt;
+class OpDefBuilderWrapper&lt;true&gt; {
+ public:
+  explicit OpDefBuilderWrapper(const char name[]) : builder_(name) {}
+  OpDefBuilderWrapper&lt;true&gt;&amp; Attr(string spec) {
+    builder_.Attr(std::move(spec));
+    return *this;
+  }
+  OpDefBuilderWrapper&lt;true&gt;&amp; Input(string spec) {
+    builder_.Input(std::move(spec));
+    return *this;
+  }
+  OpDefBuilderWrapper&lt;true&gt;&amp; Output(string spec) {
+    builder_.Output(std::move(spec));
+    return *this;
+  }
+  OpDefBuilderWrapper&lt;true&gt;&amp; SetIsCommutative() {
+    builder_.SetIsCommutative();
+    return *this;
+  }
+  OpDefBuilderWrapper&lt;true&gt;&amp; SetIsAggregate() {
+    builder_.SetIsAggregate();
+    return *this;
+  }
+  OpDefBuilderWrapper&lt;true&gt;&amp; SetIsStateful() {
+    builder_.SetIsStateful();
+    return *this;
+  }
+  OpDefBuilderWrapper&lt;true&gt;&amp; SetAllowsUninitializedInput() {
+    builder_.SetAllowsUninitializedInput();
+    return *this;
+  }
+  OpDefBuilderWrapper&lt;true&gt;&amp; Deprecated(int version, string explanation) {
+    builder_.Deprecated(version, std::move(explanation));
+    return *this;
+  }
+  OpDefBuilderWrapper&lt;true&gt;&amp; Doc(string text) {
+    builder_.Doc(std::move(text));
+    return *this;
+  }
+  OpDefBuilderWrapper&lt;true&gt;&amp; SetShapeFn(
+      Status (*fn)(shape_inference::InferenceContext*)) {
+    builder_.SetShapeFn(fn);
+    return *this;
+  }
+  const ::tensorflow::OpDefBuilder&amp; builder() const { return builder_; }
+
+ private:
+  mutable ::tensorflow::OpDefBuilder builder_;
+};
+</code></pre>
+
+<h2 id="opdefbuilder">OpDefBuilder</h2>
+<p>REGISTER_OP().Input().Attr() 调用过程中Input，Attr等函数的参数由OpDefBuilder类对象负责存储，</p>
+<p>每个OpDefBuilder类对象包含一个OpRegistrationData对象，调用REGISTER_OP().SetShapeFn()时会更新OpShapeInferenceFn到OpRegistrationData对象中， 这个数据会在随后</p>
+<p>OpDefBuilder类的Finalize方法调用时会通过参数指针的方式拷贝OpRegistrationData中的数据到外部</p>
+<p>tensorflow\core\framework\op_def_builder.h</p>
+<pre><code class="c++">// Builder class passed to the REGISTER_OP() macro.
+class OpDefBuilder {
+ public:
+  // Constructs an OpDef with just the name field set.
+  explicit OpDefBuilder(string op_name);
+
+  // Adds an attr to this OpDefBuilder (and returns *this). The spec has
+  // format &quot;&lt;name&gt;:&lt;type&gt;&quot; or &quot;&lt;name&gt;:&lt;type&gt;=&lt;default&gt;&quot;
+  // where &lt;name&gt; matches regexp [a-zA-Z][a-zA-Z0-9_]*
+  // (by convention only using capital letters for attrs that can be inferred)
+  // &lt;type&gt; can be:
+  //   &quot;string&quot;, &quot;int&quot;, &quot;float&quot;, &quot;bool&quot;, &quot;type&quot;, &quot;shape&quot;, or &quot;tensor&quot;
+  //   &quot;numbertype&quot;, &quot;realnumbertype&quot;, &quot;quantizedtype&quot;
+  //       (meaning &quot;type&quot; with a restriction on valid values)
+  //   &quot;{int32,int64}&quot; or {realnumbertype,quantizedtype,string}&quot;
+  //       (meaning &quot;type&quot; with a restriction containing unions of value types)
+  //   &quot;{\&quot;foo\&quot;, \&quot;bar\n baz\&quot;}&quot;, or &quot;{'foo', 'bar\n baz'}&quot;
+  //       (meaning &quot;string&quot; with a restriction on valid values)
+  //   &quot;list(string)&quot;, ..., &quot;list(tensor)&quot;, &quot;list(numbertype)&quot;, ...
+  //       (meaning lists of the above types)
+  //   &quot;int &gt;= 2&quot; (meaning &quot;int&quot; with a restriction on valid values)
+  //   &quot;list(string) &gt;= 2&quot;, &quot;list(int) &gt;= 2&quot;
+  //       (meaning &quot;list(string)&quot; / &quot;list(int)&quot; with length at least 2)
+  // &lt;default&gt;, if included, should use the Proto text format
+  // of &lt;type&gt;.  For lists use [a, b, c] format.
+  //
+  // Note that any attr specifying the length of an input or output will
+  // get a default minimum of 1 unless the &gt;= # syntax is used.
+  //
+  // TODO(josh11b): Perhaps support restrictions and defaults as optional
+  // extra arguments to Attr() instead of encoding them in the spec string.
+  // TODO(josh11b): Would like to have better dtype handling for tensor attrs:
+  // * Ability to say the type of an input/output matches the type of
+  //   the tensor.
+  // * Ability to restrict the type of the tensor like the existing
+  //   restrictions for type attrs.
+  // Perhaps by linking the type of the tensor to a type attr?
+  OpDefBuilder&amp; Attr(string spec);
+
+  // Adds an input or output to this OpDefBuilder (and returns *this).
+  // The spec has form &quot;&lt;name&gt;:&lt;type-expr&gt;&quot; or &quot;&lt;name&gt;:Ref(&lt;type-expr&gt;)&quot;
+  // where &lt;name&gt; matches regexp [a-z][a-z0-9_]* and &lt;type-expr&gt; can be:
+  // * For a single tensor: &lt;type&gt;
+  // * For a sequence of tensors with the same type: &lt;number&gt;*&lt;type&gt;
+  // * For a sequence of tensors with different types: &lt;type-list&gt;
+  // Where:
+  //   &lt;type&gt; is either one of &quot;float&quot;, &quot;int32&quot;, &quot;string&quot;, ...
+  //                 or the name of an attr (see above) with type &quot;type&quot;.
+  //   &lt;number&gt; is the name of an attr with type &quot;int&quot;.
+  //   &lt;type-list&gt; is the name of an attr with type &quot;list(type)&quot;.
+  // TODO(josh11b): Indicate Ref() via an optional argument instead of
+  // in the spec?
+  // TODO(josh11b): SparseInput() and SparseOutput() matching the Python
+  // handling?
+  OpDefBuilder&amp; Input(string spec);
+  OpDefBuilder&amp; Output(string spec);
+
+  // Turns on the indicated boolean flag in this OpDefBuilder (and
+  // returns *this).
+  OpDefBuilder&amp; SetIsCommutative();
+  OpDefBuilder&amp; SetIsAggregate();
+  OpDefBuilder&amp; SetIsStateful();
+  OpDefBuilder&amp; SetAllowsUninitializedInput();
+
+  // Deprecate the op at a certain GraphDef version.
+  OpDefBuilder&amp; Deprecated(int version, string explanation);
+
+  // Adds docs to this OpDefBuilder (and returns *this).
+  // Docs have the format:
+  //   &lt;1-line summary&gt;
+  //   &lt;rest of the description&gt;
+  //   &lt;name&gt;: &lt;description of name&gt;
+  //   &lt;name&gt;: &lt;description of name&gt;
+  //     &lt;if long, indent the description on subsequent lines&gt;
+  // Where &lt;name&gt; is the name of an attr, input, or output.  Please
+  // wrap docs at 72 columns so that it may be indented in the
+  // generated output.  For tensor inputs or outputs (not attrs), you
+  // may start the description with an &quot;=&quot; (like name:= &lt;description&gt;)
+  // to suppress the automatically-generated type documentation in
+  // generated output.
+#ifndef TF_LEAN_BINARY
+  OpDefBuilder&amp; Doc(string text);
+#else
+  OpDefBuilder&amp; Doc(string text) { return *this; }
+#endif
+
+  // Sets the shape function to be used for shape inference.
+  //
+  // Note that currently (October 2016), python code still requires a
+  // RegisterShape call to invoke this; see call_cpp_shape_fn in
+  // python/framework/common_shapes.py
+  OpDefBuilder&amp; SetShapeFn(OpShapeInferenceFn fn);
+
+  // Sets op_reg_data-&gt;op_def to the requested OpDef and
+  // op_reg_data-&gt;shape_inference_fn to the requested shape inference function,
+  // or returns an error.
+  // Must be called after all of the above methods.
+  //
+  // Note that OpDefBuilder only reports parsing errors.  You should also
+  // call ValidateOpDef() to detect other problems.
+  Status Finalize(OpRegistrationData* op_reg_data) const;
+
+ private:
+  friend class FunctionDefHelper;
+
+  // Adds control output to this OpDefBuilder (and returns *this).
+  // The &lt;name&gt; must be a valid node name (matches regexp
+  // [a-zA-Z][a-zA-Z0-9_]*). Named control output can only exist for functions.
+  OpDefBuilder&amp; ControlOutput(string name);
+
+  OpDef* op_def() { return &amp;op_reg_data_.op_def; }
+
+  OpRegistrationData op_reg_data_;
+  std::vector&lt;string&gt; attrs_;
+  std::vector&lt;string&gt; inputs_;
+  std::vector&lt;string&gt; outputs_;
+  std::vector&lt;string&gt; control_outputs_;
+  string doc_;
+  std::vector&lt;string&gt; errors_;
+};
+</code></pre>
+
+<h2 id="opregistry">OpRegistry</h2>
+<p>OpRegistry类的Global方法，使用singleton单例模式创建了一个OpRegistry类对象</p>
+<pre><code class="c++">void OpRegistry::Register(const OpRegistrationDataFactory&amp; op_data_factory) {
+  mutex_lock lock(mu_);
+  if (initialized_) {
+    TF_QCHECK_OK(RegisterAlreadyLocked(op_data_factory));
+  } else {
+    deferred_.push_back(op_data_factory);
+  }
+}
+</code></pre>
+
+<p>OpRegistry类的Register方法，其参数为std::function<Status(OpRegistrationData*)>类型，注册OP时会使用lambda函数包裹OpDefBuilder的Finalize方法作为Register方法的参数</p>
+<pre><code class="c++">Status OpRegistry::RegisterAlreadyLocked(
+    const OpRegistrationDataFactory&amp; op_data_factory) const {
+  std::unique_ptr&lt;OpRegistrationData&gt; op_reg_data(new OpRegistrationData);
+  Status s = op_data_factory(op_reg_data.get());
+  if (s.ok()) {
+    s = ValidateOpDef(op_reg_data-&gt;op_def);
+    if (s.ok() &amp;&amp;
+        !gtl::InsertIfNotPresent(&amp;registry_, op_reg_data-&gt;op_def.name(),
+                                 op_reg_data.get())) {
+      s = errors::AlreadyExists(&quot;Op with name &quot;, op_reg_data-&gt;op_def.name());
+    }
+  }
+  Status watcher_status = s;
+  if (watcher_) {
+    watcher_status = watcher_(s, op_reg_data-&gt;op_def);
+  }
+  if (s.ok()) {
+    op_reg_data.release();
+  } else {
+    op_reg_data.reset();
+  }
+  return watcher_status;
+}
+</code></pre>
+
+<p>OpRegistry::Register的方法调用时或者调用后，最终都会调用到RegisterAlreadyLocked方法，该会先构造一个OpRegistrationData， 然后将其作为参数调用OpRegistry::Register接收的lambda函数</p>
+<p>调用lambda函数，即调用OpDefBuilder的Finalize方法，在该方法中，
+1) 会将OpDefBuilder类对象的OpRegistrationData成员拷贝给OpRegistry::Register方法中的OpRegistrationData对象（更新的是
+OpShapeInferenceFn), 
+2) 然后调用FinalizeAttr，FinalizeInputOrOutput等方法更新OpDef给OpRegistry::Register方法中的OpRegistrationData对象</p>
+<pre><code class="c++">// registry_ 存储注册的OP
+mutable std::unordered_map&lt;string, const OpRegistrationData*&gt; registry_
+    GUARDED_BY(mu_);
+
+// OpRegistry::RegisterAlreadyLocked方法向registry_中插入OP数据
+if (s.ok() &amp;&amp;
+    !gtl::InsertIfNotPresent(&amp;registry_, op_reg_data-&gt;op_def.name(),
+                                op_reg_data.get())) {
+    s = errors::AlreadyExists(&quot;Op with name &quot;, op_reg_data-&gt;op_def.name());
+}
+</code></pre>
+
+<p>gtl::InsertIfNotPresent方法会完成最终的注册</p>
+<pre><code>typedef std::function&lt;Status(const Status&amp;, const OpDef&amp;)&gt; Watcher;
+</code></pre>
+
+<p>在检查OpDef有效，且该op没有注册后，会以OpDef为参数调用watcher_函数</p>
+<pre><code class="c++">class OpRegistry : public OpRegistryInterface {
+ public:
+  typedef std::function&lt;Status(OpRegistrationData*)&gt; OpRegistrationDataFactory;
+  void Register(const OpRegistrationDataFactory&amp; op_data_factory);
+}
+</code></pre>
+
+<p>tensorflow\core\framework\op.h</p>
+<pre><code class="c++">// Users that want to look up an OpDef by type name should take an
+// OpRegistryInterface.  Functions accepting a
+// (const) OpRegistryInterface* may call LookUp() from multiple threads.
+class OpRegistryInterface {
+ public:
+  virtual ~OpRegistryInterface();
+
+  // Returns an error status and sets *op_reg_data to nullptr if no OpDef is
+  // registered under that name, otherwise returns the registered OpDef.
+  // Caller must not delete the returned pointer.
+  virtual Status LookUp(const string&amp; op_type_name,
+                        const OpRegistrationData** op_reg_data) const = 0;
+
+  // Shorthand for calling LookUp to get the OpDef.
+  Status LookUpOpDef(const string&amp; op_type_name, const OpDef** op_def) const;
+};
+
+// The standard implementation of OpRegistryInterface, along with a
+// global singleton used for registering ops via the REGISTER
+// macros below.  Thread-safe.
+//
+// Example registration:
+//   OpRegistry::Global()-&gt;Register(
+//     [](OpRegistrationData* op_reg_data)-&gt;Status {
+//       // Populate *op_reg_data here.
+//       return Status::OK();
+//   });
+class OpRegistry : public OpRegistryInterface {
+ public:
+  typedef std::function&lt;Status(OpRegistrationData*)&gt; OpRegistrationDataFactory;
+
+  OpRegistry();
+  ~OpRegistry() override;
+
+  void Register(const OpRegistrationDataFactory&amp; op_data_factory);
+
+  Status LookUp(const string&amp; op_type_name,
+                const OpRegistrationData** op_reg_data) const override;
+
+  // Fills *ops with all registered OpDefs (except those with names
+  // starting with '_' if include_internal == false) sorted in
+  // ascending alphabetical order.
+  void Export(bool include_internal, OpList* ops) const;
+
+  // Returns ASCII-format OpList for all registered OpDefs (except
+  // those with names starting with '_' if include_internal == false).
+  string DebugString(bool include_internal) const;
+
+  // A singleton available at startup.
+  static OpRegistry* Global();
+
+  // Get all registered ops.
+  void GetRegisteredOps(std::vector&lt;OpDef&gt;* op_defs);
+
+  // Get all `OpRegistrationData`s.
+  void GetOpRegistrationData(std::vector&lt;OpRegistrationData&gt;* op_data);
+
+  // Watcher, a function object.
+  // The watcher, if set by SetWatcher(), is called every time an op is
+  // registered via the Register function. The watcher is passed the Status
+  // obtained from building and adding the OpDef to the registry, and the OpDef
+  // itself if it was successfully built. A watcher returns a Status which is in
+  // turn returned as the final registration status.
+  typedef std::function&lt;Status(const Status&amp;, const OpDef&amp;)&gt; Watcher;
+
+  // An OpRegistry object has only one watcher. This interface is not thread
+  // safe, as different clients are free to set the watcher any time.
+  // Clients are expected to atomically perform the following sequence of
+  // operations :
+  // SetWatcher(a_watcher);
+  // Register some ops;
+  // op_registry-&gt;ProcessRegistrations();
+  // SetWatcher(nullptr);
+  // Returns a non-OK status if a non-null watcher is over-written by another
+  // non-null watcher.
+  Status SetWatcher(const Watcher&amp; watcher);
+
+  // Process the current list of deferred registrations. Note that calls to
+  // Export, LookUp and DebugString would also implicitly process the deferred
+  // registrations. Returns the status of the first failed op registration or
+  // Status::OK() otherwise.
+  Status ProcessRegistrations() const;
+
+  // Defer the registrations until a later call to a function that processes
+  // deferred registrations are made. Normally, registrations that happen after
+  // calls to Export, LookUp, ProcessRegistrations and DebugString are processed
+  // immediately. Call this to defer future registrations.
+  void DeferRegistrations();
+
+  // Clear the registrations that have been deferred.
+  void ClearDeferredRegistrations();
+
+ private:
+  // Ensures that all the functions in deferred_ get called, their OpDef's
+  // registered, and returns with deferred_ empty.  Returns true the first
+  // time it is called. Prints a fatal log if any op registration fails.
+  bool MustCallDeferred() const EXCLUSIVE_LOCKS_REQUIRED(mu_);
+
+  // Calls the functions in deferred_ and registers their OpDef's
+  // It returns the Status of the first failed op registration or Status::OK()
+  // otherwise.
+  Status CallDeferred() const EXCLUSIVE_LOCKS_REQUIRED(mu_);
+
+  // Add 'def' to the registry with additional data 'data'. On failure, or if
+  // there is already an OpDef with that name registered, returns a non-okay
+  // status.
+  Status RegisterAlreadyLocked(const OpRegistrationDataFactory&amp; op_data_factory)
+      const EXCLUSIVE_LOCKS_REQUIRED(mu_);
+
+  Status LookUpSlow(const string&amp; op_type_name,
+                    const OpRegistrationData** op_reg_data) const;
+
+  mutable mutex mu_;
+  // Functions in deferred_ may only be called with mu_ held.
+  mutable std::vector&lt;OpRegistrationDataFactory&gt; deferred_ GUARDED_BY(mu_);
+  // Values are owned.
+  mutable std::unordered_map&lt;string, const OpRegistrationData*&gt; registry_
+      GUARDED_BY(mu_);
+  mutable bool initialized_ GUARDED_BY(mu_);
+
+  // Registry watcher.
+  mutable Watcher watcher_ GUARDED_BY(mu_);
+};
+</code></pre>
+
+<h2 id="opregistrationdata">OpRegistrationData</h2>
+<p>OpRegistrationData结构体中包含OpDef和OpShapeInferenceFn</p>
+<p>OpDef 包含attr，input，ouput，doc等op注册时传入的信息</p>
+<p>OpShapeInferenceFn 包含的是shape推断函数</p>
+<p>tensorflow\core\framework\op_def_builder.h</p>
+<pre><code class="c++">struct OpRegistrationData {
+ public:
+  OpRegistrationData() {}
+  OpRegistrationData(const OpDef&amp; def) : op_def(def) {}
+  OpRegistrationData(const OpDef&amp; def, const OpShapeInferenceFn&amp; fn,
+                     bool is_function = false)
+      : op_def(def), shape_inference_fn(fn), is_function_op(is_function) {}
+
+  OpDef op_def;
+  OpShapeInferenceFn shape_inference_fn;
+  bool is_function_op = false;
+};
+</code></pre>
+
+<h2 id="opdef">OpDef</h2>
+<p>OpDef 使用proto3协议进行定义</p>
+<p>tensorflow\core\framework\op_def.proto</p>
+<p>tensorflow/core/framework/op_def.pb.h</p>
+<h2 id="nodedef">NodeDef</h2>
+<p>tensorflow/core/framework/node_def.proto</p>
+<p>tensorflow/core/framework/node_def.pb.h</p>
+<h2 id="graphdef">GraphDef</h2>
+<p>tensorflow\core\framework\graph.proto</p>
+<p>tensorflow/core/framework/graph.pb.h</p>
+<p>class GraphDefBuilder</p>
+<p>tensorflow\core\graph\graph_def_builder.h</p>
+<h1 id="loadlibrary">LoadLibrary</h1>
+<p>tensorflow\core\framework\load_library.cc</p>
+<pre><code class="c++">
+</code></pre>
+
+<h1 id="variable">Variable</h1>
+<pre><code class="python"># tensorflow\python\ops\variables.py
+@tf_export(&quot;Variable&quot;, v1=[])
+class Variable(six.with_metaclass(VariableMetaclass,
+                                  trackable.Trackable)):
+</code></pre>
+
+<h1 id="tensor">Tensor</h1>
+<pre><code class="python"># tensorflow\python\framework\ops.py
+@tf_export(&quot;Tensor&quot;)
+class Tensor(_TensorLike):
+</code></pre></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js" defer></script>
+        <script src="../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
