@@ -1,9 +1,13 @@
 site_name: osljw
 
+theme:
+  name: material
+  
 extra_javascript: 
     - https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML
 
 # Extensions
 markdown_extensions:
-  - mdx_math:
-    enable_dollar_delimiter: True
+  - pymdownx.arithmatex
+  # - mdx_math:
+  #   enable_dollar_delimiter : true

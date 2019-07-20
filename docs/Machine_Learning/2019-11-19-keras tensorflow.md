@@ -11,7 +11,7 @@ tags:
 
 # keras session
 当设置log_device_placement=True时
-```
+```python
 import tensorflow as tf
 import tensorflow.keras.backend as K
 
@@ -24,10 +24,13 @@ K.set_session(sess)  # set this TensorFlow session as the default session for Ke
 ```
 
 # keras compile
+```python
+# keras/engine/training.py
 class Model(Netword)
-https://github.com/keras-team/keras/blob/master/keras/engine/training.py
+```
 model compile 被调用时，主要完成loss function， optimizer， metrics部分的定义
 仅仅使用model进行predict时， 不需要进行compile
+
 当改变变量trainable状态后再次进行训练之前， 也需要进行compile
 
 # keras fit_generator, train_on_batch
@@ -46,7 +49,7 @@ keras是通过面向对象来共享变量的， 在对象的build方法中定义
 # keras batch 训练
 
 # keras Input
-```
+```python
 x = Input(shape=(2,), dtype='string')
 y = x
 model = tf.keras.models.Model(x, y)
@@ -82,6 +85,14 @@ model.fit_generator(batch_generator(X_train, y_train, batch_size))
 输入到Embedding层的id索引需要在[0, input_dim) 区间内
 
 # keras GPU
+
+## keras 禁止使用gpu
+
+```python
+import os
+os.environ["CUDA_VISIBLE_DEVICES"]="-1"    
+import tensorflow as tf
+```
 
 ## keras gpu 内存使用大小限制
 ```python

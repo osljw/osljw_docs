@@ -14,9 +14,7 @@ tags:
 我们坚信写作写的是内容，所思所想，而不是花样格式。
 >                                                — Ulysses for Mac
 
-## vscode markdown
-- 插件： markdown + math
-- 实时预览： ctrl + shift + v
+
 
 ## 1.标题
 

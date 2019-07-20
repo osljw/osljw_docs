@@ -1,15 +1,6 @@
 
----
-layout:     post
-title:      "tensorflow"
-subtitle:   "tensorflow"
-date:       2019-06-20 15:58:24
-author:     "none"
-header-img: "img/posts/default_post.jpg"
-catalog: true
-tags:
-    - tag
----
+
+# OP
 
 ## REGISTER_OP
 
@@ -540,3 +531,95 @@ class Variable(six.with_metaclass(VariableMetaclass,
 @tf_export("Tensor")
 class Tensor(_TensorLike):
 ```
+
+# GFile
+
+GFile 继承自_FileIO, _FileIO 支持了with语法，
+
+```python
+# tensorflow\python\platform\gfile.py
+@tf_export('io.gfile.GFile', v1=['gfile.GFile', 'gfile.Open', 'io.gfile.GFile'])
+class GFile(_FileIO):
+
+# tensorflow\python\lib\io\file_io.py
+class FileIO(object):
+
+  def _preread_check(self):
+    if not self._read_buf:
+      if not self._read_check_passed:
+        raise errors.PermissionDeniedError(None, None,
+                                           "File isn't open for reading")
+      self._read_buf = pywrap_tensorflow.CreateBufferedInputStream(
+          compat.as_bytes(self.__name), 1024 * 512)
+```
+python 层调用pywrap_tensorflow.CreateBufferedInputStream打开文件
+
+```c++
+// tensorflow\python\lib\io\file_io.i
+tensorflow::io::BufferedInputStream* CreateBufferedInputStream(
+    const string& filename, size_t buffer_size, TF_Status* status) {
+  std::unique_ptr<tensorflow::RandomAccessFile> file;
+  tensorflow::Status s =
+      tensorflow::Env::Default()->NewRandomAccessFile(filename, &file);
+  if (!s.ok()) {
+    Set_TF_Status_from_Status(status, s);
+    return nullptr;
+  }
+  std::unique_ptr<tensorflow::io::RandomAccessInputStream> input_stream(
+      new tensorflow::io::RandomAccessInputStream(
+          file.release(), true /* owns_file */));
+  std::unique_ptr<tensorflow::io::BufferedInputStream> buffered_input_stream(
+      new tensorflow::io::BufferedInputStream(
+          input_stream.release(), buffer_size, true /* owns_input_stream */));
+  return buffered_input_stream.release();
+}
+
+// Ensure that the returned object is destroyed when its wrapper is
+// garbage collected.
+%newobject CreateBufferedInputStream;
+
+tensorflow::io::BufferedInputStream* CreateBufferedInputStream(
+    const string& filename, size_t buffer_size, TF_Status* status);
+```
+
+根据文件名， 获取到相应的FileSystem进行处理
+```c++
+// tensorflow\core\platform\env.cc
+
+Status Env::GetFileSystemForFile(const string& fname, FileSystem** result) {
+  StringPiece scheme, host, path;
+  io::ParseURI(fname, &scheme, &host, &path);
+  FileSystem* file_system = file_system_registry_->Lookup(string(scheme));
+  if (!file_system) {
+    if (scheme.empty()) {
+      scheme = "[local]";
+    }
+
+    return errors::Unimplemented("File system scheme '", scheme,
+                                 "' not implemented (file: '", fname, "')");
+  }
+  *result = file_system;
+  return Status::OK();
+}
+
+
+Status Env::NewRandomAccessFile(const string& fname,
+                                std::unique_ptr<RandomAccessFile>* result) {
+  FileSystem* fs;
+  TF_RETURN_IF_ERROR(GetFileSystemForFile(fname, &fs));
+  return fs->NewRandomAccessFile(fname, result);
+}
+```
+
+
+
+## 文件系统实现
+```c++
+// 继承FileSystem虚基类， 实现接口
+class HadoopFileSystem : public FileSystem {
+}
+
+// 注册文件系统， 绑定scheme 和 实现类
+REGISTER_FILE_SYSTEM("hdfs", HadoopFileSystem);
+```
+

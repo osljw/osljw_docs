@@ -2,21 +2,23 @@
 # mkdocs
 
 ```
+pip install mkdocs mkdocs-material
 mkdocs gh-deploy
 ```
 
+
 # math
 ```
-pip install https://github.com/mitya57/python-markdown-math/archive/master.zip
-```
+pip install mkdocs mkdocs-material
 
-```
-# test_math/config.yaml
+# mkdocs.yml
+theme:
+  name: material
 
 extra_javascript: 
     - https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML
 
+# Extensions
 markdown_extensions:
-    - mdx_math
-        enable_dollar_delimiter: True
+  - pymdownx.arithmatex
 ```
