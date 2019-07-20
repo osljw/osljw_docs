@@ -1,27 +1,9 @@
 site_name: osljw
 
+extra_javascript: 
+    - https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML
+
 # Extensions
 markdown_extensions:
-    - admonition
-    - codehilite:
-        guess_lang: false 
-    - def_list 
-    - footnotes 
-    - meta
-    - toc:
-        permalink: true
-    - pymdownx.arithmatex
-    - pymdownx.caret
-    - pymdownx.critic
-    - pymdownx.details
-    - pymdownx.emoji:
-        emoji_generator: !!python/name:pymdownx.emoji.to_svg
-    - pymdownx.inlinehilite
-    - pymdownx.keys
-    - pymdownx.magiclink
-    - pymdownx.mark
-    - pymdownx.smartsymbols
-    - pymdownx.superfences
-    - pymdownx.tasklist:
-        custom_checkbox: true
-    - pymdownx.tilde
+  - mdx_math:
+    enable_dollar_delimiter: True
