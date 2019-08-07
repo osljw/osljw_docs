@@ -8,8 +8,33 @@ tags:
     - 学习笔记
 ---
 
-# Date Input
+# Data Input
 
-按列输入
+
+继承结构
+- DatasetV2
+- DatasetSource
+    - TensorDataset
+    - TensorSliceDataset
+- ConcatenateDataset
+- UnaryDataset
+    - BatchDataset
+    - MapDataset
+
+
+## structure 
+
+tensorflow.python.data.util.structure
+
+- RaggedTensorStructure
+- SparseTensorStructure
+
+## test
+
+tensorflow/python/data/experimental/kernel_tests
+
+功能实现代码
+
+tensorflow/python/data/util/structure.py
 
 
