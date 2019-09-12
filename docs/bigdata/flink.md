@@ -26,6 +26,9 @@ sbt run
 sbt "run -f application.conf"
 ```
 
+## flink特点
+- window机制
+- checkpoint机制
 
 ## flink任务
 ```
@@ -33,6 +36,8 @@ sbt "run -f application.conf"
 flink run 
 
 
+# 手动保存savepoint
+flink savepoint <job_id>
 ```
 
 
@@ -90,6 +95,20 @@ https://ci.apache.org/projects/flink/flink-docs-release-1.8/dev/api_concepts.htm
 custom aggregations
 
 reduce()
+
+## Window
+### timeWindow
+Batch 是 Streaming 的一个特例, 使用timeWindow可以统一batch和stream任务的处理
+- Tumbling Time Window
+```
+# 翻滚时间窗口, 1分钟
+.timeWindow(Time.minutes(1))
+
+# 滑动时间窗口, 窗口1分钟，滑动30秒
+.timeWindow(Time.minutes(1), Time.seconds(30))
+```
+### countWindow
+### Session Window
 
 
 ## savepoint

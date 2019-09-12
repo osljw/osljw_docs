@@ -1,15 +1,4 @@
 
----
-layout:     post
-title:      "sql inject"
-subtitle:   "sql inject"
-date:       2019-06-12 16:56:15
-author:     "none"
-header-img: "img/posts/default_post.jpg"
-catalog: true
-tags:
-    - tag
----
 
 # 后台登录
 http://www.shiyanbar.com/ctf/2036

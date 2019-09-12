@@ -4,11 +4,12 @@
 
 ## REGISTER_OP
 
+> 自动注册工厂模式
 
 
 REGISTER_OP 本质定义了一个::tensorflow::register_op::OpDefBuilderReceiver类的对象， 这个对象是一个全局变量，该对象的构造参数为一个模板类::tensorflow::register_op::OpDefBuilderWrapper<SHOULD_REGISTER_OP(name)>生成的对象， 
 
-1. REGISTER_OP 最终生成了两个对象，分别为OpDefBuilderReceiver类和OpDefBuilderWrapper模板类的对象，OpDefBuilderReceiver类在赋值符号(=)的右边，OpDefBuilderWrapper模板类对象在赋值符号(=)的左边，
+1. REGISTER_OP 最终生成了两个对象，分别为OpDefBuilderReceiver类和OpDefBuilderWrapper模板类的对象，OpDefBuilderReceiver类在赋值符号(=)的左边，OpDefBuilderWrapper模板类对象在赋值符号(=)的右边，
 2. REGISTER_OP宏后可以继续调用OpDefBuilderWrapper模板类的方法，如Input，Attr等
 
 
@@ -64,6 +65,8 @@ OpDefBuilderReceiver::OpDefBuilderReceiver(
 }
 }  // namespace register_op
 ```
+OpRegistry::Global()->Register函数的参数为一个lambda函数
+
 
 ## OpDefBuilderWrapper
 
@@ -623,3 +626,79 @@ class HadoopFileSystem : public FileSystem {
 REGISTER_FILE_SYSTEM("hdfs", HadoopFileSystem);
 ```
 
+tensorflow\core\platform\env.h
+
+
+```c++
+// Register a FileSystem implementation for a scheme. Files with names that have
+// "scheme://" prefixes are routed to use this implementation.
+#define REGISTER_FILE_SYSTEM_ENV(env, scheme, factory) \
+  REGISTER_FILE_SYSTEM_UNIQ_HELPER(__COUNTER__, env, scheme, factory)
+#define REGISTER_FILE_SYSTEM_UNIQ_HELPER(ctr, env, scheme, factory) \
+  REGISTER_FILE_SYSTEM_UNIQ(ctr, env, scheme, factory)
+#define REGISTER_FILE_SYSTEM_UNIQ(ctr, env, scheme, factory)   \
+  static ::tensorflow::register_file_system::Register<factory> \
+      register_ff##ctr TF_ATTRIBUTE_UNUSED =                   \
+          ::tensorflow::register_file_system::Register<factory>(env, scheme)
+
+#define REGISTER_FILE_SYSTEM(scheme, factory) \
+  REGISTER_FILE_SYSTEM_ENV(::tensorflow::Env::Default(), scheme, factory);
+```
+- ::tensorflow::Env::Default() 为单例模式
+- Register\<factory>为模板类，使用lambda将factory封装为函数对象，以便延迟构造
+
+```c++
+namespace register_file_system {
+
+template <typename Factory>
+struct Register {
+  Register(Env* env, const string& scheme) {
+    // TODO(b/32704451): Don't just ignore the ::tensorflow::Status object!
+    env->RegisterFileSystem(scheme, []() -> FileSystem* { return new Factory; })
+    .IgnoreError();
+  }
+};
+
+}  // namespace register_file_system
+```
+
+tensorflow\core\platform\env.cc
+```c++
+Status Env::RegisterFileSystem(const string& scheme,
+                               FileSystemRegistry::Factory factory) {
+  return file_system_registry_->Register(scheme, std::move(factory));
+}
+
+Env::Env() : file_system_registry_(new FileSystemRegistryImpl) {}
+
+Status FileSystemRegistryImpl::Register(const string& scheme,
+                                        FileSystemRegistry::Factory factory) {
+  mutex_lock lock(mu_);
+  if (!registry_.emplace(string(scheme), std::unique_ptr<FileSystem>(factory()))
+           .second) {
+    return errors::AlreadyExists("File factory for ", scheme,
+                                 " already registered");
+  }
+  return Status::OK();
+}
+```
+所有的对象交由file_system_registry_对象进行管理, file_system_registry_为Env类的成员，初始化为FileSystemRegistryImpl类实例, 其Register方法为线程安全的注册实现
+
+```
+std::unique_ptr<FileSystemRegistry> file_system_registry_;
+```
+
+
+tensorflow\core\platform\file_system.h
+```c++
+class FileSystemRegistry {
+ public:
+  typedef std::function<FileSystem*()> Factory;
+
+  virtual ~FileSystemRegistry();
+  virtual Status Register(const string& scheme, Factory factory) = 0;
+  virtual FileSystem* Lookup(const string& scheme) = 0;
+  virtual Status GetRegisteredFileSystemSchemes(
+      std::vector<string>* schemes) = 0;
+};
+```
