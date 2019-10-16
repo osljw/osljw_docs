@@ -49,6 +49,12 @@ x = tf.keras.Input(shape=(None, None, 3), name="input_image")
 
 ### tf.keras.layers.Bidirectional
 
+# keras model
+
+获取所有层的名称name
+```
+[x.name for x in base_model.layers]
+```
 
 
 # keras compile

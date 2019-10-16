@@ -30,6 +30,10 @@ sbt "run -f application.conf"
 - window机制
 - checkpoint机制
 
+## flink on yarn
+- 启动一个YARN session(Start a long-running Flink cluster on YARN)
+- 直接在YARN上提交运行Flink作业(Run a Flink job on YARN)
+
 ## flink任务
 ```
 # 任务提交和恢复， -s指定savepoint路径， -c指定入口主类
@@ -40,7 +44,20 @@ flink run
 flink savepoint <job_id>
 ```
 
+# flink shell
 
+本地模式启动交互式shell
+```
+bin/start-scala-shell.sh local
+```
+
+```
+val dataSet = benv.fromElements((1,2), (2,3), (3,5), (4,6))
+dataSet.maxBy(0).print()
+```
+
+
+# flink time
 ```scala
 // get an ExecutionEnvironment
 val env = StreamExecutionEnvironment.getExecutionEnvironment
@@ -90,11 +107,36 @@ https://ci.apache.org/projects/flink/flink-docs-release-1.8/dev/api_concepts.htm
 -  field expression:
 
 ## aggregator functions
-- maxBy
+> 内置api
+  - maxBy
 
-custom aggregations
+> 继承AggregateFunction
 
-reduce()
+覆盖三个实现, IN表示输入类型， ACC表示聚合类型， OUT表示输出类型
+- def createAccumulator() 负责创建初始值
+- override def add((value: IN, accumulator: ACC):ACC 负责将输入数据和已聚合数据进行聚合
+- override def merge(a: ACC, b: ACC):ACC 负责合并不同分区的数据
+- override def getResult(accumulator: ACC): OUT 负责从迭代类型得到聚合后的返回结果
+```
+import org.apache.flink.api.common.functions.AggregateFunction
+
+class MyAggFunc(k: String) extends AggregateFunction[IN, ACC, OUT] {
+  override def createAccumulator() = ACC()
+  override def add((value: IN, accumulator: ACC) = {
+    // add value and accumulator
+    return ACC()
+  }
+  override def merge(a: ACC, b: ACC) = {
+  }
+
+  override def getResult(accumulator: ACC): OUT = {
+  }
+}
+
+
+```
+
+- reduce()
 
 ## Window
 ### timeWindow
@@ -125,9 +167,40 @@ Batch 是 Streaming 的一个特例, 使用timeWindow可以统一batch和stream�
 > object
 - 可以拥有属性和方法，且默认都是"static"类型，可以直接用object名直接调用属性和方法，不需要通过new出来的对象（也不支持）
 - 必须无参
-- object可以extends父类或Trait，但object不可以extends object，即object无法作为父类。
+- object可以extends父类或trait，但object不可以extends object，即object无法作为父类。
+
+```scala
+import org.apache.spark.{ SparkConf, SparkContext }
+import org.apache.spark.sql.SparkSession
+ 
+trait Spark {
+    def spark = { 
+        val sparkConf = new SparkConf().setAppName("SparkApp")
+
+        val spark = SparkSession.builder()
+            .config(sparkConf)
+            .enableHiveSupport()
+            .getOrCreate()
+
+        spark
+    }   
+}
+
+object SparkApp extends Spark {
+    def main(args: Array[String]) {
+        val showSql = "show databases"
+        val rdd = spark.sql(showSql)
+        rdd.show()
+    }   
+}
+```
+object 继承trait后可以使用trait里的函数
 
 > trait
+> 
+类似java中的接口interface
+- 可以定义属性和方法的实现
+- 可以被class和object继承(extends)
 
 多重继承， with
 

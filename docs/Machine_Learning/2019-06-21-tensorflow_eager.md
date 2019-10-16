@@ -1,17 +1,4 @@
 
----
-layout:     post
-title:      "tensorflow_eager"
-subtitle:   "tensorflow_eager"
-date:       2019-06-21 14:22:49
-author:     "none"
-header-img: "img/posts/default_post.jpg"
-catalog: true
-tags:
-    - tag
----
-
-
 ## pywrap_tensorflow
 
 ```python
