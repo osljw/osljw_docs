@@ -2,6 +2,19 @@
 # yolov3
 
 
+# 数据集
+- pascal voc
+
+# 标注工具
+- labelImg https://github.com/tzutalin/labelImg
+- VoTT https://github.com/Microsoft/VoTT
+
+
+# pascal voc => tfrecord
+https://github.com/tensorflow/models/blob/master/research/object_detection/dataset_tools/create_pascal_tf_record.py
+
+
+
 # yolov3 tensorflow 2.0
 https://github.com/zzh8829/yolov3-tf2
 

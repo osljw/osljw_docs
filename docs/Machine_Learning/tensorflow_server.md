@@ -102,3 +102,41 @@ tensorflow\core\distributed_runtime\worker_interface.h
 > WorkerService
 
 tensorflow\core\protobuf\worker_service.proto
+
+
+
+
+# SavedModel
+
+https://www.tensorflow.org/guide/saved_model?hl=zh_cn#exporting_custom_models
+
+- keras submodel model export
+- keras function api model export
+- export multiple signatures
+
+
+# SavedModel c++ 
+
+- tensorflow::SavedModelBundle
+  - MetaGraphDef
+    - SignatureDef
+      - TensorInfo
+    - GraphDef
+
+tensorflow\cc\saved_model\loader.h
+```
+struct SavedModelBundle {
+  std::unique_ptr<Session> session;
+  MetaGraphDef meta_graph_def;
+
+  /// A TensorFlow Session does not Close itself on destruction. To avoid
+  /// resource leaks, we explicitly call Close on Sessions that we create.
+  ~SavedModelBundle() {
+    if (session) {
+      session->Close().IgnoreError();
+    }
+  }
+
+  SavedModelBundle() = default;
+};
+```

@@ -17,5 +17,15 @@ cvr模型:
     - 劣势: 不能够对未点击的样本进行建模
 
 
+
+
+# ESMM
+
 CVR预估的新思路：完整空间多任务模型
 https://zhuanlan.zhihu.com/p/37562283
+
+- Estimator实现 https://zhuanlan.zhihu.com/p/42214716 
+- Estimator实现 https://github.com/lambdaji/tf_repos/tree/master/DeepMTL
+- 阿里xdl https://github.com/alibaba/x-deeplearning/wiki/%E5%85%A8%E7%A9%BA%E9%97%B4%E5%A4%9A%E4%BB%BB%E5%8A%A1%E6%A8%A1%E5%9E%8B(ESMM)
+
+

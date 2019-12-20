@@ -75,6 +75,106 @@ keras loss函数需要两个参数y_true 和 y_pred, y_pred对应的是model的o
 
 CTC (Connectionist Temporal Classification)
 
+# keras metrics
+
+tf.keras.metrics.Metric
+- `__init__` 定义metric计算是需要的变量
+- `update_state` 接受y_true和y_pred输入，来计算metric
+- `result` 返回metric
+
+在每个train或者valid epoch开始时，keras会使用model.reset_metrics()
+
+在compile中设定metrics参数， 每个metrics
+
+tensorflow/python/keras/engine/training_utils.py
+
+
+- Metric
+  - Reduce
+    - MeanMetricWrapper
+      - Mean
+    - Sum
+
+# keras callbacks
+
+tf.keras.callbacks.Callback
+
+metrics的计算结果如何传递给callback，
+
+tensorflow/python/keras/engine/training_v2.py
+```python
+      with training_context.on_start(
+          model, callbacks, use_sample, verbose, mode):
+        # TODO(scottzhu): Handle TPUStrategy training loop
+        with training_context.on_epoch(0, mode) as epoch_logs:
+          model.reset_metrics()
+          result = run_one_epoch(
+              model,
+              data_iterator,
+              execution_function,
+              dataset_size=adapter.get_size(),
+              batch_size=adapter.batch_size(),
+              strategy=strategy,
+              steps_per_epoch=steps,
+              num_samples=total_samples,
+              mode=mode,
+              training_context=training_context,
+              total_epochs=1)
+          cbks.make_logs(model, epoch_logs, result, mode)
+```
+`training_context.on_epoch`负责构建一个epoch的上下文环境，调用callback函数
+`run_one_epoch` 返回的是The loss and metric value from the model.
+
+tensorflow/python/keras/callbacks.py
+```python
+def make_logs(model, logs, outputs, mode, prefix=''):
+  """Computes logs for sending to `on_batch_end` methods."""
+  metric_names = model.metrics_names
+  if mode in {ModeKeys.TRAIN, ModeKeys.TEST} and metric_names:
+    for label, output in zip(metric_names, outputs):
+      logs[prefix + label] = output
+  else:
+    logs['outputs'] = outputs
+  return logs
+```
+
+# keras fit
+支持的数据格式
+
+根据输入数据的不同，选择不同的train loop
+
+- context.executing_eagerly() -> training_v2.Loop()
+- self._distribution_strategy -> training_distributed.DistributionSingleWorkerTrainingLoop()
+
+
+tensorflow/python/keras/engine/training_v2.py
+```
+class Loop(training_utils.TrainingLoop):
+  def fit(
+      self, model, x=None, y=None, batch_size=None, epochs=1, verbose=1,
+      callbacks=None, validation_split=0., validation_data=None, shuffle=True,
+      class_weight=None, sample_weight=None, initial_epoch=0,
+      steps_per_epoch=None, validation_steps=None, validation_freq=1, **kwargs):
+```
+
+
+
+处理一个epoch的数据
+```
+def run_one_epoch(model,
+                  iterator,
+                  execution_function,
+                  dataset_size=None,
+                  batch_size=None,
+                  strategy=None,
+                  steps_per_epoch=None,
+                  num_samples=None,
+                  mode=ModeKeys.TRAIN,
+                  training_context=None,
+                  total_epochs=None):
+```
+
+
 
 # keras fit_generator, train_on_batch
 https://github.com/keras-team/keras/blob/master/keras/engine/training_generator.py
