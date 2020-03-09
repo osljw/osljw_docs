@@ -49,11 +49,17 @@ x = tf.keras.Input(shape=(None, None, 3), name="input_image")
 
 ### tf.keras.layers.Bidirectional
 
-# keras model
+# keras model layer
 
 获取所有层的名称name
 ```
 [x.name for x in base_model.layers]
+```
+
+将模型的层按照名称变为python中的变量
+```python
+for x in yolo.layers:
+    globals()[x.name] = yolo.get_layer(x.name)
 ```
 
 

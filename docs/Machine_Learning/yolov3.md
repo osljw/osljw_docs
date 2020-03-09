@@ -43,6 +43,7 @@ tfrecord格式，每个样本的格式如下
       'image/object/view': dataset_util.bytes_list_feature(poses),
   }))
 ```
+bbox 使用的是归一化后的大小
 
 训练数据解析,每个样本最多包含100个目标， 不足100个目标的样本进行padding
 ```
@@ -65,12 +66,13 @@ def parse_tfrecord(tfrecord, class_table):
 
     return x_train, y_train
 ```
-最终transform_targets函数参数y_train的shape为(batch_size, 100, 5)
 
-由真实标签的bbox计算所属anchor
+最终transform_targets函数参数y_train的shape为(batch_size, 100, 5), y_train参数shape可解释为(batch_size, max_boxes, (xmin, ymin, xmax, ymax, label))
+- max_boxes=100表示每幅图片中最多包含100个目标框
+- 5表示(xmin, ymin, xmax, ymax, labels)
 
-
-```
+`transform_targets`根据真实标签的bbox和anchor的iou计算目标框应该由哪个尺寸来进行检测
+```python
 def transform_targets(y_train, anchors, anchor_masks, classes):
     # y_train: shape=(batch_size, boxes, 5)
     y_outs = []
@@ -102,12 +104,13 @@ def transform_targets(y_train, anchors, anchor_masks, classes):
 
     return tuple(y_outs)
 ```
-transform_targets函数最终返回一个tuple， 这个tuple的size为3，对应三个尺度
+`transform_targets`函数最终返回一个tuple， 这个tuple的size为3，对应三个尺度
 ```
 [TensorShape([batch_size, 13, 13, 3, 6]),
  TensorShape([batch_size, 26, 26, 3, 6]),
  TensorShape([batch_size, 52, 52, 3, 6])]
 ```
+返回的每个尺寸结果可解释为(N, grid, grid, anchors, [x, y, w, h, obj, class])
 
 
 `transform_targets`的anchors参数和anchor_masks参数
@@ -117,7 +120,7 @@ transform_targets函数最终返回一个tuple， 这个tuple的size为3，对�
                             np.float32) / 416
     yolo_anchor_masks = np.array([[6, 7, 8], [3, 4, 5], [0, 1, 2]])
 ```
-`transform_targets`的y_train参数shape可解释为(batch_size, boxes, (xmin, ymin, xmax, ymax, label))
+
 
 ```
     box_wh = y_train[..., 2:4] - y_train[..., 0:2]
@@ -135,7 +138,7 @@ anchor_area为预设框的面积，(9，2)
 
 anchor_idx最终的shape为(batch_size, boxes, 1)， 表示的是每个目标框与哪个预设框iou最大
 
-transform_targets_for_output函数负责将(N, boxes, (x1, y1, x2, y2, class, best_anchor))转换为(N, grid, grid, anchors, [x, y, w, h, obj, class]), 由于使用了for和if控制流, 因此需要使用tf.function，
+transform_targets_for_output函数负责将(N, boxes, (x1, y1, x2, y2, class, best_anchor))转换为(N, grid, grid, anchors, [x, y, w, h, obj, class]), 由于使用了for和if控制流, 因此需要使用tf.function
 ```
 @tf.function
 def transform_targets_for_output(y_true, grid_size, anchor_idxs, classes):
@@ -157,6 +160,8 @@ def transform_targets_for_output(y_true, grid_size, anchor_idxs, classes):
         # i表示第几个样本
         for j in tf.range(tf.shape(y_true)[1]):
             # j表示第几个目标框
+
+            # 为0表示的是padding的目标框
             if tf.equal(y_true[i][j][2], 0):
                 continue
             anchor_eq = tf.equal(
@@ -284,19 +289,55 @@ def YoloOutput(filters, anchors, classes, name=None):
     return yolo_output
 ```
 
-三个不同尺度的特征图都会进行目标边框的预测, 每个特征图的一个像素可以视为对应三个预设框和三个预测框
+三个不同尺度的特征图都会进行目标边框的预测, 每个特征图的一个像素可以视为对应三个预设框和三个预测框, 每个预测框由6维构成， 表示框的中心距离当前格点坐标的偏移和相对预设框的宽高比例，以及是包含目标和目标的类别
 
 ![](yolov3/yolov3-bbox.png)
 
 每个预测框由$(t_x, t_y, t_w, t_h, obj_{logit}, class_{logit})$来描述,
 这些数值再经过计算变换为$(b_x, b_y, b_w, b_h, obj, class)$
-- $b_x$表示预测框相对于预设框中心的x轴偏移量
+- $c_x$和$c_y$表示尺度图的格点坐标, 例如13*13的尺度图， $0 <= c_x <13$
+- $b_x$表示预测框相对于预设框中心的x轴偏移量, 
 - $b_y$表示预测框相对于预设框中心的y轴偏移量
-- $p_w, p_h$表示预测框的宽和高
+- $p_w, p_h$表示预设框的宽和高, 归一化数值
 - obj表示预测框中是否包含目标
 - class为num_class长度，表示每个目标类别的概率
 ![](yolov3/bbox.png)
 
+
+yolo_boxes负责将由$(t_x, t_y, t_w, t_h, obj_{logit}, class_{logit})$变换为$(b_x, b_y, b_w, b_h, obj, class)$， 最终输出(bbox, objectness, class_probs， pred_box)
+
+- $(t_x, t_y, t_w, t_h, obj_{logit}, class_{logit})$ 由卷积输出，未经过batchnorm和激活函数处理
+- bbox为左上角坐标和右下角坐标， 归一化数值
+- pred_box用于计算loss时使用
+
+```python
+def yolo_boxes(pred, anchors, classes):
+    # pred: (batch_size, grid, grid, anchors, (x, y, w, h, obj, ...classes))
+    grid_size = tf.shape(pred)[1]
+    box_xy, box_wh, objectness, class_probs = tf.split(
+        pred, (2, 2, 1, classes), axis=-1)
+
+    box_xy = tf.sigmoid(box_xy)
+    objectness = tf.sigmoid(objectness)
+    class_probs = tf.sigmoid(class_probs)
+    pred_box = tf.concat((box_xy, box_wh), axis=-1)  # original xywh for loss
+
+    # !!! grid[x][y] == (y, x)
+    grid = tf.meshgrid(tf.range(grid_size), tf.range(grid_size))
+    grid = tf.expand_dims(tf.stack(grid, axis=-1), axis=2)  # [gx, gy, 1, 2]
+
+    # 预测框的中心位置， 归一化
+    box_xy = (box_xy + tf.cast(grid, tf.float32)) / \
+        tf.cast(grid_size, tf.float32)
+    # 预测框的宽高， 归一化
+    box_wh = tf.exp(box_wh) * anchors
+
+    box_x1y1 = box_xy - box_wh / 2
+    box_x2y2 = box_xy + box_wh / 2
+    bbox = tf.concat([box_x1y1, box_x2y2], axis=-1)
+
+    return bbox, objectness, class_probs, pred_box
+```
 
 # loss and train
 
@@ -323,11 +364,16 @@ y_true 的shape为(batch_size, grid, grid, anchors, (x1, y1, x2, y2, obj, cls))
 - 每个目标只后落到$grid*grid*anchors$中的一个cell上
 - 每个目标由一个(5+num_classes)维的向量(x1, y1, x2, y2, obj, cls)表示
 
-```
+
+`YoloLoss`负责计算每个尺度下的损失， 将真实检测框转换为尺度格点图上的坐标
+```python
 def YoloLoss(anchors, classes=80, ignore_thresh=0.5):
     def yolo_loss(y_true, y_pred):
-        # 1. transform all pred outputs
+        # y_true: (batch_size, grid, grid, anchors, (x, y, w, h, obj, ...cls))
         # y_pred: (batch_size, grid, grid, anchors, (x, y, w, h, obj, ...cls))
+        # x, y, obj, cls 为sigmoid激活后的输出值
+
+        # 1. transform all pred outputs
         pred_box, pred_obj, pred_class, pred_xywh = yolo_boxes(
             y_pred, anchors, classes)
         pred_xy = pred_xywh[..., 0:2]
@@ -337,7 +383,9 @@ def YoloLoss(anchors, classes=80, ignore_thresh=0.5):
         # y_true: (batch_size, grid, grid, anchors, (x1, y1, x2, y2, obj, cls))
         true_box, true_obj, true_class_idx = tf.split(
             y_true, (4, 1, 1), axis=-1)
+        # 目标框的中心位置， 归一化
         true_xy = (true_box[..., 0:2] + true_box[..., 2:4]) / 2
+        # 目标框的宽高
         true_wh = true_box[..., 2:4] - true_box[..., 0:2]
 
         # give higher weights to small boxes
@@ -347,6 +395,7 @@ def YoloLoss(anchors, classes=80, ignore_thresh=0.5):
         grid_size = tf.shape(y_true)[1]
         grid = tf.meshgrid(tf.range(grid_size), tf.range(grid_size))
         grid = tf.expand_dims(tf.stack(grid, axis=-1), axis=2)
+        # 目标框与格点的偏移量
         true_xy = true_xy * tf.cast(grid_size, tf.float32) - \
             tf.cast(grid, tf.float32)
         true_wh = tf.math.log(true_wh / anchors)
@@ -354,18 +403,24 @@ def YoloLoss(anchors, classes=80, ignore_thresh=0.5):
                            tf.zeros_like(true_wh), true_wh)
 
         # 4. calculate all masks
+        # obj_mask: (batch_size, grid_size, grid_size, anchors)
         obj_mask = tf.squeeze(true_obj, -1)
         # ignore false positive when iou is over threshold
-        true_box_flat = tf.boolean_mask(true_box, tf.cast(obj_mask, tf.bool))
-        best_iou = tf.reduce_max(broadcast_iou(
-            pred_box, true_box_flat), axis=-1)
+        # obj_mask: (batch_size, grid_size, grid_size, anchors)
+        best_iou, _, _ = tf.map_fn(
+            lambda x: (tf.reduce_max(broadcast_iou(x[0], tf.boolean_mask(
+                x[1], tf.cast(x[2], tf.bool))), axis=-1), 0, 0),
+            (pred_box, true_box, obj_mask))
+        # ignore_mask: (batch_size, grid_size, grid_size, anchors)
         ignore_mask = tf.cast(best_iou < ignore_thresh, tf.float32)
+        # 对于实际没有目标框的格点, 其可以预测出目标，但其预测框与目标框的iou不能超过阈值，如果其预测框和目标框iou不超过阈值，可以忽略其预测出目标的损失
 
         # 5. calculate all losses
         xy_loss = obj_mask * box_loss_scale * \
             tf.reduce_sum(tf.square(true_xy - pred_xy), axis=-1)
         wh_loss = obj_mask * box_loss_scale * \
             tf.reduce_sum(tf.square(true_wh - pred_wh), axis=-1)
+        # obj_loss: (batch_size, grid_size, grid_size, anchors, 1)
         obj_loss = binary_crossentropy(true_obj, pred_obj)
         obj_loss = obj_mask * obj_loss + \
             (1 - obj_mask) * ignore_mask * obj_loss
@@ -382,36 +437,80 @@ def YoloLoss(anchors, classes=80, ignore_thresh=0.5):
         return xy_loss + wh_loss + obj_loss + class_loss
     return yolo_loss
 ```
+`tf.map_fn`在batch_size维度进行拆解， 对每幅
 
-yolo_boxes负责将由$(t_x, t_y, t_w, t_h, obj_{logit}, class_{logit})$变换为$(b_x, b_y, b_w, b_h, obj, class)$， 变换时和预设框anchors的大小相关
+`broadcast_iou`负责计算所有预测框和一个真实目标框的iou, 
+- box_1: (grid_size, grid_size, anchors, (x1, y1, x2, y2))
+- box_2: (N, (x1, y1, x2, y2))
+- return: (grid_size, grid_size, anchors, N)
+```python
+def broadcast_iou(box_1, box_2):
+    # box_1: (..., (x1, y1, x2, y2))
+    # box_2: (N, (x1, y1, x2, y2)) 真实目标框
 
+    # broadcast boxes
+    box_1 = tf.expand_dims(box_1, -2)
+    box_2 = tf.expand_dims(box_2, 0)
+    # new_shape: (..., N, (x1, y1, x2, y2))
+    new_shape = tf.broadcast_dynamic_shape(tf.shape(box_1), tf.shape(box_2))
+    box_1 = tf.broadcast_to(box_1, new_shape)
+    box_2 = tf.broadcast_to(box_2, new_shape)
+
+    int_w = tf.maximum(tf.minimum(box_1[..., 2], box_2[..., 2]) -
+                       tf.maximum(box_1[..., 0], box_2[..., 0]), 0)
+    int_h = tf.maximum(tf.minimum(box_1[..., 3], box_2[..., 3]) -
+                       tf.maximum(box_1[..., 1], box_2[..., 1]), 0)
+    int_area = int_w * int_h
+    box_1_area = (box_1[..., 2] - box_1[..., 0]) * \
+        (box_1[..., 3] - box_1[..., 1])
+    box_2_area = (box_2[..., 2] - box_2[..., 0]) * \
+        (box_2[..., 3] - box_2[..., 1])
+    return int_area / (box_1_area + box_2_area - int_area)
 ```
-def yolo_boxes(pred, anchors, classes):
-    # pred: (batch_size, grid, grid, anchors, (x, y, w, h, obj, ...classes))
-    grid_size = tf.shape(pred)[1]
-    box_xy, box_wh, objectness, class_probs = tf.split(
-        pred, (2, 2, 1, classes), axis=-1)
 
-    box_xy = tf.sigmoid(box_xy)
-    objectness = tf.sigmoid(objectness)
-    class_probs = tf.sigmoid(class_probs)
-    pred_box = tf.concat((box_xy, box_wh), axis=-1)  # original xywh for loss
 
-    # !!! grid[x][y] == (y, x)
-    grid = tf.meshgrid(tf.range(grid_size), tf.range(grid_size))
-    grid = tf.expand_dims(tf.stack(grid, axis=-1), axis=2)  # [gx, gy, 1, 2]
 
-    box_xy = (box_xy + tf.cast(grid, tf.float32)) / \
-        tf.cast(grid_size, tf.float32)
-    box_wh = tf.exp(box_wh) * anchors
+# nms non_max_suppression
+nms算法， 
+- 按照分数排序
+  - 循环
+    - 选择分数最高的目标框， 
+    - 剔除与该目标框iou大于阈值的其他框
+```python
+def yolo_nms(outputs, anchors, masks, classes):
+    # boxes, conf, type
+    b, c, t = [], [], []
 
-    box_x1y1 = box_xy - box_wh / 2
-    box_x2y2 = box_xy + box_wh / 2
-    bbox = tf.concat([box_x1y1, box_x2y2], axis=-1)
+    for o in outputs:
+        b.append(tf.reshape(o[0], (tf.shape(o[0])[0], -1, tf.shape(o[0])[-1])))
+        c.append(tf.reshape(o[1], (tf.shape(o[1])[0], -1, tf.shape(o[1])[-1])))
+        t.append(tf.reshape(o[2], (tf.shape(o[2])[0], -1, tf.shape(o[2])[-1])))
 
-    return bbox, objectness, class_probs, pred_box
+    bbox = tf.concat(b, axis=1)
+    confidence = tf.concat(c, axis=1)
+    class_probs = tf.concat(t, axis=1)
+
+    scores = confidence * class_probs
+    boxes, scores, classes, valid_detections = tf.image.combined_non_max_suppression(
+        boxes=tf.reshape(bbox, (tf.shape(bbox)[0], -1, 1, 4)),
+        scores=tf.reshape(
+            scores, (tf.shape(scores)[0], -1, tf.shape(scores)[-1])),
+        max_output_size_per_class=FLAGS.yolo_max_boxes,
+        max_total_size=FLAGS.yolo_max_boxes,
+        iou_threshold=FLAGS.yolo_iou_threshold,
+        score_threshold=FLAGS.yolo_score_threshold
+    )
+
+    return boxes, scores, classes, valid_detections
 ```
+- outputs: tuple类型，长度为3，每个元素为(bbox, objectness, class_probs), 分表表示每个尺度下的预测结果， bbox为(x1, y1, x2, y2)
+-  
+
+# detect 预测
+输入： Input([size, size, channels]) 图像
+输出：
 
 
 # 相关文档
-https://hugsy.top/2019/06/18/cnn_yolov3/
+- https://hugsy.top/2019/06/18/cnn_yolov3/
+- https://github.com/YunYang1994/cv-notebooks/blob/master/ai_algorithm/YOLOv3.md

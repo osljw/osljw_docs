@@ -173,18 +173,40 @@ override def run(ctx: SourceContext[MyType]): Unit = {
 }
 ```
 - Timestamp Assigners / Watermark Generators
+
+AscendingTimestampExtractor
 ```scala
 import org.apache.flink.streaming.api.functions.timestamps.AscendingTimestampExtractor;
 
 val env = StreamExecutionEnvironment.getExecutionEnvironment
 env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime)
 
-val timedData = csvInput.assignTimestampsAndWatermarks(new AscendingTimestampExtractor[UserBehavior]() {
+val timedData = csvInput.assignTimestampsAndWatermarks(
+  new AscendingTimestampExtractor[UserBehavior]() {
     override def extractAscendingTimestamp(ub: UserBehavior):Long = {
         ub.timestamp * 1000
     }
-})
+  }
+)
 ```
+BoundedOutOfOrdernessTimestampExtractor
+```scala
+import org.apache.flink.streaming.api.functions.timestamps.BoundedOutOfOrdernessTimestampExtractor;
+
+val env = StreamExecutionEnvironment.getExecutionEnvironment
+env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime)
+
+val maxLaggedTimeMinutes = 1
+val timedData = dataInput.assignTimestampsAndWatermarks(
+  new BoundedOutOfOrdernessTimestampExtractor[EventBase](Time.minutes(maxLaggedTimeMinutes)) {
+    override def extractTimestamp(d: EventBase):Long = {
+      //ub.getTimestamp * 1000
+      d.getTime
+    }
+  }
+)
+```
+
 
 # 基础操作
 ## 过滤
@@ -302,6 +324,11 @@ https://ci.apache.org/projects/flink/flink-docs-master/api/java/org/apache/flink
 
 ### timeWindow
 Batch 是 Streaming 的一个特例, 使用timeWindow可以统一batch和stream任务的处理
+
+https://segmentfault.com/a/1190000020119816
+
+`timeWindow` api 会使用`environment.getStreamTimeCharacteristic()` 自动判断时间类型
+
 - Tumbling Time Window
 ```
 # 翻滚时间窗口, 1分钟

@@ -702,3 +702,166 @@ class FileSystemRegistry {
       std::vector<string>* schemes) = 0;
 };
 ```
+
+
+# gen_ops
+
+ops： 
+- `tensorflow/python/ops/gen_<name>.py`文件对应的c++源码为`tensorflow/core/kernels/<name>.cc`
+- 可以通过安装后的python包查看自动生成的python源码
+
+使用bazel查询文件的生成规则
+```
+bazel query --output=build tensorflow/python/ops/gen_math_ops.py
+
+# /home/test/tensorflow/tensorflow/python/BUILD:2134:1
+genrule(
+  name = "math_ops_pygenrule",
+  generator_name = "math_ops_gen",
+  generator_function = "tf_gen_op_wrapper_private_py",
+  generator_location = "tensorflow/python/BUILD:2134",
+  srcs = ["//tensorflow/core/api_def:base_api_def", "//tensorflow/core/api_def:python_api_def"],
+  tools = ["//tensorflow/python:gen_math_ops_py_wrappers_cc"] + select({"//tensorflow:framework_shared_object": ["//tensorflow:libtensorflow_framework.so.2"], "//conditions:default": [], "//tensorflow:macos_with_framework_shared_object": ["//tensorflow:libtensorflow_framework.2.dylib"]}),
+  outs = ["//tensorflow/python:ops/gen_math_ops.py"],
+  cmd = "$(location gen_math_ops_py_wrappers_cc) $$(dirname $$(echo $(locations //tensorflow/core/api_def:base_api_def) | cut -d\" \" -f1)),$$(dirname $$(echo $(locations //tensorflow/core/api_def:python_api_def) | cut -d\" \" -f1)) '' 1 0 > $@",
+)
+```
+
+
+`gen_math_ops.py`文件的生成规则
+```
+# tensorflow/tensorflow/python/BUILD
+tf_gen_op_wrapper_private_py(
+    name = "math_ops_gen",
+    visibility = [
+        "//learning/brain/google/python/ops:__pkg__",
+        "//learning/brain/python/ops:__pkg__",
+        "//tensorflow/compiler/tests:__pkg__",
+        "//tensorflow/python/kernel_tests:__pkg__",
+    ],
+)
+```
+`tf_gen_op_wrapper_private_py` 生成函数会调用`tf_gen_op_wrapper_py`
+```
+# tensorflow/python/build_defs.bzl
+def tf_gen_op_wrapper_private_py(
+        name,
+        out = None,
+        deps = [],
+        require_shape_functions = False,
+        visibility = []):
+    if not name.endswith("_gen"):
+        fail("name must end in _gen")
+    if not visibility:
+        visibility = ["//visibility:private"]
+    bare_op_name = name[:-4]  # Strip off the _gen
+    tf_gen_op_wrapper_py(
+        name = bare_op_name,
+        out = out,
+        visibility = visibility,
+        deps = deps,
+        require_shape_functions = require_shape_functions,
+        generated_target_name = name,
+        api_def_srcs = [
+            "//tensorflow/core/api_def:base_api_def",
+            "//tensorflow/core/api_def:python_api_def",
+        ],
+    )
+```
+`tf_gen_op_wrapper_py`生成函数
+```
+# tensorflow/tensorflow.bzl
+
+```
+`tf_gen_op_wrapper_py`的主要功能如下：
+- 使用tf_cc_binary，依赖//tensorflow/core:math_ops_op_lib目标， 将相应的c++源码构建为静态库
+- 使用native.genrule，定义如何从apidef生成python文件gen_math_ops.py
+- 使用native.py_library， 将生成的python文件作为python库
+
+
+
+
+
+```
+# tensorflow/tensorflow.bzl
+# Given a list of "op_lib_names" (a list of files in the ops directory
+# without their .cc extensions), generate a library for that file.
+def tf_gen_op_libs(op_lib_names, deps = None, is_external = True):
+    # Make library out of each op so it can also be used to generate wrappers
+    # for various languages.
+    if not deps:
+        deps = []
+    for n in op_lib_names:
+        native.cc_library(
+            name = n + "_op_lib",
+            copts = tf_copts(is_external = is_external),
+            srcs = ["ops/" + n + ".cc"],
+            deps = deps + [clean_dep("//tensorflow/core:framework")],
+            visibility = ["//visibility:public"],
+            alwayslink = 1,
+            linkstatic = 1,
+        )
+```
+
+tensorflow/core/BUILD
+```
+# Generates library per group of ops.
+tf_gen_op_libs(
+    is_external = False,
+    op_lib_names = [
+        "batch_ops",
+        "bitwise_ops",
+        "boosted_trees_ops",
+        ...
+        "math_ops",
+        ...
+        "sparse_ops",
+        ...
+    ],
+    deps = [
+        ":lib",
+        ":protos_all_cc",
+    ],
+)
+```
+`tf_gen_op_libs`函数为每个包名自动生成cc_library编译规则，如math_ops包对应的规则名为`math_ops_op_lib`, 使用cc_library对tensorflow/core/ops/math_ops.cc进行编译， 
+
+
+tensorflow/core/kernels/BUILD
+```
+# Generates library per group of ops.
+tf_gen_op_libs(
+    is_external = False,
+    op_lib_names = [
+        "batch_ops",
+        "bitwise_ops",
+        "boosted_trees_ops",
+        ...
+        "math_ops",
+        ...
+        "sparse_ops",
+        ...
+    ],
+    deps = [
+        ":lib",
+        ":protos_all_cc",
+    ],
+)
+```
+
+# RegisterGradient
+使用示例tensorflow/python/ops/math_grad.py
+
+`tf.RegisterGradient` tensorflow/python/framework/ops.py, 实现对op和梯度函数的关联，梯度函数的输入为两个参数(op, grad)，通过op参数获取op前向计算的输入tensors， 通过grad获取反向传播时输入的梯度。
+
+
+`class Registry`负责管理所有梯度函数的注册
+```
+tensorflow/python/framework/registry.py
+
+```
+该类在tensorflow/python/framework/ops.py中进行实例化
+```
+_gradient_registry = registry.Registry("gradient")
+```
+

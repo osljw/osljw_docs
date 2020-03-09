@@ -76,3 +76,5 @@ it = iter(ds)
 print(next(it))
 ```
 
+# MapDataset
+`StructuredFunctionWrapper`对map_function进行包裹， map_function实现从 nested structure 到another nested structure 的变换
