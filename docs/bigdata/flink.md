@@ -70,6 +70,40 @@ val dataSet = benv.fromElements((1,2), (2,3), (3,5), (4,6))
 dataSet.maxBy(0).print()
 ```
 
+# flink checkpoint
+
+```
+import org.apache.flink.streaming.api.CheckpointingMode
+import org.apache.flink.streaming.api.environment.CheckpointConfig.ExternalizedCheckpointCleanup
+
+val env = StreamExecutionEnvironment.getExecutionEnvironment
+
+val interval = 1000
+val timeout = 1000
+// checkpoint
+env.enableCheckpointing(interval)
+// advanced options:
+// set mode to exactly-once (this is the default)
+env.getCheckpointConfig.setCheckpointingMode(CheckpointingMode.EXACTLY_ONCE)
+// make sure 500 ms of progress happen between checkpoints
+env.getCheckpointConfig.setMinPauseBetweenCheckpoints(500)
+// checkpoints have to complete within one minute, or are discarded
+env.getCheckpointConfig.setCheckpointTimeout(timeout)
+// prevent the tasks from failing if an error happens in their checkpointing, 
+// the checkpoint will just be declined.
+env.getCheckpointConfig.setFailOnCheckpointingErrors(false)
+// allow only one checkpoint to be in progress at the same time
+env.getCheckpointConfig.setMaxConcurrentCheckpoints(1)
+// ExternalizedCheckpointCleanup.RETAIN_ON_CANCELLATION: 
+// Retain the checkpoint when the job is cancelled. 
+// Note that you have to manually clean up the checkpoint state after cancellation in this case.
+env.getCheckpointConfig.enableExternalizedCheckpoints(
+  ExternalizedCheckpointCleanup.RETAIN_ON_CANCELLATION)
+//ExternalizedCheckpointCleanup.DELETE_ON_CANCELLATION: 
+// Delete the checkpoint when the job is cancelled. 
+// The checkpoint state will only be available if the job fails.
+```
+
 
 # flink time
 - EventTime: 消息携带的时间戳, 需要指定如何从DataSource中抽取时间戳
@@ -384,4 +418,30 @@ StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironm
 env.setParallelism(10);
 ```
 
+
+# flink ParameterTool
+
+```scala
+import scala.collection.JavaConversions._
+import collection.JavaConverters._
+import org.apache.flink.api.java.utils.ParameterTool
+
+
+def main(args: Array[String]) {
+
+  val params = scala.collection.mutable.Map[String, String]()
+  args.foreach(arg => {
+    val items = arg.split("=", 2)
+    if (items.length == 2) {
+      println(s"argument: key(${items.head}), value(${items.last})")
+      params += (items.head -> items.last)
+    } else {
+      println(s"ERROR:Invalid parama => $arg")
+    }
+  })
+  val all_params = ParameterTool
+    .fromPropertiesFile("conf/stream.conf")
+    .mergeWith(ParameterTool.fromMap(args))
+}
+```
 
