@@ -12,6 +12,19 @@
 - Code finder， Find what accesses this address
 - Code Injection
 
+多级指针扫描
+1. value_address : value 通过值扫描找到存储value的地址value_address
+2. 寻找一级指针
+   1. 在value_address上使用Find what accesses this address, 通过代码找到偏移量offset1
+   2. ptr1_address -> ptr1_value + offset1 = value_address 使用value_address - offset1 得到ptr1_value
+   3. 通过值扫描找到存储ptr1_value的地址ptr1_address
+3. 寻找二级指针
+   1. 在ptr1_address上使用Find what accesses this address, 通过代码找到偏移量offset2
+   2. ptr2_address -> ptr2_value + offset2 = ptr1_address, 使用ptr1_address - offset1 得到ptr2_value
+   3. 通过值扫描找到存储ptr1_value的地址ptr2_address
+4. 重复上述过程， 直到地址ptrn_address变绿(由module的基址 + 偏移量进行表示)
+
+
 Find what accesses this address
 ===============================
 CE 默认使用硬件断点的方式，断点只能停在指令执行之后
@@ -234,3 +247,71 @@ __declspec( naked ) void gl_DrawHud( ) //Mid-Function Hook, right at the end of 
 }
 ```
 PreRenderFrame 函数调用GL库的函数进行绘制
+
+
+# HOOK
+> 在哪里进行hook(每帧绘制处)
+
+- D3D12 HOOK
+  - BeginScene
+  - EndScene
+  - Present (切换双buffer)
+- openGL HOOK
+  - DrawHud
+
+> 如何进行hook(detour， minihook)
+
+> hook处插入代码
+绘制GUI
+
+
+
+
+
+获取d3d devecie, 通过代码扫描定位地址
+CSGOSimple/valve_sdk/sdk.cpp
+```c++
+auto dx9api = GetModuleHandleW(L"shaderapidx9.dll");
+g_D3DDevice9 = **(IDirect3DDevice9***)(Utils::PatternScan(dx9api, "A1 ? ? ? ? 50 8B 08 FF 51 0C") + 1);
+```
+g_D3DDevice9 是IDirect3DDevice9类对象的地址
+
+CSGOSimple/hooks.hpp
+```
+namespace Hooks
+{
+	inline vfunc_hook direct3d_hook;
+}
+```
+
+CSGOSimple/hooks.cpp
+```
+direct3d_hook.setup(g_D3DDevice9);
+
+direct3d_hook.hook_index(index::EndScene, hkEndScene);
+direct3d_hook.hook_index(index::Reset, hkReset);
+```
+vfunc_hook 为class
+
+- setup方法的参数为void*指针， 接受一个类对象的地址， 找到该对象的虚表地址和虚表大小
+并拷贝虚表到新分配的内存上， 将该对象的虚表指针指向新的虚表地址
+- hook_index方法第一个参数为虚函数在虚表中的索引， 第二个参数为hook之后的函数
+- vfunc_hook类中保存了旧虚表的地址和新虚表的地址，在hook之后的新函数中通过get_original方法得到原来函数的地址
+
+```
+long __stdcall hkEndScene(IDirect3DDevice9* pDevice)
+{
+	static auto oEndScene = direct3d_hook.get_original<decltype(&hkEndScene)>(index::EndScene);
+	// your code
+	return oEndScene(pDevice);
+}
+```
+
+
+
+
+# entity
+
+
+# Signature Scanning
+https://wiki.alliedmods.net/Signature_Scanning
