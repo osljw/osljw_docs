@@ -7,7 +7,18 @@
 - CreateRemoteThread
 
 
+# 下载
+- Cheat Engine
+	- https://cheatengine.org/
+	- https://duvf52y7btwne.cloudfront.net/9h66m-xfg2auo/CheatEngine71.exe
+- IDA PRO
+	- https://www.hex-rays.com/products/ida/support/download_freeware/
+	- https://out7.hex-rays.com/files/idafree70_windows.exe
+	
 # Cheat Engine
+
+
+
 - scan type 和 value type 需要匹配， 例如扫描decreased value时，double类型的不能选择float类型
 - Code finder， Find what accesses this address
 - Code Injection
@@ -234,3 +245,9 @@ __declspec( naked ) void gl_DrawHud( ) //Mid-Function Hook, right at the end of 
 }
 ```
 PreRenderFrame 函数调用GL库的函数进行绘制
+
+
+# spy++
+visual studio -> Tool -> spy++
+
+# D3D12
