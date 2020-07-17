@@ -168,3 +168,11 @@ replicated actor可以通过Role可以判断是否只在服务器端执行
 1. 使用UPROPERTY(Replicated)修饰变量
 2. GetLifetimeReplicatedProps函数中使用DOREPLIFETIME宏配置变量
 
+
+# 动画系统
+
+Animation Essentials - Unreal Engine 4 Course
+
+https://www.youtube.com/playlist?list=PLL0cLF8gjBpqpCGt9ayn4Ip1p6kvgXYi2
+
+
