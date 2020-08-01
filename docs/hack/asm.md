@@ -136,3 +136,8 @@ void hello_world(int i) {
 0023366A  push        esi  
 0023366B  push        edi 
 ```
+
+
+# 编译原理
+- lexer: lexical analysis
+- parser: AST(abstract syntax tree)

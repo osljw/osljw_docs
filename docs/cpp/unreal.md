@@ -11,14 +11,34 @@ https://www.tomlooman.com/ue4-gameplay-framework/
 - 骨骼网格物体 Actor
 - 静态网格物体 Actor
 - 
-# Component
+# ActorComponent
 
 AttachToComponent
 
 
+# Pawn and Character 
 
-# PlayerController
+交通工具， 战士，等通常用Pawn进行表示 
 
+Character是Pawn的子类， 实现了SkeletalMesh和CharacterMovementComponent 
+
+
+# PlayerController and PlayerState
+
+人物，交通工具等用Pawn来呈现
+
+PlayerController和Pawn为一对多的关系， PlayerController通过Process来绑定需要操作的Pawn
+
+
+
+```c++
+GetWorld()->GetPlayerControllerIterator() // GetWorld is available in any Actor instance
+PlayerState->GetOwner() // owner of playerstate is of type PlayerController, you will need to cast it to PlayerController yourself.
+Pawn->GetController() // Only set when the pawn is currently ‘possessed’ (ie. controlled) by a PlayerController.
+```
+
+客户端上仅有玩家自身对应的PlayerController， 没有其他玩家对应的PlayerController，因此PlayerController不适合
+存储玩家的数据， 当想要访问其他玩家的数据时，可以使用PlayerState进行存储
 
 关卡蓝图中获取对象
 - GetPlayerController
@@ -26,6 +46,14 @@ AttachToComponent
   
 关卡蓝图中动态生成对象
 Spawn Actor from Class
+
+# GameMode and GameStateBase
+
+GameModeBase 中的Login()为玩家创建PlayerController
+
+GameModeBase 中的SpawnDefaultPawnAtTransform为玩家创建Pawn
+
+GameMode 仅存在于服务器端
 
 # Static Mesh
 
@@ -96,7 +124,19 @@ PlayerInputCompo
 UPROPERTY
 
 UFUNCTION
+
+  - Client: 函数在Server上调用, 在Client上执行
+  - Server :  函数在Client上调用, 在Server上执行
+  - NetMulticast： 函数在Server上调用， 在Server和所有Client上都会执行
+
+  - Reliable 
   - BlueprintCallable
+
+Connection ownership
+
+Actor 拥有Connection，  connection和PlayerController一一对应，一个Actor最外层对应的PlayerController决定了
+该Actor的Connection
+https://docs.unrealengine.com/en-US/Gameplay/Networking/Actors/OwningConnections/index.html
 
 
 # 调试
@@ -176,4 +216,12 @@ replicated actor可以通过Role可以判断是否只在服务器端执行
 1. 头文件中使用UPROPERTY(Replicated)修饰变量
 2. 源文件中#include "Net/UnrealNetwork.h"
 3. 源文件中GetLifetimeReplicatedProps函数中使用DOREPLIFETIME宏配置变量
+
+
+# 动画系统
+
+Animation Essentials - Unreal Engine 4 Course
+
+https://www.youtube.com/playlist?list=PLL0cLF8gjBpqpCGt9ayn4Ip1p6kvgXYi2
+
 

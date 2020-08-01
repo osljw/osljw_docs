@@ -47,6 +47,11 @@ sbt "run -f application.conf"
 # 任务提交和恢复， -s指定savepoint路径， -c指定入口主类
 flink run 
 
+# 任务取消
+```
+flink cancel -yid <yarn application_id> -s <flink job_id>
+```
+yarn application 并不会结束， flink的job会结束
 
 # 手动保存savepoint
 flink savepoint <job_id>
@@ -237,10 +242,16 @@ val timedData = dataInput.assignTimestampsAndWatermarks(
       //ub.getTimestamp * 1000
       d.getTime
     }
+
   }
 )
 ```
 
+https://blog.csdn.net/lmalds/article/details/52704170
+  
+使用EventTime处理数据时， 
+- 窗口起始时间默认是按照自然时间00:00:00对齐开始进行窗口划分的
+- 窗口何时触发计算： 当窗口中包含有数据时， 最新到来的数据产生的Watermark时间戳>=窗口的结束时间时，该窗口就会开始计算
 
 # 基础操作
 ## 过滤

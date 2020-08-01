@@ -48,7 +48,7 @@ mysql -u root -p
 ```
 
 
-# mysql
+# mysql 插入数据
 
 - insert into (插入新数据， key相同时插入失败)
 - insert overwrite(会先删除表或分区，再插入数据)
@@ -99,4 +99,10 @@ CREATE TABLE IF NOT EXISTS convert_back (
     `label` VARCHAR(255),
     PRIMARY KEY (dt, request_id, idea_id, location)
 );
+```
+
+# 删除数据
+```
+delete from cpi
+ where (countryid, year) in (('AD', 2010), ('AF', 2009), ('AG', 1992))
 ```
