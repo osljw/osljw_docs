@@ -3,6 +3,8 @@
 跑酷项目
 https://www.youtube.com/watch?v=9qHRQF3YXZs&list=PLX2_v3fTeazrzhJcnEMvgpMPCghfy1H8p&index=3
 
+# Gameplay Framework
+https://www.tomlooman.com/ue4-gameplay-framework/
 
 # Actor 
 
@@ -31,12 +33,26 @@ StaicMesh - UStaticMesh
 SkeletalMesh - UPhysicsAsset
 
 
+# 武器系统 Weapon
+
+Weapon 
+- AAcotr
+  - AWeapon （自定义武器类）
+    - USkeletalMeshComponent （武器外形组件） 可以在编辑器中选择skeletal mesh进行绑定
+    - GetOwner() 获取武器正在被谁持有
+    - 
+
+
 人物和武器
 https://www.bilibili.com/video/av28206952/
 
+- 构建武器AActor
+
 - 人物添加插槽
 
-- 武器在人物插槽上的位置预览
+- 武器在人物插槽上的位置预览和调整位置
+
+- 在人物（pawn）创建后（AGameMode::RestartPlayer)或者BeginPlay时SpawnActor创建武器，并AttachToComponent到人物上
 
 - 武器添加碰撞
 
@@ -50,6 +66,18 @@ https://www.bilibili.com/video/av28206952/
 - 扔掉武器
   - DetachFromComponent 
 
+
+# 碰撞系统
+- FCollisionQueryParams
+  - AddIgnoredActor 碰撞忽略的Actor
+  - bTraceComplex = true 碰撞情况捕捉更加精细
+
+- FHitResult 碰撞结果
+- GetWorld()->LineTraceSingleByChannel 直线碰撞
+
+# 伤害系统
+- TSubclassOf<UDamageType> 伤害类型
+- UGameplayStatics::ApplyPointDamage 点伤害
 
 # Character
 # ThirdPersonCharacter （Blueprint Class)
@@ -82,7 +110,26 @@ https://docs.unrealengine.com/en-US/Programming/QuickStart/index.html
 # unreal engine project
 > 项目入口
 
-Project Settings -> Maps & Modes
+Project Settings -> Maps & Modes -> Default Maps 设置游戏启动时的第一个关卡
+
+关卡蓝图的Event BeginPlay事件中， 使用Create Widget创建UI中的Widget Blueprint
+
+Widget Blueprint的Designer界面负责设计UI, Graph界面负责逻辑代码， Button的Events中关联事件，
+使用Open Level打开游戏地图关卡
+
+地图关卡设计界面 Window > World Settings 中可以设置每个关卡自己的Game Mode，未设置时使用的是Project Settings中设置的Game Mode
+Game Mode 负责处理玩家的生成， 在Player Start出生成玩家(Character)， 
+AGameMode::RestartPlayer(class AController* NewPlayer)负责玩家的出生过程
+https://www.bilibili.com/video/BV1pb41177pn?p=84 （085 Replicate Weapon Code Part 1）
+
+Character的BeginPlay被调用， 在Character中创建武器时， 只需要在服务器端执行SpawnActor的代码， 并把武器类设置为Replicate和
+把Character中保存的武器生成后变量设置为replicated。
+这样多个客户端都能看到武器并通过变量操作武器
+
+
+Edit > Project Settings > Input 输入
+
+
 
 > GameInstance
 
@@ -94,6 +141,7 @@ Project Settings -> Maps & Modes -> Game Instance Class
 只存在于服务器端， 
 Project Settings -> Maps & Modes -> Default Game Mode
 
+> Package
 
 # 摄像机
 set_active
@@ -125,6 +173,7 @@ replicated actor可以通过Role可以判断是否只在服务器端执行
 
 - Variable Replication
 
-1. 使用UPROPERTY(Replicated)修饰变量
-2. GetLifetimeReplicatedProps函数中使用DOREPLIFETIME宏配置变量
+1. 头文件中使用UPROPERTY(Replicated)修饰变量
+2. 源文件中#include "Net/UnrealNetwork.h"
+3. 源文件中GetLifetimeReplicatedProps函数中使用DOREPLIFETIME宏配置变量
 
