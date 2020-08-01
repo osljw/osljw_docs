@@ -58,6 +58,11 @@ mysql -u root -p
 INSERT INTO <table> VALUES(id1, v1, v2) ON DUPLICATE KEY UPDATE col1=VALUES(v1), col2=VALUES(v2)
 ```
 
+```
+INSERT INTO mytable (col1, col2, col3) VALUES (?, ?, ?)
+ON DUPLICATE KEY UPDATE col1=VALUES(col1), col2=VALUES(col2), col3=VALUES(col3);
+```
+
 
 ```
 CREATE TABLE IF NOT EXISTS ocpc_cvr (
