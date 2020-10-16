@@ -229,3 +229,17 @@ http://spinningup.openai.com/en/latest/
 
 tensorflow2.0 actor-critic
 http://inoryy.com/post/tensorflow2-deep-reinforcement-learning/
+
+
+# Monte Carlo
+https://www.analyticsvidhya.com/blog/2018/11/reinforcement-learning-introduction-monte-carlo-learning-openai-gym/
+
+随机概率算法， 通过采样得到episode， 一次完整的episode称为一条经验， 从经验中进行学习
+
+- Model-Based : 对环境有建模信息， 可以得到状态转移概率
+- Model-Free : 无模型的强化学习， 使用episode得到经验， 计算每个状态下所有采样样本的平均收益
+
+使用Monte Carlo 计算平均回报returns
+- First Visit Monte Carlo: Average returns only for first time s is visited in an episode
+- Every visit Monte Carlo: Average returns for every time s is visited in an episode.
+

@@ -31,7 +31,7 @@ bazel build --config=opt tensorflow/...
 bazel build //tensorflow:libtensorflow_cc.so
 ```
 
-头文件
+## 头文件
 
 ```
 cp -r bazel-genfiles/*  include/
@@ -58,9 +58,12 @@ cp -r bazel-bin/tensorflow/include/src/google bazel-bin/tensorflow/include/googl
 ```
 
 > 通过python pip包获取
+
+`pip show tensorflow`获取tensorflow存放地址
 ```
 # python pip 安装目录, 缺少savedmodel和c api头文件
-python3.7/site-packages/tensorflow_core/include
+- python3.7/site-packages/tensorflow/include
+- python3.7/site-packages/tensorflow_core/include
 ```
 合并生成完整头文件(这样得到的体积较小~40M)
 ```
@@ -69,7 +72,7 @@ cp -r bazel-bin/tensorflow/include/tensorflow include/
 ```
 
 
-库文件路径
+## 库文件
 ```
 cp bazel-bin/libtensorflow_cc.so /usr/local/lib/
 ```
@@ -85,7 +88,7 @@ bazel-bin/tensorflow/libtensorflow_framework.so.2
 
 编译pip：
 ```
-bazel build -c opt --copt=-mfpmath=both --copt=-msse4.1 --copt=-msse4.2 -k //tensorflow/tools/pip_package:build_pip_package
+bazel build --config=opt -c opt --copt=-O3 --copt=-msse4.1 --copt=-msse4.2 //tensorflow/tools/pip_package:build_pip_package
 ```
 上边命令不会直接生成wheel 包， 而是生成了一个中间脚本
 bazel-bin/tensorflow/tools/pip_package/build_pip_package /tmp/tensorflow_pkg
@@ -115,8 +118,27 @@ tensorflow/tensorflow/core                 -> include/tensorflow/
 (解决fatal error: tensorflow/core/framework/tensor.h: No such file or directory)
 ```
 
+## protobuf
+自己工程代码中有使用protobuf时， 容易与tensorflow使用的protobuf版本不一致
+
+确定自己的代码
+```
+protoc --version
+```
+
+确认tensorflow使用的protobuf版本
+```
+google/protobuf/stubs/common.h 
+#define GOOGLE_PROTOBUF_VERSION 3009002
+```
+
+选择与tensorflow匹配的protoc版本，更新自己的代码
+https://github.com/protocolbuffers/protobuf/releases
+
+
+
 # tensorflow serving build
-tensorflow serving 编译需要添加优化指令，能明显改善相应速度
+tensorflow serving 编译需要添加优化指令，能明显改善性能
 
 serving 编译和打包
 ```
@@ -186,6 +208,18 @@ bazel build -c opt --copt=-O3  tensorflow_serving/example/libtensorflow_serving.
 
 
 
+#  tensorflow GPU
 
+https://www.tensorflow.org/install/gpu#software_requirements
 
+- NVIDIA GPU 驱动程序版本
+```
+nvidia-smi
+```
 
+- CUDA 工具包
+```
+nvcc --version
+```
+cuda 版本对nvidia driver驱动版本有要求
+https://docs.nvidia.com/deploy/cuda-compatibility/index.html

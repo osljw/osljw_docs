@@ -20,6 +20,11 @@ _try_run_local_init_op
 
 # Dataset
 
+- tf.py_function 
+- tf.function
+
+Dataset的map方法参数中的函数会以图模式(graph)执行, 要想实现eager调试，可以将函数使用tf.py_function进行包裹，将函数运行在python环境中
+
 # Feature Column
 
 # loss 

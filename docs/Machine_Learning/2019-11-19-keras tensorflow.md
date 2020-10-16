@@ -78,6 +78,8 @@ model compile 被调用时，主要完成loss function， optimizer， metrics�
 keras loss函数需要两个参数y_true 和 y_pred, y_pred对应的是model的outputs参数， model进行compile时并不知道label的信息， y_true的rank会被认为和y_pred一样
 - 在自定义loss函数中使用tf.reshape将y_true变换为需要的shape
 - 将loss函数包裹形成层直接放到model中，定义一个无用的loss函数
+- 多目标输出时， 每个输出节点会使用相同的损失函数，或者通过dict配置的损失函数，想要在所用目标上使用一个损失函数，可以把多目标`Concatenate`为一个目标
+  
 
 CTC (Connectionist Temporal Classification)
 
@@ -301,7 +303,33 @@ new_model = keras.experimental.load_from_saved_model('path_to_saved_model')
 使用model.save_weights 和model.load_weights , 由于自定义层的序列化问题避免使用model.save()
 
 
-# loss
+# loss 损失函数
+
+- tf.keras.losses.BinaryCrossentropy
+
+
+loss的实际计算过程(Loss.__call__函数)
+1. `tf.keras.losses.binary_crossentropy(y_true, y_pred)` 由y_true和y_pred得到loss, 会对最后一维平均聚合
+2. `compute_weighted_loss(losses, sample_weight, reduction=self._get_reduction())`
+
+
+示例：
+y_true: (num_target, batch_size, 1)
+y_pred: (num_target, batch_size, 1)
+sample_weight: (num_target, batch_size, 1)
+
+1. `loss = binary_crossentropy(y_true, y_pred)` loss 为(num_target, batch_size)
+2. `loss = compute_weighted_loss(losses, sample_weight, reduction.NONE)`  loss 为(num_target, batch_size), 这步进行了weighted_losses = tf.math.multiply(losses, sample_weight)
+2. `loss = compute_weighted_loss(losses, sample_weight, reduction.SUM)`  loss 为(num_target, batch_size), 这步进行了weighted_losses = tf.math.multiply(losses, sample_weight) 和 tf.reduce_sum(weighted_losses)
+
+总结： 当`reduction`为`NONE`时， 只对最后一维进行均值聚合， 其余reduction返回的都为标量损失
+
+
+
+优化器使用求和损失 vs 平均损失
+
+
+
 
 > tf.keras.backend.ctc_batch_cost
 
@@ -319,3 +347,15 @@ tf.keras.backend.ctc_batch_cost(
 - label_length: (samples, 1)
 
 y_pred 为模型输出， 其他三个参数一般为模型输入
+
+
+
+# tf.distribute.MirroredStrategy
+strategy 负责变量的replica和reduce同步
+
+reduce过程：
+1. strategy.reduce()
+2. StrategyBase.reduce()
+3. StrategyExtended._reduce()
+4. `StrategyExtended.reduce_to()` destinations 为"/device:CPU:0"
+5. `MirroredExtended._reduce_to()` 

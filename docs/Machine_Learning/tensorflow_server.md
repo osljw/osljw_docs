@@ -140,3 +140,50 @@ struct SavedModelBundle {
   SavedModelBundle() = default;
 };
 ```
+
+## LoadSavedModel
+- export_dir -> [LoadSavedModel] -> SavedModelBundle
+- export_dir/saved_model.pb -> [ReadSavedModel, ReadBinaryProto] -> SavedModel
+- MetaGraphDef -> [LoadMetagraphIntoSession] -> Session
+- 
+
+
+
+# SavedModel python
+```
+tf.saved_model.load()
+```
+
+tensorflow/python/saved_model/load.py
+```
+root = load_v1_in_v2.load(export_dir, tags)
+```
+
+class _EagerSavedModelLoader(loader_impl.SavedModelLoader):
+- self.get_meta_graph_def_from_tags 读取到MetaGraphDef
+- wrap_function -> self.load_graph
+
+wrap_function
+- VariableHolder
+- WrappedFunction
+
+_lift_unlifted_variables
+
+```
+def load_graph(self, returns, meta_graph_def):
+  saver, _ = tf_saver._import_meta_graph_with_return_elements(
+    meta_graph_def)
+  returns[0] = saver
+```
+
+
+tensorflow/python/training/saver.py
+- _import_meta_graph_with_return_elements
+  
+tensorflow/python/framework/meta_graph.py
+- import_scoped_meta_graph_with_return_elements
+
+
+tf.function to saved_model
+https://stackoverflow.com/questions/57048064/saved-model-prune-in-tf2-0
+
