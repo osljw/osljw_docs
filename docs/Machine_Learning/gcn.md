@@ -1,14 +1,34 @@
 
+
+
+
 # GCN 图卷积神经网络
 - 邻接矩阵A(adjacency matrix)表示节点间的连接关系
 - 度矩阵D(degree matrix)表示每个节点链接的节点数
 - 特征矩阵X
 
+- GraphConv: 
+  - Graph convolutional network (GCN)
+  - https://arxiv.org/abs/1609.02907
+
+- GATConv:
+  - Graph attention network (GAT)
+
+- R
+  - Relational graph convolutional network
+
 
 # GraphSAGE
 
 
-# alibaba/euler
+开源
+- alibaba/euler
+- alibaba/graph-learn 
+  - https://github.com/alibaba/graph-learn
+  - AliGraph: a comprehensive graph neural network platform
+- danielegrattarola/spektral
+  - https://github.com/danielegrattarola/spektral
+
 
 - input：euler_ops
 
@@ -47,7 +67,11 @@ graph.apply_edges(fn.u_add_v('el', 'er', 'e'))
 ```
 
 
+> dgl runtime
 
+```
+When users call a method such as g.update_all(), instead of diving right to computation, DGL starts a mini-program and fills it with instructions. The instructions include read/writes on the graph features, and computation on the features with built-in operators and/or User Defined Functions. DGL then runs the program by interpreting those instructions.
+```
 
 
 
@@ -116,3 +140,14 @@ h_{\mathcal{N}(i)}^{(l+1)}
 &= \mathrm{norm}(h_{i}^{l})
 \end{aligned}
 $$
+
+
+> dlpack的作用
+
+在不同框架的内存间共享tensor
+
+> gspmm 和 gsddmm
+
+- gspmm: Generalized Sparse Matrix Multiplication
+- gsddmm: Generalized Sampled-Dense-Dense Matrix Multiplication
+- gsdmm: Gibbs Sampling Dirichlet Multinomial Mixture

@@ -47,9 +47,23 @@ V = I * WV
 
 Positional Encoding
 
+# tf.keras.layers.Attention
+input: 
+  query: [batch_size, Tq, dim] eg: 文本相似度应用中，query是第一段文字的序列嵌入
+  value: [batch_size, Tv, dim] eg: 文本相似度应用中，value是第二段文字的序列嵌入
+  key: [batch_size, Tv, dim] eg: 文本相似度应用中，key是第二段文字的序列嵌入, key和value相同
+output:
+  [batch_size, Tq, dim]
 
+1. Calculate scores with shape `[batch_size, Tq, Tv]` as a `query`-`key` dot
+  product: `scores = tf.matmul(query, key, transpose_b=True)`.
+2. Use scores to calculate a distribution with shape
+  `[batch_size, Tq, Tv]`: `distribution = tf.nn.softmax(scores)`.
+3. Use `distribution` to create a linear combination of `value` with
+  shape `[batch_size, Tq, dim]`:
+  `return tf.matmul(distribution, value)`.
 
-seq2seq任务
+# seq2seq任务
 - Encoder
   - Layer
     - multi-head self-attention mechanism

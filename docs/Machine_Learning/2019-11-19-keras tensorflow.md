@@ -269,6 +269,29 @@ https://keras.io/utils/#multi_gpu_model
 keras layers 的call方法必须含有inputs参数， inputs参数为keras tensor或者keras tensor list，
 keras tensor包含_keras_history属性， Layer类的__call__方法调用子类的call方法后， 会根据inputs里的_keras_history为子类返回的tensor添加_keras_history.
 
+```
+Each time a layer is connected to some new input,
+a node is added to `layer._inbound_nodes`.
+Each time the output of a layer is used by another layer,
+a node is added to `layer._outbound_nodes`. 
+
+# 在执行Layer的__call__调用时， 会创建一个Node对象表示这次调用的输入， 
+# 把这个Node对象新增到这个Layer的_inbound_nodes列表中表示这层发现了新的输入
+# 对这层的所有输入keras tensor， 由其携带的_keras_history信息定位到是哪些层输出的
+# 更新这些层的_outbound_nodes
+# Wire up Node to Layers.
+self.layer._inbound_nodes.append(self)
+for kt in self.keras_inputs:
+  inbound_layer = kt._keras_history.layer
+  if inbound_layer is not None:  # `None` for `Input` tensors.
+    inbound_layer._outbound_nodes.append(self)
+
+# Set metadata on outputs.
+node_index = len(self.layer._inbound_nodes) - 1
+for i, tensor in enumerate(nest.flatten(outputs)):
+  tensor._keras_history = KerasHistory(
+      layer=layer, node_index=node_index, tensor_index=i)
+```
 
 # model weights
 keras/engine/base_layer.py
