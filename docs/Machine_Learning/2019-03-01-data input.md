@@ -78,3 +78,8 @@ print(next(it))
 
 # MapDataset
 `StructuredFunctionWrapper`对map_function进行包裹， map_function实现从 nested structure 到another nested structure 的变换
+
+
+# RaggedTensor
+- values tensor： 存储flattened
+- row_splits tensor: 

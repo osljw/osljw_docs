@@ -1,16 +1,3 @@
----
-layout:     post
-title:      "����"
-subtitle:   "build_system"
-date:       2019-04-17 16:22:51
-author:     "soaringsoul"
-header-img: "img/posts/default_post.jpg"
-catalog: true
-tags:
-    - ѧϰ�ʼ�
----
-
-
 
 
 
@@ -36,3 +23,15 @@ $(shell find . -name "*.cpp")
 
 将*.cpp文件替换成*.o文件
 $(patsubst %.cpp,%.o, $(cpp_files))
+
+
+# 宏
+宏展开
+```
+gcc -E -P input.cpp -o output.cpp
+```
+
+代码格式化
+```
+clang-format -i output.cpp -style=google
+```

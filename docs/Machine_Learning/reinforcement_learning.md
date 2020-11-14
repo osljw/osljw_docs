@@ -1,5 +1,5 @@
 
-# Reinforcement learning
+# Reinforcement learning 强化学习
 
 - environment
 - agent
@@ -106,10 +106,15 @@ maximize the sum of rewards $\sum^{T}_{t=0} \gamma^{t}r_{t}$,
 $\gamma$ - discount factor, [0,1]
 
 # policy gradient, value-based, actor-critic
-value-based - 评估动作（action)获得的收益(reward)
+value-based - 评估在状态（state)下采取动作（action)获得的收益(reward)
 
 policy gradient - 根据
 
+
+# 强化学习分类（按照损失函数划分）
+- `Temporal-Difference` : 例如`Q-learning`, 减少预测的Q值和真实Q值的误差， Q值是关于state和action的函数，表示在系统状态s下采取动作a能够获得的期望收益， value-based
+- `Policy Gradients` ： 
+- `actor-critic`: value-based 和 Policy Gradients 方法的混合， actor为policy， critic为Q值
 
 ## Q-Learning
 Q-function (state-action value function)
@@ -134,7 +139,7 @@ E - expectation
 
 ## Deep Q-Learning
 
-optimal Q-function $Q^{*}(s, a; \theta)$
+optimal Q-function $Q^{*}(s, a; \theta)$ 用神经网络模拟Q值函数
 
 $L(\theta) = E_{s,a,r,s' ~p(.)}[(y_i - Q(s,a;\theta_i))^2]$ 
 
@@ -157,12 +162,12 @@ p(.) -  behaviour distribution
 
 ## Advantage Actor-Critic (A2C)
 ## Asynchronous Advantage Actor-Critic (A3C)
-异步
 
-gradients are weighted with returns
+gradients are weighted with `returns`: a discounted sum of future rewards
 
-raw returns Vs advantage function
-advantages = returns - values
+advantage function 优势函数
+
+advantages = returns - values()
 
 entropy maximization
 
@@ -233,3 +238,17 @@ http://spinningup.openai.com/en/latest/
 
 tensorflow2.0 actor-critic
 http://inoryy.com/post/tensorflow2-deep-reinforcement-learning/
+
+
+# Monte Carlo
+https://www.analyticsvidhya.com/blog/2018/11/reinforcement-learning-introduction-monte-carlo-learning-openai-gym/
+
+随机概率算法， 通过采样得到episode， 一次完整的episode称为一条经验， 从经验中进行学习
+
+- Model-Based : 对环境有建模信息， 可以得到状态转移概率
+- Model-Free : 无模型的强化学习， 使用episode得到经验， 计算每个状态下所有采样样本的平均收益
+
+使用Monte Carlo 计算平均回报returns
+- First Visit Monte Carlo: Average returns only for first time s is visited in an episode
+- Every visit Monte Carlo: Average returns for every time s is visited in an episode.
+
