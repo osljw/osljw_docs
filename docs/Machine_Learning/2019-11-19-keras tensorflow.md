@@ -28,6 +28,13 @@ K.set_session(sess)  # set this TensorFlow session as the default session for Ke
 
 In the functional API, models are created by specifying their inputs and outputs in a graph of layers. That means that a single graph of layers can be used to generate multiple models.
 
+
+Model
+- _is_graph_network 是否为图网络
+- save_weights： 调用self._trackable_saver.save函数保存checkpoint
+- load_weights: 支持延迟恢复Delayed restorations
+
+
 ## tf.keras.Input
 ```
 x = tf.keras.Input(shape=(224, 224, 3), name="input_image")
@@ -304,6 +311,16 @@ for layer in model.layers:
     print("weights:", layer.get_weights())
 ```
 
+> load_weights
+- TensorFlow format
+  - by_name=False (topological loading)
+  - by_name=True (不支持)
+- HDF5 format
+  - by_name=False (topological loading)
+  - by_name=True ()
+
+使用Model的_trackable_saver从checkpoint中restore
+  
 # keras SavedModel
 
 1. Sequential models or Functional models
