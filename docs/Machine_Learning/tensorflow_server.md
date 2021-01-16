@@ -187,3 +187,32 @@ tensorflow/python/framework/meta_graph.py
 tf.function to saved_model
 https://stackoverflow.com/questions/57048064/saved-model-prune-in-tf2-0
 
+
+# tflite
+
+## android
+
+DetectorActivity 继承 CameraActivity
+
+
+视图
+src\main\res\layout\tfe_od_activity_camera.xml
+- R.layout.tfe_od_activity_camera (setContentView)
+  - R.id.toolbar
+  - R.id.containe
+  - R.id.bottom_sheet_layout (BottomSheetBehavior)
+
+配置菜单视图
+src\main\res\layout\tfe_od_layout_bottom_sheet.xml
+- R.id.gesture_layout
+
+检测结果视图
+- R.id.tracking_overlay
+
+相机
+- CameraManager
+```
+final CameraManager manager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
+```
+
+- CameraConnectionFragment
