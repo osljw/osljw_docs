@@ -218,10 +218,23 @@ replicated actor可以通过Role可以判断是否只在服务器端执行
 3. 源文件中GetLifetimeReplicatedProps函数中使用DOREPLIFETIME宏配置变量
 
 
+
 # 动画系统
 
 Animation Essentials - Unreal Engine 4 Course
 
 https://www.youtube.com/playlist?list=PLL0cLF8gjBpqpCGt9ayn4Ip1p6kvgXYi2
+
+
+skeleton (人体结构)
+  - skeleton tree
+    - retarget （迁移动画）
+mesh （人体皮肤） 
+
+pyhsics（人体物理约束）
+
+
+PoseAsset
+  Curve
 
 
