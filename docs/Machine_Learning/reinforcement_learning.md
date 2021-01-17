@@ -175,6 +175,16 @@ class Model
 输入为observation， 输出为action
 
 
+
+
+episode 样本收集
+episode需要包括，
+- observations[step]： 第step步时的系统状态
+- actions[step]，values[step] : 模型第step步采取的动作, 模型对回报收益的预测
+- rewards[step], dones[step]: 执行动作后的奖赏，是否结束标识
+
+使用`_returns_advantages`函数计算一次episode在每个step时的回报`returns[step]`，
+第step步的return回报 = 第step步的reward奖赏 + gamma * 第step+1步的回报
 ```python
     def _returns_advantages(self, rewards, dones, values, next_value):
         # next_value is the bootstrap value estimate of a future state (the critic)
@@ -188,9 +198,8 @@ class Model
         return returns, advantages
 ```
 
-episode 样本收集
-episode需要包括，observation, action，reward的信息
-
+模型采取的动作就是策略网络的标签， 使用advantage作为SparseCategoricalCrossentropy损失计算时的权重，
+`advantages = returns - values` advantage值越大，表示现在模型输出action的实际回报越大或者是模型预测的回报偏小
 
 ```python
    def train(self, env, batch_sz=32, updates=1000):
