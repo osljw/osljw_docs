@@ -369,6 +369,23 @@ sample_weight: (num_target, batch_size, 1)
 优化器使用求和损失 vs 平均损失
 
 
+> tf.keras.losses.CategoricalCrossentropy
+
+batch softmax
+
+```
+# 对角线上score为样本分数
+scores = tf.linalg.matmul(
+    query_embeddings, candidate_embeddings, transpose_b=True)
+
+
+num_queries = tf.shape(scores)[0]
+num_candidates = tf.shape(scores)[1]
+
+labels = tf.eye(num_queries, num_candidates)
+
+loss = self._loss(y_true=labels, y_pred=scores, sample_weight=sample_weight)
+```
 
 
 > tf.keras.backend.ctc_batch_cost
