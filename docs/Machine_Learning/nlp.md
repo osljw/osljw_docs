@@ -75,3 +75,78 @@ output:
 
 - Decoder
   - 
+
+
+# faiss
+
+https://waltyou.github.io/Faiss-Introduce/
+
+```python
+import numpy as np
+import faiss
+
+dimension = 2
+index = faiss.IndexIDMap2(faiss.IndexFlatL2(dimension))
+
+# embedding must be type of float32
+ids = np.array([1,2,3])
+data = np.array([
+    [0.9840072 , 0.34055966],
+    [0.884534  , 0.14055097],
+    [0.19493523, 0.72189105]
+]).astype('float32')
+index.add_with_ids(data, ids)
+
+
+topk = 2
+search_data = np.array([
+    [0.9840072 , 0.34055966],
+    [0.19493523, 0.72189105]
+]).astype('float32')
+result_score, result_ids = index.search(search_data, topk)
+
+```
+
+
+聚类划分搜索空间
+```python
+import numpy as np
+import faiss
+
+dimension = 2
+centroids = 2
+quantizer = faiss.IndexFlatL2(dimension)  # quantizer 向量和聚类中心的计算索引
+#index = faiss.IndexIVFFlat(quantizer, dimension, centroids, faiss.METRIC_L2)
+index = faiss.IndexIVFFlat(quantizer, dimension, centroids, faiss.METRIC_INNER_PRODUCT)
+
+ids = np.array([1,2,3])
+data = np.array([
+    [0.9840072 , 0.34055966],
+    [0.884534  , 0.14055097],
+    [0.19493523, 0.72189105]
+]).astype('float32')
+index.train(data)
+index.add_with_ids(data, ids)
+
+
+
+```
+
+
+使用工厂模式构建索引
+```python
+dimension = 2
+index = faiss.index_factory(dimension, "IVF2,Flat", faiss.METRIC_INNER_PRODUCT)
+
+
+ids = np.array([1,2,3])
+data = np.array([
+    [0.9840072 , 0.34055966],
+    [0.884534  , 0.14055097],
+    [0.19493523, 0.72189105]
+]).astype('float32')
+index.train(data)
+index.add_with_ids(data, ids)
+
+#index = faiss.IndexIDMap2(index)
+```
