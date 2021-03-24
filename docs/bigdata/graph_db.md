@@ -1,6 +1,6 @@
 
 
-platodb
+# platodb
 
 ```
 SHOW TAGS; 
@@ -63,3 +63,112 @@ https://github.com/vesoft-inc/nebula-docs-cn/blob/master/docs/manual-CN/1.overvi
 - Meta Service： leader/follower架构
 - Storage Service：
 - Query Service：
+
+
+# neo4j
+
+下载安装：https://neo4j.com/download-center/#community
+
+
+# 
+
+```
+show databases;
+```
+
+```
+:use <database>
+```
+
+查看数据
+```
+match(n) return n
+```
+
+
+导入数据
+```
+CREATE CONSTRAINT itemIdConstraint ON (item:Item) ASSERT item.id IS UNIQUE;
+
+MATCH (n)
+DETACH DELETE n;
+
+USING PERIODIC COMMIT 1000 LOAD CSV WITH HEADERS FROM "file:///id.csv" AS csvLine
+CREATE (p:Item {id: csvLine.id});
+
+USING PERIODIC COMMIT 1000 LOAD CSV WITH HEADERS FROM 'file:///data.csv' AS line
+MATCH (from:Item{id:line.src}),(to:Item{id:line.dst})
+MERGE (from)-[r:Count{count:line.count}]-> (to);
+```
+
+
+清除数据库
+```
+//clean item graph
+drop constraint itemIdConstraint;
+
+match (n) detach delete n
+```
+
+节点总数
+```
+
+```
+
+边总数
+```
+MATCH ()-[r]->() RETURN count(*)
+```
+
+
+## Cypher
+
+node: 图的顶点， 用`(var_name:var_type)`表示node
+
+Relationship： 图的边，用`[var_name:var_type]`表示relationship
+
+- Match 图模式匹配
+    - 节点`(p:Person)`, `(m:Movie)`
+    - 边`[r:ACTED_IN]`
+    - 入边`->`, 出边`->`
+- WITH 聚合
+- where 过滤条件
+- RETURN
+
+
+match 匹配
+
+- 匹配边的方向
+```
+MATCH (m:Movie)<-[r:ACTED_IN]-(p:Person) RETURN p,r,m
+```
+
+```
+MATCH (p:Person)-[r:ACTED_IN]->(m:Movie) RETURN p,r,m
+```
+
+- 属性匹配和relatedTo相关匹配
+```
+MATCH (p:Person)-[relatedTo]-(m:Movie {title: "Cloud Atlas"}) return p.name, type(relatedTo)
+```
+
+
+create 创建节点
+```
+CREATE (john:Person {name: 'John'})
+CREATE (joe:Person {name: 'Joe'})
+```
+create 创建边
+```
+CREATE (john)-[:FRIEND]->(joe)-[:FRIEND]->(steve)
+```
+
+匹配创建
+```
+MATCH (p:Person), (m:Movie)
+WHERE p.name = "Tom Hanks" and m.title = "Cloud Atlas"
+CREATE (p)-[w:WATCHED]->(m)
+RETURN type(w)
+```
+
+merge match create 匹配存在的节点或者创建新的节点
