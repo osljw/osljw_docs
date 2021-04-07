@@ -56,6 +56,17 @@ clang-format -style=google -dump-config > .clang-format
 
 `shift + option + F` 格式化文件
 
+
+```
+初始化列表格式控制
+ConstructorInitializerIndentWidth: 4
+ConstructorInitializerAllOnOneLineOrOnePerLine: true
+
+BreakConstructorInitializersBeforeComma: false
+BreakConstructorInitializers: AfterColon
+```
+
+
 ```
 Language: Cpp
 BasedOnStyle: LLVM
