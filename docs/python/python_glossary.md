@@ -17,6 +17,13 @@ https://docs.python.org/3/glossary.html
 一起来写个简单的解释器（5）
 http://www.opython.com/1411.html
 
+# site-packages
+查看python使用的site-packages位置
+```
+python -m site
+```
+
+PYTHONPATH 会被追加到`sys.path`中， python从`sys.path`指定的列表搜表模块位置
 
 # Token
 
