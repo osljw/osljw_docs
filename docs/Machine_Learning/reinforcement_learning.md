@@ -108,7 +108,7 @@ $\gamma$ - discount factor, [0,1]
 # policy gradient, value-based, actor-critic
 value-based - 评估在状态（state)下采取动作（action)获得的收益(reward)
 
-policy gradient - 根据
+policy gradient - 通过调整策略的参数，优化策略， 通过monte-carlo方法估计策略的梯度来优化策略
 
 
 # 强化学习分类（按照损失函数划分）
