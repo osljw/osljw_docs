@@ -22,6 +22,9 @@
 
 
 
+
+
+
 # 评测
 - GLUE
 
@@ -149,4 +152,24 @@ index.train(data)
 index.add_with_ids(data, ids)
 
 #index = faiss.IndexIDMap2(index)
+```
+
+
+# word2vec
+
+- skip-gram ( Continuous Skip-gram Model )
+- CBOW ( Continuous Bag-of-Words Model )
+
+
+skip-gram训练样本格式：
+
+```
+# 句子 -> (target, context) pair,  use target predict context
+
+window_size = 2 # skip-gram 窗口大小
+num_ns = 4
+
+targets: (batch_size, 1)
+contexts: (batch_size, )
+
 ```

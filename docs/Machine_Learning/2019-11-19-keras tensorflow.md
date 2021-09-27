@@ -191,6 +191,46 @@ def run_one_epoch(model,
 
 
 
+- make_train_function
+  - def train_function(iterator)
+    - train_step(data)
+
+fit或train_on_batch调用make_train_function获得训练函数， make_train_function返回train_function训练函数， train_function函数调用train_step实现训练
+
+# keras fit trace twice
+- train_function
+
+run_eagerly = False的情况下， keras生成的train_function会被tf.function进行装饰， train_function第一次被调用时, 会导致trace两次
+
+1. tensorflow/python/eager/def_function.py,  Function的_call方法中会调用_initialize方法, 会发生一次trace
+2. Function的_initialize方法调用时， 导致_created_variables不为None， 则_call方法会继续调用Function的_stateless_fn， 再次发生一次trace
+
+
+发生一次trace
+```python
+def f(a, b):
+    print("test trace")
+    return a + b
+
+tf.function(f)(1, 2)
+```
+
+
+发生两次trace
+```python
+v = None
+def f(a, b):
+    print("test trace")
+    global v
+    if v is None:
+        v = tf.Variable(0)
+    return a + b
+
+tf.function(f)(1, 2)
+```
+
+
+
 # keras fit_generator, train_on_batch
 https://github.com/keras-team/keras/blob/master/keras/engine/training_generator.py
 fit_generator 内部调用的是train_on_batch完成batch数据的训练

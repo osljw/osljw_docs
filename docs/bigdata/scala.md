@@ -55,6 +55,20 @@ object 继承trait后可以使用trait里的函数
 > 伴生对象
 - 实现同个类既有普通方法又有静态方法， 伴生类和伴生对象可以相互访问彼此的私有成员
 
+
+# scala shell
+
+scala jar
+```
+scala -cp target/scala-2.11/my-assembly-1.0.jar
+```
+
+交互式加载运行scala脚本
+```
+:load test.scala
+```
+
+
 # scala json
 build.sbt
 ```
@@ -69,6 +83,19 @@ import org.json4s.JsonAST._
 import org.json4s.jackson.JsonMethods.{compact, parse, render}
 import org.json4s.jackson.Serialization
 ```
+
+
+```
+import com.alibaba.fastjson.JSONObject
+
+var json = new JSONObject()
+json.put("flowid", flowid)
+json.put("user_id", user_id)
+json.put("user_sex", user_sex)
+
+json.toJSONString
+```
+
 
 # Try Success Failure
 ```
@@ -89,4 +116,31 @@ val url = parseURL("http://hello.com") match {
 build.sbt
 ```
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % "test"
+```
+
+
+# scala protobuf
+
+
+使用newBuilder构建对象
+```
+import mypackage.RawSampleOuterClass.RawSample
+val raw_sample = RawSample.newBuilder()
+```
+
+
+
+使用python保持pb byte数据
+```
+# raw_sample is pb object
+fd = open("raw_sample.pb", 'wb')
+fd.write(raw_sample.SerializeToString())
+fd.close()
+```
+
+加载byte数据为pb对象
+```
+import java.nio.file.{Files, Paths}
+val byteArray = Files.readAllBytes(Paths.get("../raw_sample.pb"))
+val raw_sample = RawSample.parseFrom(byteArray)
 ```

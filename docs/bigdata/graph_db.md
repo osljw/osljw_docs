@@ -1,6 +1,14 @@
 
 
-# platodb
+# platodb nebula graph
+
+
+https://nebula-graph.com.cn/posts/nebula-graph-data-model-and-system-design/
+
+顶点由vid唯一标识， 一个顶点可以有多个tag， 每个tag可以有多个属性，
+
+边分割存储图
+
 
 ```
 SHOW TAGS; 
@@ -64,6 +72,46 @@ https://github.com/vesoft-inc/nebula-docs-cn/blob/master/docs/manual-CN/1.overvi
 - Storage Service：
 - Query Service：
 
+
+
+## nebula 集群配置
+
+1. graphd 和 storaged 需要知道所有meted的ip和端口， 在etc/nebula-graphd.conf和etc/nebula-storaged.conf配置文件中--meta_server_addrs参数指定
+2. 用户启动客户端console时需要知道graphd的ip和端口
+
+http服务的port冲突问题， 在
+
+- 用户
+  - 只需知道所有graphd机器的地址和端口
+  
+- graphd
+  - 扩容： 扩容graphd需要知道metad的所有addr， 通知用户
+
+- metad
+  - 目前不能进行扩容，缩容
+  - 需要通知已经启动的graphd， storaged增加和删除metad
+
+- storaged
+  - 扩容： 先部署新增机器， 使用管理命令开始迁移数据， 等待任务结束
+  - 缩容： 使用管理命令开始迁移目标机器的数据， 等待任务结束， 删除目标机器
+
+启动
+
+```
+sbin/nebula --addr 0.0.0.0 --port 18080 -u root -p nebula
+```
+port 为graphd服务的port
+
+
+## 参考链接
+Nebula 架构剖析系列（一）图数据库的存储设计
+
+https://www.huaweicloud.com/articles/cbc7c60e3ec524dfe279b4de4c687e49.html
+
+
+
+- studio 
+  - 网页： 默认7001端口链接
 
 # neo4j
 

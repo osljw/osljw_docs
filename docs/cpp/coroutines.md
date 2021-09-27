@@ -1,4 +1,6 @@
 
+# coroutines
+
 一个函数成为一个coroutine， 当这个函数有使用`co_`前缀操作符时
 - co_await 挂起协程
 - co_yield 挂起协程执行并返回值
@@ -58,3 +60,203 @@ co_await语句执行时发生的情况：
 
 
 co_await expression => Awaitable  => Awaiter
+
+
+
+# x86
+
+编译32位
+```
+g++ main.cpp -m32
+```
+
+
+
+c++ 和 汇编 
+- MSVC inline asm 
+- GNU C inline asm
+
+
+汇编语法
+- Intel syntax - target on the left, source on the right
+反汇编
+```
+objdump -M intel -d a.out
+```
+
+
+
+函数调用分析
+
+### 示例一： 正常调用函数
+源码：
+```c++
+int func() {
+    return 123;
+}
+
+int main()
+{
+    int ret = func();
+    return 0;
+}
+```
+
+反汇编：
+```
+g++ main.cpp -m32
+objdump -M intel -d a.out
+```
+
+带调试信息， c源码和汇编代码
+```
+g++ main.cpp -m32 -ldl -g
+objdump -M intel -dS a.out
+```
+
+```
+0804850d <_Z4funcv>:
+ 804850d:       55                      push   ebp
+ 804850e:       89 e5                   mov    ebp,esp
+ 8048510:       b8 7b 00 00 00          mov    eax,0x7b
+ 8048515:       5d                      pop    ebp
+ 8048516:       c3                      ret   
+
+08048517 <main>:
+ 8048517:       55                      push   ebp
+ 8048518:       89 e5                   mov    ebp,esp
+ 804851a:       83 ec 10                sub    esp,0x10
+ 804851d:       e8 eb ff ff ff          call   804850d <_Z4funcv>
+ 8048522:       89 45 fc                mov    DWORD PTR [ebp-0x4],eax
+ 8048525:       b8 00 00 00 00          mov    eax,0x0
+ 804852a:       c9                      leave  
+ 804852b:       c3                      ret 
+```
+
+子函数未分配局部变量， esp未改变， ret前不需要leave指令, 仅需要恢复父函数的ebp即可
+
+### 示例二：
+
+```
+int func() {
+    int a = 1;
+    int b = 2;
+    
+    return 123;
+}
+
+int main()
+{
+    int ret = func();
+    return 0;
+}
+```
+
+```
+0804850d <_Z4funcv>:
+ 804850d:       55                      push   ebp
+ 804850e:       89 e5                   mov    ebp,esp
+ 8048510:       83 ec 10                sub    esp,0x10
+ 8048513:       c7 45 fc 01 00 00 00    mov    DWORD PTR [ebp-0x4],0x1
+ 804851a:       c7 45 f8 02 00 00 00    mov    DWORD PTR [ebp-0x8],0x2
+ 8048521:       b8 7b 00 00 00          mov    eax,0x7b
+ 8048526:       c9                      leave  
+ 8048527:       c3                      ret    
+
+08048528 <main>:
+ 8048528:       55                      push   ebp
+ 8048529:       89 e5                   mov    ebp,esp
+ 804852b:       83 ec 10                sub    esp,0x10
+ 804852e:       e8 da ff ff ff          call   804850d <_Z4funcv>
+ 8048533:       89 45 fc                mov    DWORD PTR [ebp-0x4],eax
+ 8048536:       b8 00 00 00 00          mov    eax,0x0
+ 804853b:       c9                      leave  
+ 804853c:       c3                      ret    
+```
+
+### 函数调用过程分析
+
+栈： 从栈顶入元素， 从栈顶出元素
+
+刚进入子程序时， 栈内存的布局：
+```
+esp -> [call 指令的下一条指令地址]
+```
+
+函数的开始都有如下代码, 用于保存父函数的栈帧， 父函数的栈顶（esp） 和子函数的栈底（ebp）相同
+```
+push   ebp
+mov    ebp,esp
+```
+
+栈内存的布局：
+```
+              [call 指令的下一条指令地址]
+esp，ebp ->   [父函数的ebp]
+```
+
+子函数使用局部变量时， 基于ebp进行寻址, 取传入参数使用+地址， 取局部变量使用-地址
+
+子函数返回时，将返回值保存到eax中
+
+函数返回时， leave指令将父函数的esp置为子程序的ebp， 然后将父函数的ebp从栈里弹出恢复， 
+```
+esp ->   [call 指令的下一条指令地址]
+```
+ret指令从栈里取出返回地址， 接着执行父函数
+
+
+
+
+
+
+
+
+```c++
+__declspec(naked) void __stdcall func(void* ptr)
+{
+    __asm
+    {
+      //...
+    }
+}
+```
+__declspec() : MSVC的拓展属性声明
+naked: https://docs.microsoft.com/en-us/cpp/cpp/naked-cpp?view=msvc-160， 用户自定义函数进入（prolog）和退出（epilog）逻辑
+
+
+
+Function prolog and epilog
+
+
+
+
+
+函数调用指令
+
+影响参数传递和返回值的方式
+__stdcall：被调用者（callee) 负责清理栈内存 （winapi  dll 默认为__stdcall 方式）
+__cdecl： 调用者（caller) 负责清理栈内存 
+
+```
+/* example of __cdecl */
+push arg1
+push arg2
+push arg3
+call function
+add sp,12 // effectively "pop; pop; pop"
+```
+
+
+```
+/* example of __stdcall */
+push arg1 
+push arg2 
+push arg3 
+call function // no stack cleanup - callee does this
+```
+
+
+# 协程使用场景
+
+系统调用IO阻塞， 通过hook系统调用改为非阻塞， 进行协程切换
