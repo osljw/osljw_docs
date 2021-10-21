@@ -101,3 +101,20 @@ print("b:", b)
 print("a:", a)
 print("prob:", 1 / b)
 ```
+
+# swing
+
+![](media/swing.png)
+
+- sim(i, j) -  item i 和 j 的相似度
+- $U_i$ - 喜欢item i和用户集合，  $U_j$ 喜欢item j的用户集合
+- u, v - 同时喜欢item i 和 j的用户u 和 v
+- $I_u$ - 用户u喜欢的物品集合， $I_v$ - 用户v喜欢的物品集合
+
+
+实现
+
+user2items_dict, key为用户id， value为用户喜欢的物品集合
+item2users_dict, key为物品id， value为喜欢物品的用户集合
+
+for i, j in item2users_dict.keys()
