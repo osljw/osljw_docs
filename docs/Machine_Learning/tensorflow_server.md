@@ -188,6 +188,21 @@ tf.function to saved_model
 https://stackoverflow.com/questions/57048064/saved-model-prune-in-tf2-0
 
 
+```
+user_spec = {feat: tf.TensorSpec([None, 1], tf.string, name=feat) for feat in model.user_features}
+item_spec = {feat: tf.TensorSpec([None, 1], tf.string, name=feat) for feat in model.item_features}
+#signatures = {
+#    'user_embedding': model.user_model.call.get_concrete_function(user_spec),
+#    'item_embedding': model.item_model.call.get_concrete_function(item_spec),
+#}
+#signatures = {
+#    'user_embedding': tf.function(model.user_model.call).get_concrete_function(user_spec),
+#    'item_embedding': tf.function(model.item_model.call).get_concrete_function(item_spec),
+#}
+
+tf.saved_model.save(model, FLAGS.export_path, signatures=signatures)
+```
+
 # tflite
 
 ## android

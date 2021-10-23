@@ -58,6 +58,7 @@ sprintf(szBuffer, "Stack Buffer Overrun!111111111111111"  "111111111111111111111
 
 系统调用通过软中断实现， 进入内核空间， 但不会改变线程上下文， current宏是有效的，准备退出中断上下文时，如果没有高优先级的线程抢占， 还是会回到原来的线程上下文
 
+<<<<<<< HEAD
 线程状态
 
 https://smartkeyerror.com/Linux-Blocking
@@ -65,3 +66,68 @@ https://smartkeyerror.com/Linux-Blocking
 运行：
 等待：由于缺少 CPU 资源而被迫停止运行， 只要调度器下次选中该进程即可立即执行，进入运行状态，  线程放到就绪队列中（红黑树实现）
 睡眠：进程不会被调度器进行选择并执行， 等待外部事件的发生而变为等待状态（例如硬件中断等）， 线程放到等待队列中（双链表实现）
+=======
+
+# 系统调用hook
+
+### LD_PRELOAD 方式
+
+https://blog.csdn.net/tianxuhong/article/details/50974400
+
+替换加载的动态连接库
+
+
+```c++
+#include <stdio.h>
+#include <string.h>
+
+int main(int argc, char *argv[])
+{
+  if( strcmp(argv[1], "test") )
+  {
+    printf("Incorrect password\n");
+  }
+  else
+  {
+    printf("Correct password\n");
+  }
+  return 0;
+}
+```
+
+
+```c++
+#include <stdio.h>
+#include <string.h>
+#include <dlfcn.h>
+/*
+hook的目标是strcmp，所以typedef了一个STRCMP函数指针
+hook的目的是要控制函数行为，从原库libc.so.6中拿到strcmp指针，保存成old_strcmp以备调用
+*/
+typedef int(*STRCMP)(const char*, const char*);
+ 
+int strcmp(const char *s1, const char *s2)
+{
+  static void *handle = NULL;
+  static STRCMP old_strcmp = NULL;
+ 
+  if( !handle )
+  {
+    handle = dlopen("libc.so.6", RTLD_LAZY);
+    old_strcmp = (STRCMP)dlsym(handle, "strcmp");
+  }
+  printf("oops!!! hack function invoked. s1=<%s> s2=<%s>\n", s1, s2);
+  return !old_strcmp(s1, s2);
+}
+```
+
+
+运行
+```
+g++ main.cpp -o main
+g++ -fPIC -shared hook.cpp -o hook.so
+
+./main 123
+LD_PRELOAD=./hook.so ./a.out 123
+```
+>>>>>>> e69180baf13141dda94f194235bd4db7c6fe3551

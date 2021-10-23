@@ -10,6 +10,7 @@ conda install -c conda-forge mysql
 ```
 [client]
 #port=3336
+<<<<<<< HEAD
 #socket=/home/user/mysql/mysql.sock
 
 [mysqld]
@@ -21,6 +22,19 @@ pid-file=/home/user/software/mysql/mysql.pid
 log_error=/home/user/software/mysql/log/error.log
 #server-id=100
 lc-messages-dir=/home/user/miniconda3/pkgs/mysql-5.7.24-hbb652a2_0/share/mysql
+=======
+#socket=/home/appops/test/mysql/mysql.sock
+
+[mysqld]
+#port=3336
+basedir=/home/appops/test/miniconda3/pkgs/mysql-5.7.24-hbb652a2_0
+datadir=/home/appops/software/mysql/data
+pid-file=/home/appops/software/mysql/mysql.pid
+#socket=/home/appops/test/mysql/mysql.sock
+log_error=/home/appops/software/mysql/log/error.log
+#server-id=100
+lc-messages-dir=/home/appops/test/miniconda3/pkgs/mysql-5.7.24-hbb652a2_0/share/mysql
+>>>>>>> e69180baf13141dda94f194235bd4db7c6fe3551
 lc_messages = en_US
 log_timestamps = SYSTEM
 ```

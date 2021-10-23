@@ -25,6 +25,68 @@ _try_run_local_init_op
 
 Dataset的map方法参数中的函数会以图模式(graph)执行, 要想实现eager调试，可以将函数使用tf.py_function进行包裹，将函数运行在python环境中
 
+
+# tf.function
+https://www.tensorflow.org/guide/intro_to_graphs
+
+影响trace的重建的因素
+
+- 输入为tensor
+  - tensor shape 和 dtype
+- 输入为字典， 
+  - key发生变化， 新增或删除
+  - value tensor的shape 和 dtype发生变化
+
+打印tf.function的signature
+```
+print(test.pretty_printed_concrete_signatures())
+```
+
+
+# autograph
+
+https://www.youtube.com/watch?v=NIEgzljyDyI  Inside TensorFlow: AutoGraph
+
+1. getsource  得到函数源代码
+```
+import inspect
+print(inspect.getsource(f))
+```
+
+2. parse   解析函数源代码为抽象语法树
+```
+import ast
+tree_node = ast.parse(source_code)
+```
+
+3. transform  修改抽象语法树
+```
+class MyTransformer(ast.NodeTransformer):
+  def visit_If(self, node):
+    # return modified node
+
+new_tree = MyTransformer().visit(tree_node)
+```
+
+3. unparse  从抽象语法树生成代码
+
+```
+import astor
+gen = astor.code_gen.SourceGenerator(indent_with=' '*4)
+gen.visit(tree_node)
+new_source = gen.result
+```
+
+4. load  动态加载新生成的函数
+```
+import tempfile
+import imp
+with tempfile.NamedTemporaryFile() as f:
+    f.write(new_source)
+new_module = imp.load_source('', f.name)
+```
+
+
 # Feature Column
 
 # loss 

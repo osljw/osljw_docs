@@ -19,12 +19,14 @@ Sampling-Bias-Corrected Neural Modeling for Large CorpusItem Recommendations
 
 - 基于协同过滤的推荐(Collaborative Filtering-based Recommendation)
     - 基于用户的协同过滤推荐(User-based)
-        - 对用户相似性建模 (根据用户在物品上的行为数据)
+        - 对用户相似性建模 (根据用户在物品上的行为数据， 用户-物品共现对)
         - 推荐相似用户喜欢的内容给目标用户
-    - 基于项目的协同过滤推荐(Item-based）
-        - 对物品相似性建模 (根据用户在物品上的行为数据)
+    - 基于物品的协同过滤推荐(Item-based）
+        - 对物品相似性建模 (根据用户在物品上的行为数据， 物品-物品共现对)
         - 推荐目标用户自身喜欢的历史内容推荐相似内容
     - 基于模型的协同过滤推荐(Model-based)
+
+
 
 
 - BPR(Bayesian Personalized Ranking)

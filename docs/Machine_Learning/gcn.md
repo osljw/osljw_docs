@@ -32,14 +32,49 @@
 
 - input：euler_ops
 
-采样batch_size个节点
-
-sample_node
-
-
 - model
 input: (batch_size, 1)  输入节点id
 gnn: (batch_size, )
+
+
+graphSage 实现
+
+
+数据生成过程
+
+1. 采样batch_size个节点 (batch_size, 1)
+2. batch_size个节点的一阶邻居 (batch_size, hop1_size)
+3. batch_size个节点的二阶邻居 (batch_size, hop2_size)
+
+
+节点特征 （batch_size, feature_dim)
+一阶特征 （batch_size, hop1_size， feature_dim）
+二阶特征  (batch_size, hop2_size， feature_dim)
+
+
+
+模型结构: 由多个GCN层构成， 每个顶点都会
+
+GCN （input_dim, 
+
+每个节点都会使用
+
+
+模型计算过程
+
+for layer in gcn_layer:
+  节点特征
+
+  节点特征 （batch_size, feature_dim)  
+  matmul(节点特征, weight_gcn_layer) + bias  =>  (batch_size, layer_1_outputdim)
+
+  aggregator(一阶特征 （batch_size, hop1_size， feature_dim）) => 一阶邻居特征聚合 （batch_size, feature_dim）)   # mean, sum, max
+  matmul(一阶邻居特征聚合, weight_aggregator) + bias => (batch_size, layer_1_outputdim)
+
+
+  节点特征 和 一阶邻居特征聚合 # sum => (batch_size, layer_1_outputdim),  concat => (batch_size, layer_1_outputdim * 2)
+
+
 
 # Graph
 - multigraph
@@ -52,6 +87,21 @@ vertex: unique 64-bit long identifier
 # DGL
 
 https://github.com/dglai/WWW20-Hands-on-Tutorial
+
+
+## dgl graph
+
+```
+u, v, urange, vrange = utils.graphdata2tensors(data, idtype)
+
+# graphdata2tensors函数的第一个返回参数为SparseAdjTuple类型
+# SparseAdjTuple = namedtuple('SparseAdjTuple', ['format', 'arrays'])
+
+```
+
+
+
+## dgl function
 
 `message function`:  输入(u, v, e), 输出
 `reduce function`: 输入node, 聚合mailbox数据

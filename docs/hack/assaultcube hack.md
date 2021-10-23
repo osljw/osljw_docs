@@ -151,7 +151,7 @@ Trampoline 程序
 
 实现功能程序后， jmp到Trampoline 程序， 
 
-```
+```c++
 // pLocation - Target函数的地址
 // pDetour - Detour函数的地址
 // dwLength - Target函数的备份长度（需要大于等于5字节，且构成完整的汇编指令长度)
@@ -260,6 +260,9 @@ __declspec( naked ) void gl_DrawHud( ) //Mid-Function Hook, right at the end of 
 PreRenderFrame 函数调用GL库的函数进行绘制
 
 
+`#pragma comment( lib, "OPENGL32.lib" )` 链接OPENGL32.lib库文件
+
+
 # spy++
 visual studio -> Tool -> spy++
 
@@ -292,7 +295,7 @@ g_D3DDevice9 = **(IDirect3DDevice9***)(Utils::PatternScan(dx9api, "A1 ? ? ? ? 50
 g_D3DDevice9 是IDirect3DDevice9类对象的地址
 
 CSGOSimple/hooks.hpp
-```
+```c++
 namespace Hooks
 {
 	inline vfunc_hook direct3d_hook;

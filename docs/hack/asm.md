@@ -18,6 +18,34 @@ ebp 也作为当前函数局部变量寻址的基址寄存器
 
 # 汇编指令
 
+push 和 pop
+```
+PUSH <src> 
+ ESP := ESP-4  ; for x86; -8 for x64
+ MEMORY[ESP]:=<operandvalue>
+
+POP <dst> 
+ <operandtarget>:=MEMORY[ESP];
+ ESP:=ESP+4    ; for x86; +8 for x64
+```
+push先减地址，后存储， pop先取值，后加地址
+
+
+栈帧由ebp和esp确定
+
+call 和 leave 和 ret 
+- call: 将下一条指令的地址入栈， 并立即跳转到子程序
+- leave： 销毁当前函数的栈帧， 恢复父函数的栈帧
+- ret: 从栈中弹出存储作为地址， 并立即跳转到该地址执行
+
+```
+# leave 等效指令
+mov esp ebp ; 恢复父函数的esp
+pop ebp ;  恢复父函数的ebp
+```
+
+
+
 - lea 取址指令
 
 ```
@@ -136,6 +164,70 @@ void hello_world(int i) {
 0023366A  push        esi  
 0023366B  push        edi 
 ```
+
+
+c++ 类的反汇编
+
+```c++
+#include <iostream>
+#include <stdio.h>
+ 
+class AAA{
+public:
+    AAA(){}
+    ~AAA(){}
+
+    int get_a() { return a; }
+
+private:
+    int a;
+};
+
+AAA aaa;//全局变量
+ 
+int main(int argc,char** argv)
+{
+    AAA test;
+    int a = test.get_a();
+    return 0;
+}
+```
+
+
+构造函数和析构函数的反汇编
+```
+080485de <_ZN3AAAC1Ev>:
+    AAA(){}
+ 80485de:       55                      push   ebp
+ 80485df:       89 e5                   mov    ebp,esp
+ 80485e1:       5d                      pop    ebp
+ 80485e2:       c3                      ret    
+ 80485e3:       90                      nop
+
+080485e4 <_ZN3AAAD1Ev>:
+    ~AAA(){}
+ 80485e4:       55                      push   ebp
+ 80485e5:       89 e5                   mov    ebp,esp
+ 80485e7:       5d                      pop    ebp
+ 80485e8:       c3                      ret    
+ 80485e9:       90                      nop
+
+080485ea <_ZN3AAA5get_aEv>:
+    int get_a() { return a; }
+ 80485ea:       55                      push   ebp
+ 80485eb:       89 e5                   mov    ebp,esp
+ 80485ed:       8b 45 08                mov    eax,DWORD PTR [ebp+0x8]
+ 80485f0:       8b 00                   mov    eax,DWORD PTR [eax]
+ 80485f2:       5d                      pop    ebp
+ 80485f3:       c3                      ret    
+ 80485f4:       66 90                   xchg   ax,ax
+ 80485f6:       66 90                   xchg   ax,ax
+ 80485f8:       66 90                   xchg   ax,ax
+ 80485fa:       66 90                   xchg   ax,ax
+ 80485fc:       66 90                   xchg   ax,ax
+ 80485fe:       66 90                   xchg   ax,ax
+```
+在调用对象的方法时， 第一个参数默认为this指针， 通过调用
 
 
 # 编译原理
