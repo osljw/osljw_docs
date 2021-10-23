@@ -58,7 +58,6 @@ sprintf(szBuffer, "Stack Buffer Overrun!111111111111111"  "111111111111111111111
 
 系统调用通过软中断实现， 进入内核空间， 但不会改变线程上下文， current宏是有效的，准备退出中断上下文时，如果没有高优先级的线程抢占， 还是会回到原来的线程上下文
 
-<<<<<<< HEAD
 线程状态
 
 https://smartkeyerror.com/Linux-Blocking
@@ -66,7 +65,6 @@ https://smartkeyerror.com/Linux-Blocking
 运行：
 等待：由于缺少 CPU 资源而被迫停止运行， 只要调度器下次选中该进程即可立即执行，进入运行状态，  线程放到就绪队列中（红黑树实现）
 睡眠：进程不会被调度器进行选择并执行， 等待外部事件的发生而变为等待状态（例如硬件中断等）， 线程放到等待队列中（双链表实现）
-=======
 
 # 系统调用hook
 
@@ -130,4 +128,3 @@ g++ -fPIC -shared hook.cpp -o hook.so
 ./main 123
 LD_PRELOAD=./hook.so ./a.out 123
 ```
->>>>>>> e69180baf13141dda94f194235bd4db7c6fe3551
