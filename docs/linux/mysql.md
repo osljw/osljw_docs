@@ -10,6 +10,17 @@ conda install -c conda-forge mysql
 ```
 [client]
 #port=3336
+#socket=/home/user/mysql/mysql.sock
+
+[mysqld]
+#port=3336
+basedir=/home/user/miniconda3/pkgs/mysql-5.7.24-hbb652a2_0
+datadir=/home/user/software/mysql/data
+pid-file=/home/user/software/mysql/mysql.pid
+#socket=/home/user/software/mysql/mysql.sock
+log_error=/home/user/software/mysql/log/error.log
+#server-id=100
+lc-messages-dir=/home/user/miniconda3/pkgs/mysql-5.7.24-hbb652a2_0/share/mysql
 #socket=/home/appops/test/mysql/mysql.sock
 
 [mysqld]
@@ -44,7 +55,10 @@ nohup mysqld_safe --defaults-file=/home/test/mysql/etc/my.cnf &
 ```
 mysql -u root -p
 # 输入上边记录的root密码(log/error.log: A temporary password is generated for root@localhost: AY-DAM)Zh8_Z)
+
 > SET PASSWORD = PASSWORD('root123')
+
+alter user 'root'@'localhost' identified by "rootpassword"
 ```
 
 
