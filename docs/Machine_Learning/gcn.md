@@ -84,6 +84,24 @@ for layer in gcn_layer:
 # GraphX 
 vertex: unique 64-bit long identifier
 
+# GraphFrames
+
+修改build.sbt, 使用匹配spark版本的scala版本
+
+编译graphframes jar包， 跳过测试
+```
+./build/sbt 'set test in assembly := {}' clean assembly
+```
+
+```
+pip3 install graphframes
+pip3 show graphframes
+使用zip打包graphframes
+```
+
+pyspark 提交任务时， 打包graphframes python包和jar包
+
+
 # DGL
 
 https://github.com/dglai/WWW20-Hands-on-Tutorial

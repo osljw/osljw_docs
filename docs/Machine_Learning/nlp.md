@@ -28,6 +28,9 @@
 # 评测
 - GLUE
 
+# attention
+https://jalammar.github.io/visualizing-neural-machine-translation-mechanics-of-seq2seq-models-with-attention/
+
 
 # Transformer
 http://jalammar.github.io/illustrated-transformer/
@@ -47,6 +50,31 @@ V = I * WV
 2. `Q * K^T / sqrt(d_k)`: 通过sqrt(d_k) 对关联度进行缩放， 数值梯度的稳定
 3. `softmax(Q * K^T / sqrt(d_k))`:  (word_len) 用softmax归一化权重
 4. `softmax(Q * K^T / sqrt(d_k)) * V`: （word_len, v)
+
+
+## Self-Attention
+
+I:  (batch_size, word_len, embedding_size)
+
+WQ: (embedding_size, dq)
+WK: (embedding_size, dk)
+WV: (embedding_size, dv)
+
+dq = dk = dv
+
+Q(query vector):  (batch_size, word_len, dq)
+K(key vector): (batch_size, word_len, dk)
+V(value vector): (batch_size, word_len, dv)
+
+Q * K (batch_size, word_len, dq, dk)   ((q,k) 表示第q和第k个word间的score)
+
+(Q * K) / sqrt(dq)   ( stable gradients )
+
+softmax((Q * K) / sqrt(dq), axis=-1)   (batch_size, word_len , dq, dk)   每个样本的每个词都有一个长度为dk向量，该向量的分数和为1
+
+softmax((Q * K) / sqrt(dq), axis=-1) * V   (batch_size, word_len, dq, dv)
+
+sum(softmax((Q * K) / sqrt(dq), axis=-1) * V)  (batch_size, word_len, dq)
 
 Positional Encoding
 

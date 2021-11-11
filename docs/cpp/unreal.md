@@ -1,5 +1,8 @@
 # unreal
 
+Unreal Engine 5 Beginner Tutorial - UE5 Starter Course!
+https://www.youtube.com/watch?v=gQmiqmxJMtA&list=PLKPWwh_viQMGQkQfKKD5lF96efA3_RWt-
+
 跑酷项目
 https://www.youtube.com/watch?v=9qHRQF3YXZs&list=PLX2_v3fTeazrzhJcnEMvgpMPCghfy1H8p&index=3
 
@@ -15,6 +18,10 @@ https://www.tomlooman.com/ue4-gameplay-framework/
 
 AttachToComponent
 
+UActorComponent
+  - UActorComponent （无形状）
+    - USceneComponent （有位置， 无形状）
+      - UPrimitiveComponent
 
 # Pawn and Character 
 
@@ -238,3 +245,17 @@ PoseAsset
   Curve
 
 
+# 材质(Materials)
+
+材质编辑器构建材质， 对应High-Level Shading Language(HLSL)代码
+
+
+Texture Sample
+
+
+# 光源(Light) 和 视觉效果（Visual Effects）
+
+- 点光源 (如灯泡)
+- 聚光源
+- 定向光源(Directional Ligh)
+  -  大气太阳光（Atmosphere Sun Light）
