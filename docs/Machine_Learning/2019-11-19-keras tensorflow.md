@@ -456,3 +456,12 @@ reduce过程：
 3. StrategyExtended._reduce()
 4. `StrategyExtended.reduce_to()` destinations 为"/device:CPU:0"
 5. `MirroredExtended._reduce_to()` 
+
+
+# keras export
+
+模型导出h5失败， 变量名重复， 使用如下代码打印变量名称
+```
+for i, w in enumerate(model.weights): 
+    print("model_debug:", i, w.name)
+```
