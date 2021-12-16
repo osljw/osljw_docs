@@ -10,10 +10,10 @@
 - watch 异步访问
 
 # 指令
-- v-if
-- v-model  输入
-- v-bind 绑定attribute
-- v-on 事件处理
+- v-if bool表达式
+- v-model  输入， 双向绑定
+- v-bind 绑定attribute, 简写为:
+- v-on 事件处理, 简写为@
 - v-once 一次数据绑定
 - v-html
 
