@@ -124,9 +124,37 @@ tf.contrib.layers.l2_regularizer(l2_reg)
 l1=0.1, l2=0.1 too big!!!!!!!
 
 # dropout
-tf.layers.dropout
+```python
+tf.keras.layers.Dropout(
+    rate, noise_shape=None, seed=None, **kwargs
+)
+```
+rate: 输入被dropout的概率， 未被dropout的数值会乘以1/(1-rate)
+noise_shape: 对哪些维度一起进行dropout， 例如noise_shape=(None, 1)时， axis=1维度的tensor会一起按照概率进行dropout
 
-(无)
+
+```
+layer = tf.keras.layers.Dropout(0.5, noise_shape=(None, 1))
+data = np.arange(10).reshape(5, 2).astype(np.float32)
+layer(data, training=True)
+```
+输入：
+array([[0., 1.],
+       [2., 3.],
+       [4., 5.],
+       [6., 7.],
+       [8., 9.]], dtype=float32)
+输出示例：
+```
+array([[ 0.,  2.],
+       [ 4.,  6.],
+       [ 8., 10.],
+       [ 0.,  0.],
+       [16., 18.]], dtype=float32)>
+```
+
+
+
 
 # batch_normalization
 

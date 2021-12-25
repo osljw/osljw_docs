@@ -340,7 +340,7 @@ for i, tensor in enumerate(nest.flatten(outputs)):
       layer=layer, node_index=node_index, tensor_index=i)
 ```
 
-# model weights
+# model weights tensorflow checkpoint
 keras/engine/base_layer.py
 add_weight方法使用K.variable定义变量，
 regularizer参数控制是否使用正则化
@@ -360,6 +360,13 @@ for layer in model.layers:
   - by_name=True ()
 
 使用Model的_trackable_saver从checkpoint中restore
+
+解析ckpt文件， 打印所有保存的变量name和shape
+```
+import 
+reader = tf.compat.v1.train.NewCheckpointReader('/path/checkpoint/model.2021111023')
+reader.get_variable_to_shape_map()
+```
   
 # keras SavedModel
 

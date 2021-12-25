@@ -31,6 +31,20 @@ $(patsubst %.cpp,%.o, $(cpp_files))
 gcc -E -P input.cpp -o output.cpp
 ```
 
+```
+#表示：对应变量字符串化  
+
+##表示：把宏参数名与宏定义代码序列中的标识符连接在一起，形成一个新的标识符
+
+连接符#@：它将单字符标记符变换为单字符，即加单引号.
+
+可变参数： 
+#define debug(format, args...) printf(format, ##args)
+
+args... 表示可变参数
+##args中的##表示当宏参数为0个时， 自动去除前边的逗号， 未设置##时，表示args最少需要一个参数
+```
+
 代码格式化
 ```
 clang-format -i output.cpp -style=google

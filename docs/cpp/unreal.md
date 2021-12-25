@@ -13,7 +13,20 @@ https://www.tomlooman.com/ue4-gameplay-framework/
 
 - 骨骼网格物体 Actor
 - 静态网格物体 Actor
-- 
+
+
+Actor的Role/RemoteRole属性
+
+服务端：
+Role == ROLE_Authority
+RemoteRole == ROLE_SimulatedProxy || ROLE_AutonomousProxy
+
+客户端：
+Role == ROLE_SimulatedProxy || ROLE_AutonomousProxy
+RemoteRole == ROLE_Authority
+
+
+
 # ActorComponent
 
 AttachToComponent
@@ -56,11 +69,20 @@ Spawn Actor from Class
 
 # GameMode and GameStateBase
 
-GameModeBase 中的Login()为玩家创建PlayerController
+-  AGameModeBase::PreLogin  是否接受客户端的加入地图
+-  AGameModeBase::Login 为玩家创建PlayerController
+-  AGameModeBase::PostLogin
 
 GameModeBase 中的SpawnDefaultPawnAtTransform为玩家创建Pawn
 
 GameMode 仅存在于服务器端
+
+
+
+GameState 存储服务端和客户端恭喜的全局信息
+- 连接游戏的玩家
+
+
 
 # Static Mesh
 
@@ -242,7 +264,7 @@ if (Role == ROLE_Authority) {
 ```
 不设置replication时, spawn生成的actor只有本机可见，其他机器不可见  
 
-将spawn的代码逻辑只需要在服务端执行, 可以将代码放置在UFUNCTION中, 客户端调用UFUNCTION包裹的函数时，
+将spawn的代码逻辑只需要在服务端执行, 可以将代码放置在UFUNCTION中, 客户端调用UFUNCTION包裹的函数时(会进行RPC请求），
 代码会在服务器上执行， 服务器自动将数据同步给客户端进行模拟
 
 replicated actor可以通过Role可以判断是否只在服务器端执行
@@ -253,6 +275,11 @@ replicated actor可以通过Role可以判断是否只在服务器端执行
 2. 源文件中#include "Net/UnrealNetwork.h"
 3. 源文件中GetLifetimeReplicatedProps函数中使用DOREPLIFETIME宏配置变量
 
+
+- Event Replication
+  - Multicast
+  - Run on Server (replicate event from client to server)
+  - Run on owning Client （replicate event from server to owning client）
 
 
 # 动画系统
@@ -269,6 +296,7 @@ https://www.youtube.com/watch?v=92rag3qStI4
 skeleton (人体结构)
   - skeleton tree
     - retarget （迁移动画）
+
 mesh （人体皮肤） 
 
 pyhsics（人体物理约束）
@@ -276,6 +304,22 @@ pyhsics（人体物理约束）
 
 PoseAsset
   Curve
+
+## 动画重定向（retarget）
+
+- 一个带动画的skeleton A， 一个无动画的skeleton B， 将A的动画迁移到B
+- 原理： 将A和B的skeleton 映射对齐， 就能将A的动画自动迁移到B上
+- 在A的Retarget Manager界面中， Select Rig -> Select Humanoid Rig,  相当于将A的skeleton和标准skeleton对齐
+- 在B的Retarget Manager界面中， Select Rig -> Select Humanoid Rig,  相当于将B的skeleton和标准skeleton对齐
+- 在A的动画蓝图（Animation Blueprint）上执行Retarget Anim Blueprints，  选择Target 为B， 就能为B生成动画蓝图了
+
+
+
+# UI系统
+- create widget
+- add to viewport
+- set show mouse cursor
+
 
 
 # 材质(Materials)
@@ -332,3 +376,10 @@ https://docs.unrealengine.com/4.27/zh-CN/ProgrammingAndScripting/ProgrammingWith
 
 -  Edit->plugins: enable online subsystem steam
 -  工程文件夹下， 右击工程文件launch game
+
+
+
+# 游戏分类
+
+- MMO （massively multiplayer online）大型多人在线
+- RPG（role-playing game） 角色扮演游戏
