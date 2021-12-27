@@ -149,6 +149,22 @@ Input -> Bindings -> Action Mappings
 PlayerInputCompo
 
 
+CharacterBP
+  - CharacterMesh (绑定人物mesh)
+  - Animation (绑定人物动画蓝图BP)
+
+
+1. mixamo 获取人物（mesh 和 skeleton）
+2. mixamo 人物Retarget
+   1. select Rig： humanoid
+   2. source -> target 骨架映射
+3. 已有人物skeleton上 select Rig： humanoid
+4. 已有动画蓝图（Animation Blueprint）上 Retarget Anim
+5. CharacterBP上绑定迁移好的skeleton 和 动画蓝图
+6. 工程设置中， default pawn 使用新的CharacterBP
+
+
+
 宏（UHT, Unreal Header Tool进行解析）
 UPROPERTY
 
@@ -166,6 +182,19 @@ Connection ownership
 Actor 拥有Connection，  connection和PlayerController一一对应，一个Actor最外层对应的PlayerController决定了
 该Actor的Connection
 https://docs.unrealengine.com/en-US/Gameplay/Networking/Actors/OwningConnections/index.html
+
+
+## 伤害过程
+
+Actor 自定义事件，接收伤害数值 
+
+通过碰撞事件获取到处于overlay的Actor， 调用Actor的承伤函数
+
+
+## 死亡模拟
+- CharacterMesh
+  - Set Simulate Physics
+    - Set Collision Profile Name (Ragdoll)
 
 
 # 调试
@@ -260,6 +289,10 @@ Animation Essentials - Unreal Engine 4 Course
 https://www.youtube.com/playlist?list=PLL0cLF8gjBpqpCGt9ayn4Ip1p6kvgXYi2
 
 
+动画重定向 retarget
+https://www.youtube.com/watch?v=92rag3qStI4
+
+
 skeleton (人体结构)
   - skeleton tree
     - retarget （迁移动画）
@@ -299,6 +332,17 @@ PoseAsset
 
 Texture Sample
 
+Material Function
+Material Blend
+
+
+- 材质混合 
+- Use good Texture
+- Use Macro Variation (对T_MacroVariation纹理使用多种不同的uv， 控制和改变目标纹理）
+- Use Distance Blend （以玩家为中心， startoffset(eg. -2000)， Blend Range（边界模糊 eg：10000）distance blend输出为alpha，  近处使用细节纹理， 远处使用粗糙纹理）
+- Use BlendMaterialAttributes(使用Perlin noise纹理作为alpha控制多个纹理的混合， 例如草地和泥土的混合)
+
+
 
 # 光源(Light) 和 视觉效果（Visual Effects）
 
@@ -306,6 +350,35 @@ Texture Sample
 - 聚光源
 - 定向光源(Directional Ligh)
   -  大气太阳光（Atmosphere Sun Light）
+     - SkyAtmosphere (天空半球变蓝)
+     - ExponentialHeightFog(使用雾填充天空和地图的黑色间隙)
+     - project setting -> support sky atmosphere affecting heightfog (太阳降落后，天空变黑)
+     - sky light (天光反射)
+
+
+# 蓝图 （blueprint）
+- 关卡蓝图 （level blueprint）
+  - BeginPlay
+  - Character (actor blueprint)
+
+
+# landscape
+
+left mouse： 凸起
+shift + left mouse： 凹陷
+
+
+# unreal c++ doc
+1. 编程和脚本编写 > 编程指南 > 编程快速入门 (C++ Actor)
+https://docs.unrealengine.com/4.27/zh-CN/ProgrammingAndScripting/ProgrammingWithCPP/CPPProgrammingQuickStart/
+
+2. 编程和脚本编写 > 编程指南 > C++ 编程教程 > 游戏控制的摄像机 ()
+
+
+# online subsystem steam
+
+-  Edit->plugins: enable online subsystem steam
+-  工程文件夹下， 右击工程文件launch game
 
 
 
