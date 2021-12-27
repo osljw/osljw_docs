@@ -1,4 +1,23 @@
 
+- [Reinforcement learning 强化学习](#reinforcement-learning-强化学习)
+- [environment](#environment)
+  - [CartPole](#cartpole)
+  - [CartPole in colab](#cartpole-in-colab)
+  - [CartPole](#cartpole-1)
+- [policy](#policy)
+  - [on-policy and off-policy](#on-policy-and-off-policy)
+- [rewards](#rewards)
+- [policy gradient, value-based, actor-critic](#policy-gradient-value-based-actor-critic)
+- [强化学习分类（按照损失函数划分）](#强化学习分类按照损失函数划分)
+  - [Q-Learning](#q-learning)
+  - [Deep Q-Learning](#deep-q-learning)
+  - [策略梯度policy gradient](#策略梯度policy-gradient)
+- [actor-critic](#actor-critic)
+  - [Advantage Actor-Critic (A2C)](#advantage-actor-critic-a2c)
+  - [Asynchronous Advantage Actor-Critic (A3C)](#asynchronous-advantage-actor-critic-a3c)
+  - [Resource](#resource)
+- [Monte Carlo](#monte-carlo)
+
 # Reinforcement learning 强化学习
 
 - environment
@@ -98,6 +117,8 @@ policy: map an observation from the environment to an action or a distribution o
 
 $\pi(a_t|s_t)$ 在t时刻，系统状态为$s_t$，选择执行动作$a_t$的函数
 
+## on-policy and off-policy
+on-policy 收集数据的同时更新模型， off-policy 收集数据后， 离线批量数据更新模型， 一般policy-base的方法是on-policy方式更新模型
 
 
 # rewards
