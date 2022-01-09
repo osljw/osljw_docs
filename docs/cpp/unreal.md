@@ -105,11 +105,9 @@ https://www.bilibili.com/video/av28206952/
 
 - 构建武器AActor
 
-- 人物添加插槽
+- 人物skeleton mesh添加插槽, 武器在人物插槽上的位置预览和调整位置
 
-- 武器在人物插槽上的位置预览和调整位置
-
-- 在人物（pawn）创建后（AGameMode::RestartPlayer)或者BeginPlay时SpawnActor创建武器，并AttachToComponent到人物上
+- 在人物（pawn）创建后（AGameMode::RestartPlayer)或者BeginPlay时SpawnActor创建武器，并AttachActorToComponent到人物上, 设置socket name
 
 - 武器添加碰撞
 
@@ -124,13 +122,23 @@ https://www.bilibili.com/video/av28206952/
   - DetachFromComponent 
 
 
-# 碰撞系统
+# 碰撞系统 和 物理模拟
 - FCollisionQueryParams
   - AddIgnoredActor 碰撞忽略的Actor
   - bTraceComplex = true 碰撞情况捕捉更加精细
 
 - FHitResult 碰撞结果
 - GetWorld()->LineTraceSingleByChannel 直线碰撞
+
+
+被物理力作用的Static Mesh
+- Physics -> Simulate Physics  (true)
+- Collision -> Generate Overlay Events (true)
+
+如何施加力
+- Add Force
+- Add Radial Force 
+
 
 # 伤害系统
 - TSubclassOf<UDamageType> 伤害类型
@@ -314,12 +322,41 @@ PoseAsset
 - 在A的动画蓝图（Animation Blueprint）上执行Retarget Anim Blueprints，  选择Target 为B， 就能为B生成动画蓝图了
 
 
+常驻动画（如奔跑， 跳跃） 用状态机进行控制
+
+
+- play montage （在动画不同时机执行不同程序）
+- play anim montage 
+- paly Animation
+
+
+1. 人物蓝图， 按键事件， play montage
+2. 拔枪动画，创建动画蒙太奇montage， 
+3. 动画蓝图， 新增Anim slot，
+4. 拔枪动画选择3中新增的slot
+5. 动画蓝图输出， 
+
+
+6. layered blend per bone 对骨架的不同部分进行动画混合
+
+保存状态机输出pose： default pose -> cached default pose
+构建上肢动画： cache default pose -> upper slot -> upper pose
+混合： base pose 使用cached default pose， pose 0 使用upper pose, layer setup中对base pose设置过滤条件branch filter（ 设置的bone表示不要修改该bone下对应的动画）
+
+
+## additive anim 叠加动画
+- zero pose 
+- additive Anim Type： Mesh space
+- 
 
 # UI系统
 - create widget
 - add to viewport
 - set show mouse cursor
 
+
+Actor添加Widget组件， 可以将ui和Actor进行绑定
+Pawn添加Widget Interaction组件， 通过Get Hit Result Under Cursor by Channel获取用户点击位置，  用Find look at Rotation计算出旋转角度， 调整Widget Interaction组件的旋转来指向点击位置
 
 
 # 材质(Materials)
@@ -383,3 +420,9 @@ https://docs.unrealengine.com/4.27/zh-CN/ProgrammingAndScripting/ProgrammingWith
 
 - MMO （massively multiplayer online）大型多人在线
 - RPG（role-playing game） 角色扮演游戏
+
+
+
+# Blueprint 和 c++ 协作
+
+- c++ 使用 Blueprint中定义的类型， 在cpp头文件中声明TSubclassOf<AAtor>类型变量， 并公开到蓝图进行编辑

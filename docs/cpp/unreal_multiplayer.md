@@ -63,4 +63,10 @@ BP Structure 维护玩家信息
 - PlayerImage Texture2D 玩家头像
 - PlayerCharacter ClassReference 玩家角色
 
+
+AI角色
+- Pawn Sensing 组件
+- <project>.Build.cs 文件PublicDependency添加"AIModule"
+- 听觉感知： 可以被感知的人物需要设置PawnNoiseEmitter组件和调用Pawn Make Noise， AI人物通过OnHearNoise捕获
+
 # 聊天系统
