@@ -1,4 +1,21 @@
 
+- [Inject DLL](#inject-dll)
+- [相关软件](#相关软件)
+	- [Cheat Engine](#cheat-engine)
+	- [IDA PRO](#ida-pro)
+	- [spy++](#spy)
+- [Cheat Engine](#cheat-engine-1)
+	- [Find what accesses this address](#find-what-accesses-this-address)
+- [detour](#detour)
+	- [功能](#功能)
+- [detour](#detour-1)
+- [AssaultCube](#assaultcube)
+	- [main](#main)
+- [D3D12 HOOK](#d3d12-hook)
+	- [CSGOSimple 分析](#csgosimple-分析)
+- [entity](#entity)
+- [Signature Scanning](#signature-scanning)
+
 # Inject DLL
 - OpenProcess
 - VirtualAllocEx
@@ -7,17 +24,20 @@
 - CreateRemoteThread
 
 
-# 下载
-- Cheat Engine
+# 相关软件
+## Cheat Engine
+
 	- https://cheatengine.org/
 	- https://duvf52y7btwne.cloudfront.net/9h66m-xfg2auo/CheatEngine71.exe
-- IDA PRO
+  
+## IDA PRO
 	- https://www.hex-rays.com/products/ida/support/download_freeware/
 	- https://out7.hex-rays.com/files/idafree70_windows.exe
 
+## spy++
+visual studio -> Tool -> spy++
+
 # Cheat Engine
-
-
 
 - scan type 和 value type 需要匹配， 例如扫描decreased value时，double类型的不能选择float类型
 - Code finder， Find what accesses this address
@@ -36,8 +56,8 @@
 4. 重复上述过程， 直到地址ptrn_address变绿(由module的基址 + 偏移量进行表示)
 
 
-Find what accesses this address
-===============================
+## Find what accesses this address
+
 CE 默认使用硬件断点的方式，断点只能停在指令执行之后
 
 > 1. 通过值扫描， 找到变量的地址为：0x0184F7D0
@@ -120,7 +140,7 @@ https://github.com/microsoft/detours
 - include目录为头文件
 - lib.X86目录为dll文件
 
-# 
+## 功能
 - Aimbot 自动瞄准
 - Voice Spam 
 - Quick Grenade 快速手雷
@@ -183,8 +203,9 @@ void *DetourFunction( void *pLocation, void *pDetour, DWORD dwLength ) {
 }
 ```
 
-# main
+# AssaultCube 
 
+## main
 入口函数DllMain
 
 AssaultCube Hack\Main.cpp
@@ -263,11 +284,9 @@ PreRenderFrame 函数调用GL库的函数进行绘制
 `#pragma comment( lib, "OPENGL32.lib" )` 链接OPENGL32.lib库文件
 
 
-# spy++
-visual studio -> Tool -> spy++
 
-# D3D12
-# HOOK
+
+# D3D12 HOOK
 > 在哪里进行hook(每帧绘制处)
 
 - D3D12 HOOK
@@ -283,9 +302,7 @@ visual studio -> Tool -> spy++
 绘制GUI
 
 
-
-
-
+## CSGOSimple 分析
 获取d3d devecie, 通过代码扫描定位地址
 CSGOSimple/valve_sdk/sdk.cpp
 ```c++

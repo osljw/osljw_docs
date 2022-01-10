@@ -8,7 +8,11 @@
   - [on-policy and off-policy](#on-policy-and-off-policy)
 - [rewards](#rewards)
 - [policy gradient, value-based, actor-critic](#policy-gradient-value-based-actor-critic)
-- [强化学习分类（按照损失函数划分）](#强化学习分类按照损失函数划分)
+- [强化学习分类](#强化学习分类)
+  - [model-based vs model-free](#model-based-vs-model-free)
+  - [value-based vs policy-based vs AC](#value-based-vs-policy-based-vs-ac)
+  - [DP vs TD vs MC](#dp-vs-td-vs-mc)
+  - [on-policy vs off-policy](#on-policy-vs-off-policy)
   - [Q-Learning](#q-learning)
   - [Deep Q-Learning](#deep-q-learning)
   - [策略梯度policy gradient](#策略梯度policy-gradient)
@@ -34,6 +38,32 @@
 # environment
 
 ## CartPole
+
+- value-based DQN (预测未来收益的期望)
+https://levelup.gitconnected.com/dqn-from-scratch-with-tensorflow-2-eb0541151049
+
+
+DQN 损失函数
+![](media/dqn_loss.png)
+
+样本： 在状态s时执行动作a， 得到奖赏r, 下一个状态为$s_{t+1}$
+网络： 
+  - q_net 网络， 输入状态s， 输出所有动作下对应的Q值， 选择动作a对应的Q(s, a)作为预测值
+  - target_q_net网络，输入下一个状态$s_{t+1}$, 输出所有动作下对应的Q值， 选择最大的Q值
+  - 使用r + $max_{a_{t+1}} Q(s_{t+1}, a_{t+1})$作为状态s， 执行动作a的真实Q值
+
+损失：最小化target Q value 和 predict Q value
+
+DQN loss
+https://medium.com/intro-to-artificial-intelligence/deep-q-network-dqn-applying-neural-network-as-a-functional-approximation-in-q-learning-6ffe3b0a9062
+
+
+- policy-based 
+https://towardsdatascience.com/reinforce-policy-gradient-with-tensorflow2-x-be1dea695f24
+
+
+
+
 CartPole https://github.com/openai/gym/wiki/CartPole-v0
 ```python
 import gym
@@ -127,15 +157,53 @@ maximize the sum of rewards $\sum^{T}_{t=0} \gamma^{t}r_{t}$,
 $\gamma$ - discount factor, [0,1]
 
 # policy gradient, value-based, actor-critic
-value-based - 评估在状态（state)下采取动作（action)获得的收益(reward)
-
-policy gradient - 通过调整策略的参数，优化策略， 通过monte-carlo方法估计策略的梯度来优化策略
 
 
-# 强化学习分类（按照损失函数划分）
-- `Temporal-Difference` : 例如`Q-learning`, 减少预测的Q值和真实Q值的误差， Q值是关于state和action的函数，表示在系统状态s下采取动作a能够获得的期望收益， value-based
+
+
+
+# 强化学习分类
+## model-based vs model-free
+
+是否需要环境信息， 即转移概率p(s|a),   model-based方法能基于转移概率计算得到所有可能情况，对奖赏进行精确计算， 
+
+
+## value-based vs policy-based vs AC
+value-based - 输入为状态， 输出为动作的值估计，评估在状态（state)下采取动作（action)获得的收益(reward)，
+学习的是值函数 
+缺点：
+1. 一般只能处理离散动作，无法处理连续动作
+2. Q值的更新收敛速度慢
+
+policy gradient - 输入为状态， 输出为动作的概率， 通过调整策略的参数，优化策略， 通过monte-carlo方法估计策略的梯度来优化策略, 策略的梯度使用采样估计方差大
+
+AC - 即学习值函数也学习策略
+
+
+https://github.com/abhisheksuran/Reinforcement_Learning
+
+https://towardsdatascience.com/reinforce-policy-gradient-with-tensorflow2-x-be1dea695f24
+
+
+## DP vs TD vs MC
+DP：动态规划使用转移概率进行精确建模
+TD: 使用连续两个时刻预测值的差值来更新模型
+MC：使用完整的交互信息
+
+
+## on-policy vs off-policy
+
+off-policy一般有两个策略：行为策略和目标策略，当要评估目标策略的值函数时，需要使用到历史交互样本，但是这些样本都是用行为策略得到的，所以得到的结果必然存在偏差。一般要使用重要性采样
+
+
+（按照损失函数划分）
+- `Temporal-Difference` : 例如`Q-learning`, 减少预测的Q值和真实Q值的误差， Q值是关于state和action的函数，表示在系统状态s下采取动作a能够获得的期望收益， 
 - `Policy Gradients` ： 
 - `actor-critic`: value-based 和 Policy Gradients 方法的混合， actor为policy， critic为Q值
+
+
+
+
 
 ## Q-Learning
 Q-function (state-action value function)
@@ -177,6 +245,17 @@ p(.) -  behaviour distribution
 在一轮的学习中使用同一个策略直到该轮结束
 
 每个策略会求多个轮次奖励的平均值
+
+![](media/policy_gradient.png)
+
+> Intuitively, this loss function allows us to increase the weight for actions that yielded a positive reward, and decrease them for actions that yielded a negative reward.
+
+https://towardsdatascience.com/an-intuitive-explanation-of-policy-gradient-part-1-reinforce-aa4392cbfd3c
+
+loss函数理解，
+-  当奖赏是正的时， 为了最小化loss， 会增加产生该奖赏行为的概率， 当奖赏是负数时， 会降低产生该奖赏行为的概率
+- 为什么需要log， 没有log时参数更新为： $\theta_{t+1} = \theta_t + \gamma * \nabla \pi(s|a)$ ，  对策略的损失进行归一化， 防止高概率的action， 损失学习过强
+
 
 
 # actor-critic

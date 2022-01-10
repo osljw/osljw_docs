@@ -1,3 +1,41 @@
+
+
+- [unreal](#unreal)
+- [Gameplay Framework](#gameplay-framework)
+- [Actor](#actor)
+- [ActorComponent](#actorcomponent)
+- [Pawn and Character](#pawn-and-character)
+- [PlayerController and PlayerState](#playercontroller-and-playerstate)
+- [GameMode and GameStateBase](#gamemode-and-gamestatebase)
+- [Static Mesh](#static-mesh)
+- [武器系统 Weapon](#武器系统-weapon)
+- [碰撞系统](#碰撞系统)
+- [伤害系统](#伤害系统)
+- [人物系统 Character](#人物系统-character)
+  - [ThirdPersonCharacter （Blueprint Class)](#thirdpersoncharacter-blueprint-class)
+  - [换装系统](#换装系统)
+  - [伤害过程](#伤害过程)
+  - [死亡模拟](#死亡模拟)
+- [调试](#调试)
+- [c++ 创建actor提供给unreal使用](#c-创建actor提供给unreal使用)
+- [unreal engine project](#unreal-engine-project)
+- [摄像机](#摄像机)
+- [UE4 网络游戏](#ue4-网络游戏)
+- [动画系统](#动画系统)
+  - [动画重定向（retarget）](#动画重定向retarget)
+  - [动画混合空间 （Blend Space)](#动画混合空间-blend-space)
+  - [动画蒙太奇 （Animation Montage）](#动画蒙太奇-animation-montage)
+  - [逆向运动学（Inverse Kinematics）](#逆向运动学inverse-kinematics)
+  - [Aim Offset 瞄准偏移](#aim-offset-瞄准偏移)
+- [UI系统](#ui系统)
+- [材质(Materials)](#材质materials)
+- [光源(Light) 和 视觉效果（Visual Effects）](#光源light-和-视觉效果visual-effects)
+- [蓝图 （blueprint）](#蓝图-blueprint)
+- [landscape](#landscape)
+- [unreal c++ doc](#unreal-c-doc)
+- [online subsystem steam](#online-subsystem-steam)
+- [游戏分类](#游戏分类)
+
 # unreal
 
 Unreal Engine 5 Beginner Tutorial - UE5 Starter Course!
@@ -136,8 +174,9 @@ https://www.bilibili.com/video/av28206952/
 - TSubclassOf<UDamageType> 伤害类型
 - UGameplayStatics::ApplyPointDamage 点伤害
 
-# Character
-# ThirdPersonCharacter （Blueprint Class)
+# 人物系统 Character
+
+## ThirdPersonCharacter （Blueprint Class)
 - ThirdPersonCharacter （Blueprint Class)
   - CapsuleComponent
     - SkeletalMeshComponent
@@ -164,6 +203,8 @@ CharacterBP
 6. 工程设置中， default pawn 使用新的CharacterBP
 
 
+## 换装系统
+- set master pose component
 
 宏（UHT, Unreal Header Tool进行解析）
 UPROPERTY
@@ -317,6 +358,12 @@ PoseAsset
 ## 动画混合空间 （Blend Space)
 
 ## 动画蒙太奇 （Animation Montage）
+
+## 逆向运动学（Inverse Kinematics）
+
+
+## Aim Offset 瞄准偏移
+aim offset 本质上是asset， 
 
 # UI系统
 - create widget
