@@ -13,12 +13,15 @@
   - [value-based vs policy-based vs AC](#value-based-vs-policy-based-vs-ac)
   - [DP vs TD vs MC](#dp-vs-td-vs-mc)
   - [on-policy vs off-policy](#on-policy-vs-off-policy)
+- [loss 损失函数](#loss-损失函数)
+  - [value-based DQN (预测未来收益的期望)](#value-based-dqn-预测未来收益的期望)
+  - [policy-based](#policy-based)
   - [Q-Learning](#q-learning)
   - [Deep Q-Learning](#deep-q-learning)
   - [策略梯度policy gradient](#策略梯度policy-gradient)
-- [actor-critic](#actor-critic)
-  - [Advantage Actor-Critic (A2C)](#advantage-actor-critic-a2c)
-  - [Asynchronous Advantage Actor-Critic (A3C)](#asynchronous-advantage-actor-critic-a3c)
+  - [actor-critic](#actor-critic)
+    - [Advantage Actor-Critic (A2C)](#advantage-actor-critic-a2c)
+    - [Asynchronous Advantage Actor-Critic (A3C)](#asynchronous-advantage-actor-critic-a3c)
   - [Resource](#resource)
 - [Monte Carlo](#monte-carlo)
 
@@ -38,29 +41,6 @@
 # environment
 
 ## CartPole
-
-- value-based DQN (预测未来收益的期望)
-https://levelup.gitconnected.com/dqn-from-scratch-with-tensorflow-2-eb0541151049
-
-
-DQN 损失函数
-![](media/dqn_loss.png)
-
-样本： 在状态s时执行动作a， 得到奖赏r, 下一个状态为$s_{t+1}$
-网络： 
-  - q_net 网络， 输入状态s， 输出所有动作下对应的Q值， 选择动作a对应的Q(s, a)作为预测值
-  - target_q_net网络，输入下一个状态$s_{t+1}$, 输出所有动作下对应的Q值， 选择最大的Q值
-  - 使用r + $max_{a_{t+1}} Q(s_{t+1}, a_{t+1})$作为状态s， 执行动作a的真实Q值
-
-损失：最小化target Q value 和 predict Q value
-
-DQN loss
-https://medium.com/intro-to-artificial-intelligence/deep-q-network-dqn-applying-neural-network-as-a-functional-approximation-in-q-learning-6ffe3b0a9062
-
-
-- policy-based 
-https://towardsdatascience.com/reinforce-policy-gradient-with-tensorflow2-x-be1dea695f24
-
 
 
 
@@ -203,6 +183,32 @@ off-policy一般有两个策略：行为策略和目标策略，当要评估目�
 
 
 
+# loss 损失函数
+
+## value-based DQN (预测未来收益的期望)
+https://levelup.gitconnected.com/dqn-from-scratch-with-tensorflow-2-eb0541151049
+
+
+DQN 损失函数
+![](media/dqn_loss.png)
+
+样本： 在状态s时执行动作a， 得到奖赏r, 下一个状态为$s_{t+1}$
+网络： 
+  - q_net 网络， 输入状态s， 输出所有动作下对应的Q值， 选择动作a对应的Q(s, a)作为预测值
+  - target_q_net网络，输入下一个状态$s_{t+1}$, 输出所有动作下对应的Q值， 选择最大的Q值
+  - 使用r + $max_{a_{t+1}} Q(s_{t+1}, a_{t+1})$作为状态s， 执行动作a的真实Q值
+
+损失：最小化target Q value 和 predict Q value
+
+DQN loss
+https://medium.com/intro-to-artificial-intelligence/deep-q-network-dqn-applying-neural-network-as-a-functional-approximation-in-q-learning-6ffe3b0a9062
+
+
+## policy-based 
+https://towardsdatascience.com/reinforce-policy-gradient-with-tensorflow2-x-be1dea695f24
+
+
+
 
 
 ## Q-Learning
@@ -258,11 +264,18 @@ loss函数理解，
 
 
 
-# actor-critic
+## actor-critic
+actor-critic 是value-based和policy-based两者的混合
 
-## Advantage Actor-Critic (A2C)
-## Asynchronous Advantage Actor-Critic (A3C)
+### Advantage Actor-Critic (A2C)
+`Advantage`： 指 Advantage function， 优势函数计的返回值是return和baseline的差， baseline通常为值估计
 
+`entropy maximization`： 在目标函数中加入， 来确保广泛的进行policy探索， 熵刻画的是概率分布的随机性，当熵最大时趋于均匀分布
+
+### Asynchronous Advantage Actor-Critic (A3C)
+
+`Asynchronous`: 使用multi worker的方式来生成数据， 降低数据间的相干性（decorrelate）
+ 
 gradients are weighted with `returns`: a discounted sum of future rewards
 
 advantage function 优势函数
@@ -271,10 +284,10 @@ advantages = returns - values()
 
 entropy maximization
 
-class Model
-输入为observation， 输出为action
 
-
+模型
+  - 输入： state
+  - 输出： action prob，  value
 
 
 episode 样本收集
