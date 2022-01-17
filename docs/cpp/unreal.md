@@ -11,7 +11,9 @@
 - [武器系统 Weapon](#武器系统-weapon)
   - [伤害系统](#伤害系统)
 - [碰撞系统](#碰撞系统)
+- [碰撞系统 和 物理模拟](#碰撞系统-和-物理模拟)
 - [人物系统 Character](#人物系统-character)
+- [伤害系统](#伤害系统-1)
   - [ThirdPersonCharacter （Blueprint Class)](#thirdpersoncharacter-blueprint-class)
   - [换装系统](#换装系统)
   - [伤害过程](#伤害过程)
@@ -32,6 +34,7 @@
   - [逆向运动学（Inverse Kinematics）  IK vs FK](#逆向运动学inverse-kinematics--ik-vs-fk)
     - [动画坐标空间](#动画坐标空间)
   - [Aim Offset 瞄准偏移](#aim-offset-瞄准偏移)
+  - [additive anim 叠加动画](#additive-anim-叠加动画)
 - [UI系统](#ui系统)
 - [材质(Materials)](#材质materials)
 - [光源(Light) 和 视觉效果（Visual Effects）](#光源light-和-视觉效果visual-effects)
@@ -42,6 +45,7 @@
 - [游戏分类](#游戏分类)
 - [游戏逻辑](#游戏逻辑)
   - [结束逻辑](#结束逻辑)
+- [Blueprint 和 c++ 协作](#blueprint-和-c-协作)
 
 # unreal
 
@@ -150,11 +154,9 @@ https://www.bilibili.com/video/av28206952/
 
 - 构建武器AActor
 
-- 人物添加插槽
+- 人物skeleton mesh添加插槽, 武器在人物插槽上的位置预览和调整位置
 
-- 武器在人物插槽上的位置预览和调整位置
-
-- 在人物（pawn）创建后（AGameMode::RestartPlayer)或者BeginPlay时SpawnActor创建武器，并AttachToComponent到人物上
+- 在人物（pawn）创建后（AGameMode::RestartPlayer)或者BeginPlay时SpawnActor创建武器，并AttachActorToComponent到人物上, 设置socket name
 
 - 武器添加碰撞
 
@@ -176,6 +178,7 @@ https://www.bilibili.com/video/av28206952/
 - UGameplayStatics::ApplyPointDamage 点伤害
 
 # 碰撞系统
+# 碰撞系统 和 物理模拟
 - FCollisionQueryParams
   - AddIgnoredActor 碰撞忽略的Actor
   - bTraceComplex = true 碰撞情况捕捉更加精细
@@ -184,6 +187,19 @@ https://www.bilibili.com/video/av28206952/
 - GetWorld()->LineTraceSingleByChannel 直线碰撞
 
 # 人物系统 Character
+
+被物理力作用的Static Mesh
+- Physics -> Simulate Physics  (true)
+- Collision -> Generate Overlay Events (true)
+
+如何施加力
+- Add Force
+- Add Radial Force 
+
+
+# 伤害系统
+- TSubclassOf<UDamageType> 伤害类型
+- UGameplayStatics::ApplyPointDamage 点伤害
 
 ## ThirdPersonCharacter （Blueprint Class)
 - ThirdPersonCharacter （Blueprint Class)
@@ -397,12 +413,41 @@ PoseAsset
 
 ## Aim Offset 瞄准偏移
 aim offset 本质上是asset， 
+常驻动画（如奔跑， 跳跃） 用状态机进行控制
+
+
+- play montage （在动画不同时机执行不同程序）
+- play anim montage 
+- paly Animation
+
+
+1. 人物蓝图， 按键事件， play montage
+2. 拔枪动画，创建动画蒙太奇montage， 
+3. 动画蓝图， 新增Anim slot，
+4. 拔枪动画选择3中新增的slot
+5. 动画蓝图输出， 
+
+
+6. layered blend per bone 对骨架的不同部分进行动画混合
+
+保存状态机输出pose： default pose -> cached default pose
+构建上肢动画： cache default pose -> upper slot -> upper pose
+混合： base pose 使用cached default pose， pose 0 使用upper pose, layer setup中对base pose设置过滤条件branch filter（ 设置的bone表示不要修改该bone下对应的动画）
+
+
+## additive anim 叠加动画
+- zero pose 
+- additive Anim Type： Mesh space
+- 
 
 # UI系统
 - create widget
 - add to viewport
 - set show mouse cursor
 
+
+Actor添加Widget组件， 可以将ui和Actor进行绑定
+Pawn添加Widget Interaction组件， 通过Get Hit Result Under Cursor by Channel获取用户点击位置，  用Find look at Rotation计算出旋转角度， 调整Widget Interaction组件的旋转来指向点击位置
 
 
 # 材质(Materials)
@@ -476,3 +521,7 @@ https://docs.unrealengine.com/4.27/zh-CN/ProgrammingAndScripting/ProgrammingWith
   - 判断玩家状态
     - 获取GameMode，调用结束游戏函数（只会在服务器上执行）
       - 通过GameState中的UFUNCTION(NetMulticast)函数让所有客户端执行结束函数功能
+
+# Blueprint 和 c++ 协作
+
+- c++ 使用 Blueprint中定义的类型， 在cpp头文件中声明TSubclassOf<AAtor>类型变量， 并公开到蓝图进行编辑
