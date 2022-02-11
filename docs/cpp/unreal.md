@@ -19,6 +19,7 @@
   - [伤害过程](#伤害过程)
   - [死亡模拟](#死亡模拟)
 - [调试](#调试)
+  - [Debug Console Variable](#debug-console-variable)
 - [c++ 创建actor提供给unreal使用](#c-创建actor提供给unreal使用)
 - [unreal engine project](#unreal-engine-project)
 - [摄像机](#摄像机)
@@ -266,6 +267,11 @@ Actor 自定义事件，接收伤害数值
 # 调试
 - DrawDebugLine
 
+## Debug Console Variable
+```c++
+int32 debug_switch=0;
+FAutoConsoleVariableRef CVARDebug(TEXT("NameCate.NameVar"), debug_switch, TEXT("help info"), ECVF_Cheat)
+```
 
 # c++ 创建actor提供给unreal使用
 https://docs.unrealengine.com/en-US/Programming/QuickStart/index.html

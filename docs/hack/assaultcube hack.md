@@ -5,20 +5,22 @@
 	- [Cheat Engine](#cheat-engine)
 	- [IDA PRO](#ida-pro)
 	- [spy++](#spy)
+	- [Process Monitor](#process-monitor)
 - [Cheat Engine](#cheat-engine-1)
 	- [Find what accesses this address](#find-what-accesses-this-address)
 - [detour](#detour)
 	- [功能](#功能)
-- [detour](#detour-1)
+- [detour Trampoline](#detour-trampoline)
 - [AssaultCube](#assaultcube)
 	- [main](#main)
-- [D3D12 HOOK](#d3d12-hook)
+- [API HOOK D3D12 HOOK](#api-hook-d3d12-hook)
 	- [CSGOSimple 分析](#csgosimple-分析)
 	- [Pointer-to-Member Function](#pointer-to-member-function)
 		- [PatternScan 获取全局对象地址](#patternscan-获取全局对象地址)
 		- [vfunc_hook](#vfunc_hook)
 - [entity](#entity)
 - [Signature Scanning](#signature-scanning)
+- [Win API](#win-api)
 
 # Inject DLL
 - OpenProcess
@@ -26,6 +28,7 @@
 - WriteProcessMemory
 - GetProcAddress
 - CreateRemoteThread
+
 
 ## 获取基址 base addr
 
@@ -39,8 +42,14 @@
 	- https://www.hex-rays.com/products/ida/support/download_freeware/
 	- https://out7.hex-rays.com/files/idafree70_windows.exe
 
+反汇编
+
 ## spy++
 visual studio -> Tool -> spy++
+
+
+## Process Monitor
+
 
 # Cheat Engine
 
@@ -153,7 +162,7 @@ https://github.com/microsoft/detours
 - Entity Magnet
 - Player ESP 人物感知（透视）
 
-# detour
+# detour Trampoline
 jmp指令的二进制指令位0xe9
 
 nop指令为0x90
@@ -162,23 +171,19 @@ nop指令为0x90
 - 拷贝原函数到新分配的内存上memcpy， 制作跳板程序
 - 修改原函数所在内存为可写，VirtualProtect
 
-Trampoline 程序
+`detour函数`:  实施hook过程的函数或对象， 
+	1. 需要知道被hook的函数地址， 
+	2. hook之后执行的函数地址， 
+	3. stolen byte长度， 被hook函数头部需要保存的长度
 
-将原来的目标函数， 拷贝到Trampoline 程序,
+`Trampoline`: 用于实现执行原来被hook的函数
+	1. 将被hook函数的stolen byte拷贝到Trampoline处
+	2. 紧随其后为5字节的jmp指令，跳转回原来被hook函数的地址之后继续执行
 
-紧随其后为5字节的jmp指令，跳转到原来的目标函数
-
-目标函数
-
-开头第一条修改为jmp指令， 跳转到detour之后的新函数 （jmp 指令占用5字节）
-
-新函数
-
-实现功能程序后， jmp到Trampoline 程序， 
 
 ```c++
-// pLocation - Target函数的地址
-// pDetour - Detour函数的地址
+// pLocation - 需要被hook的函数的地址
+// pDetour - hook之后执行的函数的地址(用户自定义函数)
 // dwLength - Target函数的备份长度（需要大于等于5字节，且构成完整的汇编指令长度)
 void *DetourFunction( void *pLocation, void *pDetour, DWORD dwLength ) {
 	// 构造Trampoline程序 
@@ -291,7 +296,16 @@ PreRenderFrame 函数调用GL库的函数进行绘制
 
 
 
-# D3D12 HOOK
+# API HOOK D3D12 HOOK
+
+http://jbremer.org/x86-api-hooking-demystified/
+
+x86 变长指令集
+
+`stolen bytes`:  需要被覆写的长度， 需要和指令长度进行对齐
+`trampoline`: 
+
+
 > 在哪里进行hook(每帧绘制处)
 
 - D3D12 HOOK
@@ -438,3 +452,13 @@ vfunc_hook 为class
 
 # Signature Scanning
 https://wiki.alliedmods.net/Signature_Scanning
+
+
+# Win API
+
+```
+HMODULE module = GetModuleHandleW(L"engine.dll");
+void* func_ptr = GetProcAddress(module, "CreateInterface");
+```
+
+`GetProcAddress`: Retrieves the address of an exported function or variable from the specified dynamic-link library (DLL).

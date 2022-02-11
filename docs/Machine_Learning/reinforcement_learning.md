@@ -22,8 +22,10 @@
   - [actor-critic](#actor-critic)
     - [Advantage Actor-Critic (A2C)](#advantage-actor-critic-a2c)
     - [Asynchronous Advantage Actor-Critic (A3C)](#asynchronous-advantage-actor-critic-a3c)
+  - [DDPG(Deep Deterministic Policy Gradient)](#ddpgdeep-deterministic-policy-gradient)
   - [Resource](#resource)
 - [Monte Carlo](#monte-carlo)
+- [REINFORCE](#reinforce)
 
 # Reinforcement learning 强化学习
 
@@ -344,6 +346,7 @@ episode需要包括，
         return ep_rews
 ```
 
+## DDPG(Deep Deterministic Policy Gradient)
 
 
 ## Resource
@@ -365,3 +368,39 @@ https://www.analyticsvidhya.com/blog/2018/11/reinforcement-learning-introduction
 - First Visit Monte Carlo: Average returns only for first time s is visited in an episode
 - Every visit Monte Carlo: Average returns for every time s is visited in an episode.
 
+
+# REINFORCE
+
+推导过程
+https://medium.com/@thechrisyoon/deriving-policy-gradients-and-implementing-reinforce-f887949bd63
+https://zhuanlan.zhihu.com/p/31278940
+
+
+目标函数: 找到策略使目标函数尽可能变大
+$$ J(\pi) = \mathbb{E}_{\tau \sim \pi} R(\tau) $$
+
+
+- $\tau$:  (s0, a0), (s1, a1), ... , (sn, an),  trajectory, 对应用户的状态和相应的推荐结果
+
+- $R(\tau) = \sum\limits_{t=1}^{|\tau|} R(s_t, a_t)$: 一次trajectory的回报，对应一个用户的回报（如用户的总消费时长， 用户的总点击数）
+
+- $R(s, a)$:  状态s下，采取动作a，奖赏评估函数（立即奖赏r(s, a), 一般使用折扣奖赏)
+
+- $R_{dis}(s_0, a_0) = R(s_0, a_0) + \gamma R(s_1, a_1) + \gamma^2 R(s_2, a_2) + ...$:  状态s0, 采取动作a0， 折扣奖赏计算
+
+$$ J(\pi) = \sum_\tau P(\tau; \pi) R(\tau) $$
+$P(\tau; \pi) = \prod\limits_{t=0}^{|\tau|}\pi(a_t|s_t)P(s_{t+1}|s_t, a_t)$: 表示策略$\pi$产生轨迹$\tau$的概率
+
+$$ J(\pi) = \mathbb{E}_{\tau \sim \pi} \sum_{t=0}^{|\tau|} (p(\pi(a|s) R(s_t, a_t)) $$
+
+
+
+目标函数的梯度：
+
+$$ \nabla J(\pi) =  \nabla \sum_\tau P(\tau; \pi) R(\tau)$$
+$$ \nabla J(\pi) =  \sum_\tau \nabla P(\tau; \pi) R(\tau)$$
+$$ \nabla J(\pi) =  \sum_\tau P(\tau; \pi) \frac{\nabla P(\tau; \pi)}{P(\tau; \pi)} R(\tau)$$
+$$ \nabla J(\pi) =  \sum_\tau P(\tau; \pi) \nabla logP(\tau; \pi) R(\tau)$$
+
+
+![](media/policy_log.png)
