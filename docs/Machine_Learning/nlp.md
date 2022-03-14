@@ -35,6 +35,10 @@ https://jalammar.github.io/visualizing-neural-machine-translation-mechanics-of-s
 # Transformer
 http://jalammar.github.io/illustrated-transformer/
 
+transformer = attention + 全联接， encoder-decoder结构
+
+transformer 网络结构和源码 https://zhuanlan.zhihu.com/p/178610196
+
 attention
 - Q: query-vec
 - K: key-vec
@@ -78,7 +82,7 @@ sum(softmax((Q * K) / sqrt(dq), axis=-1) * V)  (batch_size, word_len, dq)
 
 Positional Encoding
 
-# tf.keras.layers.Attention
+## tf.keras.layers.Attention
 input: 
   query: [batch_size, Tq, dim] eg: 文本相似度应用中，query是第一段文字的序列嵌入
   value: [batch_size, Tv, dim] eg: 文本相似度应用中，value是第二段文字的序列嵌入
@@ -93,6 +97,16 @@ output:
 3. Use `distribution` to create a linear combination of `value` with
   shape `[batch_size, Tq, dim]`:
   `return tf.matmul(distribution, value)`.
+
+# BERT
+
+embedding：
+token embeddings 和 position embedding： 由embedding_lookup方式进行训练
+
+
+
+
+
 
 # seq2seq任务
 - Encoder
