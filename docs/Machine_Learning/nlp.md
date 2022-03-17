@@ -44,7 +44,7 @@ attention
 - K: key-vec
 - V: value-vec
 
-I为(word_len, embedding_size), Q,K,V的大小为(word_len, v)， WQ, WK, WV的大小为embedding_size * v
+I为(word_len, embedding_size), WQ, WK, WV的大小为embedding_size * v, Q,K,V的大小为(word_len, v)
 Q = I * WQ
 K = I * WK
 V = I * WV
