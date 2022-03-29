@@ -42,7 +42,7 @@ void heap_sort(vector<int>& nums) {
 ```
 
 
-# Tire
+# Tire 字典树
 
 https://leetcode-cn.com/problems/longest-word-in-dictionary
 
@@ -123,3 +123,73 @@ public:
     }
 };
 ```
+
+
+# 并查集 UnionFind
+
+代码模板
+```c++
+class UnionFind {
+public:
+    UnionFind(int len):parent(len), group_size(len) {
+        for (int i = 0; i < len; i++) {
+            parent[i] = i;
+        }
+    }
+
+    int Find(int idx) {
+        if (parent[idx] != idx) {
+            parent[idx] = Find(parent[idx]);
+        }
+        return parent[idx];
+    }
+
+    void Union(int x, int y) {
+        int px = Find(x);
+        int py = Find(y);
+
+        if (px == py) return;
+        parent[px] = py;
+        group_size--;
+    } 
+
+    int GroupSize() {
+        return group_size;
+    }
+
+private:
+    vector<int> parent;
+    int group_size;
+};
+```
+
+剑指 Offer II 116. 省份数量 https://leetcode-cn.com/problems/bLyHh0/
+
+```c++
+class Solution {
+public:
+    int findCircleNum(vector<vector<int>>& isConnected) {
+        int n = isConnected.size();
+
+        UnionFind uf(n);
+
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                if (isConnected[i][j]) {
+                    uf.Union(i, j);
+                }
+            }
+        }
+
+        return uf.GroupSize();
+    }
+};
+```
+
+
+# DFA 确定有限自动机
+
+- 有穷状态集合Q， 有穷结束状态集合F($F \in Q$)
+- 有穷输入集合I
+- 转移函数： 输入为当前状态和输入符号，输出为下一个状态
+
