@@ -1,6 +1,6 @@
 
 
-# Heap
+# Heap 堆
 
 
 ## 向下调整法
@@ -127,31 +127,50 @@ public:
 
 # 并查集 UnionFind
 
+- 路径压缩， Find时将节点尽可能直接挂到顶级父节点下
+- 按秩合并， Union时将节点数少的树挂到节点数多的树下
+
 代码模板
 ```c++
 class UnionFind {
 public:
-    UnionFind(int len):parent(len), group_size(len) {
+    UnionFind(int len):parent(len), size(len), group_size(len) {
         for (int i = 0; i < len; i++) {
             parent[i] = i;
         }
     }
 
-    int Find(int idx) {
-        if (parent[idx] != idx) {
-            parent[idx] = Find(parent[idx]);
+    int Find(int x) {
+        // 路径压缩
+        if (x != parent[x]) {
+            parent[x] = Find(parent[x]);
         }
-        return parent[idx];
+        return parent[x];
     }
 
-    void Union(int x, int y) {
+    // void Union(int x, int y) {
+    //     int px = Find(x);
+    //     int py = Find(y);
+
+    //     if (px == py) return;
+    //     parent[px] = py;
+    //     group_size--;
+    // }
+
+    int Union(int x, int y) {
         int px = Find(x);
         int py = Find(y);
+        if (px == py) return 1;
 
-        if (px == py) return;
+        // 按秩合并，节点小的树合并到节点多的树
+        if (size[px] > size[py]) {
+            swap(px, py);
+        }
         parent[px] = py;
+        size[py] += size[px];
         group_size--;
-    } 
+        return 0;
+    }
 
     int GroupSize() {
         return group_size;
@@ -159,6 +178,7 @@ public:
 
 private:
     vector<int> parent;
+    vector<int> size;
     int group_size;
 };
 ```

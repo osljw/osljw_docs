@@ -253,6 +253,17 @@ public:
 技巧
 - 取最低位 n & 1
 - 移除最低位的1 n & (n - 1)
+- __builtin_popcount(val) 统计val的二进制中1的个数
+- 长度为m， 从中选取n个进行判断， 可以进行枚举
+```c++
+for (int mask = 0;  mask < (1 << m); mask++) {
+    for (int i = 0; i < m; i++) {
+        if (mask & (1 << i)) {
+
+        }
+    }
+}
+```
 
 剑指 Offer 56 - II. 数组中数字出现的次数 II https://leetcode-cn.com/problems/shu-zu-zhong-shu-zi-chu-xian-de-ci-shu-ii-lcof/
 
