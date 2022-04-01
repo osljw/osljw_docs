@@ -8,6 +8,10 @@
 
 # ida
 
+
+字符串视图 view -> open subviews -> strings
+1. 搜索常用的字符串， 如血量health， 弹药armor
+
 ## Exception handling
 ![](media/ida_excepthandle.png)
 

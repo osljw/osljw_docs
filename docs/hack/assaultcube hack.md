@@ -1,4 +1,27 @@
 
+- [Inject DLL](#inject-dll)
+	- [获取基址 base addr](#获取基址-base-addr)
+- [相关软件](#相关软件)
+	- [Cheat Engine](#cheat-engine)
+	- [IDA PRO](#ida-pro)
+	- [spy++](#spy)
+	- [Process Monitor](#process-monitor)
+- [Cheat Engine](#cheat-engine-1)
+	- [Find what accesses this address](#find-what-accesses-this-address)
+- [detour](#detour)
+	- [功能](#功能)
+- [detour Trampoline](#detour-trampoline)
+- [AssaultCube](#assaultcube)
+	- [main](#main)
+- [API HOOK D3D12 HOOK](#api-hook-d3d12-hook)
+	- [CSGOSimple 分析](#csgosimple-分析)
+	- [Pointer-to-Member Function](#pointer-to-member-function)
+		- [PatternScan 获取全局对象地址](#patternscan-获取全局对象地址)
+		- [vfunc_hook](#vfunc_hook)
+- [entity](#entity)
+- [Signature Scanning](#signature-scanning)
+- [Win API](#win-api)
+
 # Inject DLL
 - OpenProcess
 - VirtualAllocEx
@@ -7,17 +30,28 @@
 - CreateRemoteThread
 
 
-# 下载
-- Cheat Engine
+## 获取基址 base addr
+
+# 相关软件
+## Cheat Engine
+
 	- https://cheatengine.org/
 	- https://duvf52y7btwne.cloudfront.net/9h66m-xfg2auo/CheatEngine71.exe
-- IDA PRO
+  
+## IDA PRO
 	- https://www.hex-rays.com/products/ida/support/download_freeware/
 	- https://out7.hex-rays.com/files/idafree70_windows.exe
 
+反汇编
+
+## spy++
+visual studio -> Tool -> spy++
+
+
+## Process Monitor
+
+
 # Cheat Engine
-
-
 
 - scan type 和 value type 需要匹配， 例如扫描decreased value时，double类型的不能选择float类型
 - Code finder， Find what accesses this address
@@ -36,8 +70,8 @@
 4. 重复上述过程， 直到地址ptrn_address变绿(由module的基址 + 偏移量进行表示)
 
 
-Find what accesses this address
-===============================
+## Find what accesses this address
+
 CE 默认使用硬件断点的方式，断点只能停在指令执行之后
 
 > 1. 通过值扫描， 找到变量的地址为：0x0184F7D0
@@ -120,7 +154,7 @@ https://github.com/microsoft/detours
 - include目录为头文件
 - lib.X86目录为dll文件
 
-# 
+## 功能
 - Aimbot 自动瞄准
 - Voice Spam 
 - Quick Grenade 快速手雷
@@ -128,7 +162,7 @@ https://github.com/microsoft/detours
 - Entity Magnet
 - Player ESP 人物感知（透视）
 
-# detour
+# detour Trampoline
 jmp指令的二进制指令位0xe9
 
 nop指令为0x90
@@ -137,23 +171,19 @@ nop指令为0x90
 - 拷贝原函数到新分配的内存上memcpy， 制作跳板程序
 - 修改原函数所在内存为可写，VirtualProtect
 
-Trampoline 程序
+`detour函数`:  实施hook过程的函数或对象， 
+	1. 需要知道被hook的函数地址， 
+	2. hook之后执行的函数地址， 
+	3. stolen byte长度， 被hook函数头部需要保存的长度
 
-将原来的目标函数， 拷贝到Trampoline 程序,
+`Trampoline`: 用于实现执行原来被hook的函数
+	1. 将被hook函数的stolen byte拷贝到Trampoline处
+	2. 紧随其后为5字节的jmp指令，跳转回原来被hook函数的地址之后继续执行
 
-紧随其后为5字节的jmp指令，跳转到原来的目标函数
-
-目标函数
-
-开头第一条修改为jmp指令， 跳转到detour之后的新函数 （jmp 指令占用5字节）
-
-新函数
-
-实现功能程序后， jmp到Trampoline 程序， 
 
 ```c++
-// pLocation - Target函数的地址
-// pDetour - Detour函数的地址
+// pLocation - 需要被hook的函数的地址
+// pDetour - hook之后执行的函数的地址(用户自定义函数)
 // dwLength - Target函数的备份长度（需要大于等于5字节，且构成完整的汇编指令长度)
 void *DetourFunction( void *pLocation, void *pDetour, DWORD dwLength ) {
 	// 构造Trampoline程序 
@@ -183,8 +213,9 @@ void *DetourFunction( void *pLocation, void *pDetour, DWORD dwLength ) {
 }
 ```
 
-# main
+# AssaultCube 
 
+## main
 入口函数DllMain
 
 AssaultCube Hack\Main.cpp
@@ -263,11 +294,18 @@ PreRenderFrame 函数调用GL库的函数进行绘制
 `#pragma comment( lib, "OPENGL32.lib" )` 链接OPENGL32.lib库文件
 
 
-# spy++
-visual studio -> Tool -> spy++
 
-# D3D12
-# HOOK
+
+# API HOOK D3D12 HOOK
+
+http://jbremer.org/x86-api-hooking-demystified/
+
+x86 变长指令集
+
+`stolen bytes`:  需要被覆写的长度， 需要和指令长度进行对齐
+`trampoline`: 
+
+
 > 在哪里进行hook(每帧绘制处)
 
 - D3D12 HOOK
@@ -283,9 +321,26 @@ visual studio -> Tool -> spy++
 绘制GUI
 
 
+## CSGOSimple 分析
+
+## Pointer-to-Member Function
+
+Pointer-to-Member Function 
+https://www.codeguru.com/cplusplus/c-tutorial-pointer-to-member-function/
 
 
+```
+Return_Type (Class_Name::* pointer_name) (Argument_List);
 
+Return_Type:   member function return type.
+Class_Name:    name of the class in which the member function is declared.
+Argument_List: member function argument list.
+pointer_name:  a name we'd like to call the pointer variable.
+```
+成员函数指针和普通指针不能相互转换
+
+
+### PatternScan 获取全局对象地址
 获取d3d devecie, 通过代码扫描定位地址
 CSGOSimple/valve_sdk/sdk.cpp
 ```c++
@@ -293,6 +348,67 @@ auto dx9api = GetModuleHandleW(L"shaderapidx9.dll");
 g_D3DDevice9 = **(IDirect3DDevice9***)(Utils::PatternScan(dx9api, "A1 ? ? ? ? 50 8B 08 FF 51 0C") + 1);
 ```
 g_D3DDevice9 是IDirect3DDevice9类对象的地址
+
+
+
+
+`PatternScan`: 在某个模块代码中搜索匹配的模式字节码， 模块地址通过`GetModuleHandleW`获取， 模式字节码一般通过IDA等工具定位获取到
+```c++
+    /*
+     * @brief Scan for a given byte pattern on a module
+     *
+     * @param module    Base of the module to search
+     * @param signature IDA-style byte array pattern
+     *
+     * @returns Address of the first occurence
+     */
+    std::uint8_t* PatternScan(void* module, const char* signature)
+    {
+        static auto pattern_to_byte = [](const char* pattern) {
+            auto bytes = std::vector<int>{};
+            auto start = const_cast<char*>(pattern);
+            auto end = const_cast<char*>(pattern) + strlen(pattern);
+
+            for(auto current = start; current < end; ++current) {
+                if(*current == '?') {
+                    ++current;
+                    if(*current == '?')
+                        ++current;
+                    bytes.push_back(-1);
+                } else {
+                    bytes.push_back(strtoul(current, &current, 16));
+                }
+            }
+            return bytes;
+        };
+
+        auto dosHeader = (PIMAGE_DOS_HEADER)module;
+        auto ntHeaders = (PIMAGE_NT_HEADERS)((std::uint8_t*)module + dosHeader->e_lfanew);
+
+        auto sizeOfImage = ntHeaders->OptionalHeader.SizeOfImage;
+        auto patternBytes = pattern_to_byte(signature);
+        auto scanBytes = reinterpret_cast<std::uint8_t*>(module);
+
+        auto s = patternBytes.size();
+        auto d = patternBytes.data();
+
+        for(auto i = 0ul; i < sizeOfImage - s; ++i) {
+            bool found = true;
+            for(auto j = 0ul; j < s; ++j) {
+                if(scanBytes[i + j] != d[j] && d[j] != -1) {
+                    found = false;
+                    break;
+                }
+            }
+            if(found) {
+                return &scanBytes[i];
+            }
+        }
+        return nullptr;
+    }
+```
+
+### vfunc_hook
 
 CSGOSimple/hooks.hpp
 ```c++
@@ -303,20 +419,14 @@ namespace Hooks
 ```
 
 CSGOSimple/hooks.cpp
-```
+```c++
 direct3d_hook.setup(g_D3DDevice9);
 
 direct3d_hook.hook_index(index::EndScene, hkEndScene);
 direct3d_hook.hook_index(index::Reset, hkReset);
 ```
-vfunc_hook 为class
 
-- setup方法的参数为void*指针， 接受一个类对象的地址， 找到该对象的虚表地址和虚表大小
-并拷贝虚表到新分配的内存上， 将该对象的虚表指针指向新的虚表地址
-- hook_index方法第一个参数为虚函数在虚表中的索引， 第二个参数为hook之后的函数
-- vfunc_hook类中保存了旧虚表的地址和新虚表的地址，在hook之后的新函数中通过get_original方法得到原来函数的地址
-
-```
+```c++
 long __stdcall hkEndScene(IDirect3DDevice9* pDevice)
 {
 	static auto oEndScene = direct3d_hook.get_original<decltype(&hkEndScene)>(index::EndScene);
@@ -324,6 +434,15 @@ long __stdcall hkEndScene(IDirect3DDevice9* pDevice)
 	return oEndScene(pDevice);
 }
 ```
+
+vfunc_hook 为class
+
+- setup方法的参数为void*指针， 接受一个类对象的地址， 找到该对象的虚表地址和虚表大小
+并拷贝虚表到新分配的内存上， 将该对象的虚表指针指向新的虚表地址
+- hook_index方法第一个参数为虚函数在虚表中的索引， 第二个参数为hook之后的函数
+- vfunc_hook类中保存了旧虚表的地址和新虚表的地址，在hook之后的新函数中通过get_original方法得到原来函数的地址
+
+
 
 
 
@@ -333,3 +452,13 @@ long __stdcall hkEndScene(IDirect3DDevice9* pDevice)
 
 # Signature Scanning
 https://wiki.alliedmods.net/Signature_Scanning
+
+
+# Win API
+
+```
+HMODULE module = GetModuleHandleW(L"engine.dll");
+void* func_ptr = GetProcAddress(module, "CreateInterface");
+```
+
+`GetProcAddress`: Retrieves the address of an exported function or variable from the specified dynamic-link library (DLL).

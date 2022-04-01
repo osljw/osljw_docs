@@ -95,7 +95,11 @@ c++ 和 汇编
 反汇编
 ```
 objdump -M intel -d a.out
+objdump -x86-asm-syntax=intel -d a.out  (mac llvm)
 ```
+
+`objdump -d` only disassembles sections of the executable where there's supposed to be code.
+`objdump -D` to disassemble all sections
 
 
 
@@ -250,6 +254,15 @@ Function prolog and epilog
 影响参数传递和返回值的方式
 __stdcall：被调用者（callee) 负责清理栈内存 （winapi  dll 默认为__stdcall 方式）
 __cdecl： 调用者（caller) 负责清理栈内存 
+__fastcall: 通过寄存器来传送参数的（实际上，它用ECX和EDX传送前两个双字（DWORD）或更小的参数，剩下的参数仍旧自右向左压栈传送，被调用的函数在返回前清理传送参数的内存栈）
+
+```
+/* example of __stdcall */
+push arg1 
+push arg2 
+push arg3 
+call function // no stack cleanup - callee does this
+```
 
 ```
 /* example of __cdecl */
@@ -258,15 +271,6 @@ push arg2
 push arg3
 call function
 add sp,12 // effectively "pop; pop; pop"
-```
-
-
-```
-/* example of __stdcall */
-push arg1 
-push arg2 
-push arg3 
-call function // no stack cleanup - callee does this
 ```
 
 

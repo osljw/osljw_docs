@@ -1,3 +1,53 @@
+
+
+- [unreal](#unreal)
+- [Gameplay Framework](#gameplay-framework)
+- [Actor](#actor)
+- [ActorComponent](#actorcomponent)
+- [Pawn and Character](#pawn-and-character)
+- [PlayerController and PlayerState](#playercontroller-and-playerstate)
+- [GameMode and GameStateBase](#gamemode-and-gamestatebase)
+- [Static Mesh](#static-mesh)
+- [武器系统 Weapon](#武器系统-weapon)
+  - [伤害系统](#伤害系统)
+- [碰撞系统](#碰撞系统)
+- [碰撞系统 和 物理模拟](#碰撞系统-和-物理模拟)
+- [人物系统 Character](#人物系统-character)
+- [伤害系统](#伤害系统-1)
+  - [ThirdPersonCharacter （Blueprint Class)](#thirdpersoncharacter-blueprint-class)
+  - [换装系统](#换装系统)
+  - [伤害过程](#伤害过程)
+  - [死亡模拟](#死亡模拟)
+- [调试](#调试)
+  - [Debug Console Variable](#debug-console-variable)
+- [c++ 创建actor提供给unreal使用](#c-创建actor提供给unreal使用)
+- [unreal engine project](#unreal-engine-project)
+- [摄像机](#摄像机)
+- [UE4 网络游戏](#ue4-网络游戏)
+  - [Actor Replication](#actor-replication)
+  - [Variable Replication](#variable-replication)
+  - [Event Replication](#event-replication)
+  - [RPC](#rpc)
+- [动画系统](#动画系统)
+  - [动画重定向（retarget）](#动画重定向retarget)
+  - [动画混合空间 （Blend Space)](#动画混合空间-blend-space)
+  - [动画蒙太奇 （Animation Montage）](#动画蒙太奇-animation-montage)
+  - [逆向运动学（Inverse Kinematics）  IK vs FK](#逆向运动学inverse-kinematics--ik-vs-fk)
+    - [动画坐标空间](#动画坐标空间)
+  - [Aim Offset 瞄准偏移](#aim-offset-瞄准偏移)
+  - [additive anim 叠加动画](#additive-anim-叠加动画)
+- [UI系统](#ui系统)
+- [材质(Materials)](#材质materials)
+- [光源(Light) 和 视觉效果（Visual Effects）](#光源light-和-视觉效果visual-effects)
+- [蓝图 （blueprint）](#蓝图-blueprint)
+- [landscape](#landscape)
+- [unreal c++ doc](#unreal-c-doc)
+- [online subsystem steam](#online-subsystem-steam)
+- [游戏分类](#游戏分类)
+- [游戏逻辑](#游戏逻辑)
+  - [结束逻辑](#结束逻辑)
+- [Blueprint 和 c++ 协作](#blueprint-和-c-协作)
+
 # unreal
 
 Unreal Engine 5 Beginner Tutorial - UE5 Starter Course!
@@ -122,6 +172,13 @@ https://www.bilibili.com/video/av28206952/
   - DetachFromComponent 
 
 
+
+
+## 伤害系统
+- TSubclassOf<UDamageType> 伤害类型
+- UGameplayStatics::ApplyPointDamage 点伤害
+
+# 碰撞系统
 # 碰撞系统 和 物理模拟
 - FCollisionQueryParams
   - AddIgnoredActor 碰撞忽略的Actor
@@ -130,6 +187,7 @@ https://www.bilibili.com/video/av28206952/
 - FHitResult 碰撞结果
 - GetWorld()->LineTraceSingleByChannel 直线碰撞
 
+# 人物系统 Character
 
 被物理力作用的Static Mesh
 - Physics -> Simulate Physics  (true)
@@ -144,8 +202,7 @@ https://www.bilibili.com/video/av28206952/
 - TSubclassOf<UDamageType> 伤害类型
 - UGameplayStatics::ApplyPointDamage 点伤害
 
-# Character
-# ThirdPersonCharacter （Blueprint Class)
+## ThirdPersonCharacter （Blueprint Class)
 - ThirdPersonCharacter （Blueprint Class)
   - CapsuleComponent
     - SkeletalMeshComponent
@@ -172,6 +229,8 @@ CharacterBP
 6. 工程设置中， default pawn 使用新的CharacterBP
 
 
+## 换装系统
+- set master pose component
 
 宏（UHT, Unreal Header Tool进行解析）
 UPROPERTY
@@ -208,6 +267,11 @@ Actor 自定义事件，接收伤害数值
 # 调试
 - DrawDebugLine
 
+## Debug Console Variable
+```c++
+int32 debug_switch=0;
+FAutoConsoleVariableRef CVARDebug(TEXT("NameCate.NameVar"), debug_switch, TEXT("help info"), ECVF_Cheat)
+```
 
 # c++ 创建actor提供给unreal使用
 https://docs.unrealengine.com/en-US/Programming/QuickStart/index.html
@@ -256,7 +320,7 @@ set_active
 
 https://docs.unrealengine.com/en-US/Gameplay/Networking/Overview/index.html
 
-- Actor Replication
+## Actor Replication
 
 1. 在c++ actor类的构造函数中调用
 ```
@@ -277,18 +341,34 @@ if (Role == ROLE_Authority) {
 
 replicated actor可以通过Role可以判断是否只在服务器端执行
 
-- Variable Replication
+## Variable Replication
 
+应用场景示例： 客户端人物标识是否携带目标的变量， 需要客户端同步该变量到服务器以判断游戏是否结束
 1. 头文件中使用UPROPERTY(Replicated)修饰变量
 2. 源文件中#include "Net/UnrealNetwork.h"
 3. 源文件中GetLifetimeReplicatedProps函数中使用DOREPLIFETIME宏配置变量
 
+控制同步方式， 以节省带宽
+- DOREPLIFETIME_CONDITION
+  - COND_OwnerOnly
 
-- Event Replication
+## Event Replication
   - Multicast
   - Run on Server (replicate event from client to server)
   - Run on owning Client （replicate event from server to owning client）
 
+
+## RPC
+
+UFUNCTION(Client): 函数在客户端执行，在服务端发起调用
+UFUNCTION(Server): 函数在服务端执行，在客户端发起调用
+UFUNCTION(NetMulticast): 函数在所有端执行， 在服务端发起调用
+
+```
+UFUNCTION(Server, Reliable, WithValidation) 
+```
+- Reliable: 可靠调用
+- WithValidation： 验证
 
 # 动画系统
 
@@ -322,6 +402,23 @@ PoseAsset
 - 在A的动画蓝图（Animation Blueprint）上执行Retarget Anim Blueprints，  选择Target 为B， 就能为B生成动画蓝图了
 
 
+## 动画混合空间 （Blend Space)
+
+## 动画蒙太奇 （Animation Montage）
+
+## 逆向运动学（Inverse Kinematics）  IK vs FK
+
+使用IK调整动画
+1. 在character中计算得到末端执行器的位置
+
+
+### 动画坐标空间
+1. 角色动画的计算发生在局部（Local)空间， 相对于骨骼的Root进行计算， 
+2. Final Animation Pose 也只能接收局部（Local)空间的数据
+3. IK的计算
+
+## Aim Offset 瞄准偏移
+aim offset 本质上是asset， 
 常驻动画（如奔跑， 跳跃） 用状态机进行控制
 
 
@@ -442,6 +539,14 @@ https://docs.unrealengine.com/4.27/zh-CN/ProgrammingAndScripting/ProgrammingWith
 - RPG（role-playing game） 角色扮演游戏
 
 
+# 游戏逻辑
+
+## 结束逻辑
+
+- 通关口与玩家Overlap
+  - 判断玩家状态
+    - 获取GameMode，调用结束游戏函数（只会在服务器上执行）
+      - 通过GameState中的UFUNCTION(NetMulticast)函数让所有客户端执行结束函数功能
 
 # Blueprint 和 c++ 协作
 

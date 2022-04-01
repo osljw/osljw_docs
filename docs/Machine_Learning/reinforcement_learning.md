@@ -1,4 +1,32 @@
 
+- [Reinforcement learning 强化学习](#reinforcement-learning-强化学习)
+- [environment](#environment)
+  - [CartPole](#cartpole)
+  - [CartPole in colab](#cartpole-in-colab)
+  - [CartPole](#cartpole-1)
+- [policy](#policy)
+  - [on-policy and off-policy](#on-policy-and-off-policy)
+- [rewards](#rewards)
+- [policy gradient, value-based, actor-critic](#policy-gradient-value-based-actor-critic)
+- [强化学习分类](#强化学习分类)
+  - [model-based vs model-free](#model-based-vs-model-free)
+  - [value-based vs policy-based vs AC](#value-based-vs-policy-based-vs-ac)
+  - [DP vs TD vs MC](#dp-vs-td-vs-mc)
+  - [on-policy vs off-policy](#on-policy-vs-off-policy)
+- [loss 损失函数](#loss-损失函数)
+  - [value-based DQN (预测未来收益的期望)](#value-based-dqn-预测未来收益的期望)
+  - [policy-based](#policy-based)
+  - [Q-Learning](#q-learning)
+  - [Deep Q-Learning](#deep-q-learning)
+  - [策略梯度policy gradient](#策略梯度policy-gradient)
+  - [actor-critic](#actor-critic)
+    - [Advantage Actor-Critic (A2C)](#advantage-actor-critic-a2c)
+    - [Asynchronous Advantage Actor-Critic (A3C)](#asynchronous-advantage-actor-critic-a3c)
+  - [DDPG(Deep Deterministic Policy Gradient)](#ddpgdeep-deterministic-policy-gradient)
+  - [Resource](#resource)
+- [Monte Carlo](#monte-carlo)
+- [REINFORCE](#reinforce)
+
 # Reinforcement learning 强化学习
 
 - environment
@@ -15,6 +43,9 @@
 # environment
 
 ## CartPole
+
+
+
 CartPole https://github.com/openai/gym/wiki/CartPole-v0
 ```python
 import gym
@@ -98,6 +129,8 @@ policy: map an observation from the environment to an action or a distribution o
 
 $\pi(a_t|s_t)$ 在t时刻，系统状态为$s_t$，选择执行动作$a_t$的函数
 
+## on-policy and off-policy
+on-policy 收集数据的同时更新模型， off-policy 收集数据后， 离线批量数据更新模型， 一般policy-base的方法是on-policy方式更新模型
 
 
 # rewards
@@ -106,15 +139,79 @@ maximize the sum of rewards $\sum^{T}_{t=0} \gamma^{t}r_{t}$,
 $\gamma$ - discount factor, [0,1]
 
 # policy gradient, value-based, actor-critic
-value-based - 评估在状态（state)下采取动作（action)获得的收益(reward)
-
-policy gradient - 通过调整策略的参数，优化策略， 通过monte-carlo方法估计策略的梯度来优化策略
 
 
-# 强化学习分类（按照损失函数划分）
-- `Temporal-Difference` : 例如`Q-learning`, 减少预测的Q值和真实Q值的误差， Q值是关于state和action的函数，表示在系统状态s下采取动作a能够获得的期望收益， value-based
+
+
+
+# 强化学习分类
+## model-based vs model-free
+
+是否需要环境信息， 即转移概率p(s|a),   model-based方法能基于转移概率计算得到所有可能情况，对奖赏进行精确计算， 
+
+
+## value-based vs policy-based vs AC
+value-based - 输入为状态， 输出为动作的值估计，评估在状态（state)下采取动作（action)获得的收益(reward)，
+学习的是值函数 
+缺点：
+1. 一般只能处理离散动作，无法处理连续动作
+2. Q值的更新收敛速度慢
+
+policy gradient - 输入为状态， 输出为动作的概率， 通过调整策略的参数，优化策略， 通过monte-carlo方法估计策略的梯度来优化策略, 策略的梯度使用采样估计方差大
+
+AC - 即学习值函数也学习策略
+
+
+https://github.com/abhisheksuran/Reinforcement_Learning
+
+https://towardsdatascience.com/reinforce-policy-gradient-with-tensorflow2-x-be1dea695f24
+
+
+## DP vs TD vs MC
+DP：动态规划使用转移概率进行精确建模
+TD: 使用连续两个时刻预测值的差值来更新模型
+MC：使用完整的交互信息
+
+
+## on-policy vs off-policy
+
+off-policy一般有两个策略：行为策略和目标策略，当要评估目标策略的值函数时，需要使用到历史交互样本，但是这些样本都是用行为策略得到的，所以得到的结果必然存在偏差。一般要使用重要性采样
+
+
+（按照损失函数划分）
+- `Temporal-Difference` : 例如`Q-learning`, 减少预测的Q值和真实Q值的误差， Q值是关于state和action的函数，表示在系统状态s下采取动作a能够获得的期望收益， 
 - `Policy Gradients` ： 
 - `actor-critic`: value-based 和 Policy Gradients 方法的混合， actor为policy， critic为Q值
+
+
+
+# loss 损失函数
+
+## value-based DQN (预测未来收益的期望)
+https://levelup.gitconnected.com/dqn-from-scratch-with-tensorflow-2-eb0541151049
+
+
+DQN 损失函数
+![](media/dqn_loss.png)
+
+样本： 在状态s时执行动作a， 得到奖赏r, 下一个状态为$s_{t+1}$
+网络： 
+  - q_net 网络， 输入状态s， 输出所有动作下对应的Q值， 选择动作a对应的Q(s, a)作为预测值
+  - target_q_net网络，输入下一个状态$s_{t+1}$, 输出所有动作下对应的Q值， 选择最大的Q值
+  - 使用r + $max_{a_{t+1}} Q(s_{t+1}, a_{t+1})$作为状态s， 执行动作a的真实Q值
+
+损失：最小化target Q value 和 predict Q value
+
+DQN loss
+https://medium.com/intro-to-artificial-intelligence/deep-q-network-dqn-applying-neural-network-as-a-functional-approximation-in-q-learning-6ffe3b0a9062
+
+
+## policy-based 
+https://towardsdatascience.com/reinforce-policy-gradient-with-tensorflow2-x-be1dea695f24
+
+
+
+
 
 ## Q-Learning
 Q-function (state-action value function)
@@ -157,12 +254,30 @@ p(.) -  behaviour distribution
 
 每个策略会求多个轮次奖励的平均值
 
+![](media/policy_gradient.png)
 
-# actor-critic
+> Intuitively, this loss function allows us to increase the weight for actions that yielded a positive reward, and decrease them for actions that yielded a negative reward.
 
-## Advantage Actor-Critic (A2C)
-## Asynchronous Advantage Actor-Critic (A3C)
+https://towardsdatascience.com/an-intuitive-explanation-of-policy-gradient-part-1-reinforce-aa4392cbfd3c
 
+loss函数理解，
+-  当奖赏是正的时， 为了最小化loss， 会增加产生该奖赏行为的概率， 当奖赏是负数时， 会降低产生该奖赏行为的概率
+- 为什么需要log， 没有log时参数更新为： $\theta_{t+1} = \theta_t + \gamma * \nabla \pi(s|a)$ ，  对策略的损失进行归一化， 防止高概率的action， 损失学习过强
+
+
+
+## actor-critic
+actor-critic 是value-based和policy-based两者的混合
+
+### Advantage Actor-Critic (A2C)
+`Advantage`： 指 Advantage function， 优势函数计的返回值是return和baseline的差， baseline通常为值估计
+
+`entropy maximization`： 在目标函数中加入， 来确保广泛的进行policy探索， 熵刻画的是概率分布的随机性，当熵最大时趋于均匀分布
+
+### Asynchronous Advantage Actor-Critic (A3C)
+
+`Asynchronous`: 使用multi worker的方式来生成数据， 降低数据间的相干性（decorrelate）
+ 
 gradients are weighted with `returns`: a discounted sum of future rewards
 
 advantage function 优势函数
@@ -171,10 +286,10 @@ advantages = returns - values()
 
 entropy maximization
 
-class Model
-输入为observation， 输出为action
 
-
+模型
+  - 输入： state
+  - 输出： action prob，  value
 
 
 episode 样本收集
@@ -231,6 +346,7 @@ episode需要包括，
         return ep_rews
 ```
 
+## DDPG(Deep Deterministic Policy Gradient)
 
 
 ## Resource
@@ -252,3 +368,39 @@ https://www.analyticsvidhya.com/blog/2018/11/reinforcement-learning-introduction
 - First Visit Monte Carlo: Average returns only for first time s is visited in an episode
 - Every visit Monte Carlo: Average returns for every time s is visited in an episode.
 
+
+# REINFORCE
+
+推导过程
+https://medium.com/@thechrisyoon/deriving-policy-gradients-and-implementing-reinforce-f887949bd63
+https://zhuanlan.zhihu.com/p/31278940
+
+
+目标函数: 找到策略使目标函数尽可能变大
+$$ J(\pi) = \mathbb{E}_{\tau \sim \pi} R(\tau) $$
+
+
+- $\tau$:  (s0, a0), (s1, a1), ... , (sn, an),  trajectory, 对应用户的状态和相应的推荐结果
+
+- $R(\tau) = \sum\limits_{t=1}^{|\tau|} R(s_t, a_t)$: 一次trajectory的回报，对应一个用户的回报（如用户的总消费时长， 用户的总点击数）
+
+- $R(s, a)$:  状态s下，采取动作a，奖赏评估函数（立即奖赏r(s, a), 一般使用折扣奖赏)
+
+- $R_{dis}(s_0, a_0) = R(s_0, a_0) + \gamma R(s_1, a_1) + \gamma^2 R(s_2, a_2) + ...$:  状态s0, 采取动作a0， 折扣奖赏计算
+
+$$ J(\pi) = \sum_\tau P(\tau; \pi) R(\tau) $$
+$P(\tau; \pi) = \prod\limits_{t=0}^{|\tau|}\pi(a_t|s_t)P(s_{t+1}|s_t, a_t)$: 表示策略$\pi$产生轨迹$\tau$的概率
+
+$$ J(\pi) = \mathbb{E}_{\tau \sim \pi} \sum_{t=0}^{|\tau|} (p(\pi(a|s) R(s_t, a_t)) $$
+
+
+
+目标函数的梯度：
+
+$$ \nabla J(\pi) =  \nabla \sum_\tau P(\tau; \pi) R(\tau)$$
+$$ \nabla J(\pi) =  \sum_\tau \nabla P(\tau; \pi) R(\tau)$$
+$$ \nabla J(\pi) =  \sum_\tau P(\tau; \pi) \frac{\nabla P(\tau; \pi)}{P(\tau; \pi)} R(\tau)$$
+$$ \nabla J(\pi) =  \sum_\tau P(\tau; \pi) \nabla logP(\tau; \pi) R(\tau)$$
+
+
+![](media/policy_log.png)
