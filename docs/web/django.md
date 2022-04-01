@@ -31,3 +31,11 @@ CORS_ORIGIN_ALLOW_ALL = True
 注释掉'django.middleware.csrf.CsrfViewMiddleware'
 
 
+# ASGI vs WSGI
+- CGI:（通用网关接口， Common Gateway Interface）
+- WSGI: (Web服务器网关接口, Web Server Gateway Interface)
+- ASGI: (异步网关协议接口) 支持HTTP, HTTP2, Websocket等协议
+
+django框架为了同时支持HTTP协议和Websocket协议，引入了ASGI， ASGI分为三层， 第一层根据请求的url（http:// or ws://)解析协议，第二层为Channel，通过队列缓存消息， 第三层为Consumer消费消息
+
+![](media/asgi.png)

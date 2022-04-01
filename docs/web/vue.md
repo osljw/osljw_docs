@@ -37,3 +37,27 @@
 
 https://wdd.js.org/vue-vue-router-elementui-stupid-simple-dashboard.html
 
+
+
+
+# Vue django
+
+## 分页功能
+
+首次访问页面
+前端请求参数
+- pagenum = 1（第一页）
+- pagesize = 0 （表示由后端决定页面有多少条数据）
+
+后端返回
+- 第一页数据
+- pagesize（页大小）由后端根据数据量大小决定， 例如设置为10
+- 数据总数
+- pagesizes（分页单位）配置列表
+
+
+前端请求信息
+- 第几页
+- 每页的大小
+
+django返回数据

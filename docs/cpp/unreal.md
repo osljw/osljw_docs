@@ -347,7 +347,27 @@ PoseAsset
 ## additive anim 叠加动画
 - zero pose 
 - additive Anim Type： Mesh space
-- 
+
+
+## IK
+
+## two bone IK
+
+IK bone  要控制的目标关节
+
+Effector Target （参照目标关节？）
+
+Joint Target 关节点
+
+例如：左手臂骨骼结构
+- LeftShoulder （左肩膀）
+  - LeftArm （左上臂）
+    - LeftForeArm （左下臂）
+      - LeftHand （左手）
+      - 
+ 选择LeftHand为IK bone
+ 选择RightHand为Effector Target
+ 选择LeftForeArm为Joint Target
 
 # UI系统
 - create widget
