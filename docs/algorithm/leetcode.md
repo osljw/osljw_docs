@@ -6,12 +6,16 @@
 - [字符串类](#字符串类)
   - [字符串前缀hash](#字符串前缀hash)
   - [双指针滑动窗口](#双指针滑动窗口)
+  - [kmp](#kmp)
 - [排列， 组合， 子集](#排列-组合-子集)
   - [下一个排列](#下一个排列)
   - [全排列， 子集](#全排列-子集)
 - [排序](#排序)
 - [位运算](#位运算)
 - [单调栈](#单调栈)
+- [数学](#数学)
+  - [最大公约数gcd](#最大公约数gcd)
+  - [最小公倍数lcm](#最小公倍数lcm)
 
 
 # leetcode
@@ -92,6 +96,7 @@ public:
 - 字符串前缀hash
 - 字母异位词， 排序后字母相同，可以作为map的key
 - 双指针滑动窗口
+- 字符串翻倍
 
 
 ## 字符串前缀hash
@@ -131,6 +136,34 @@ prefix[j + 1] - prefix[i] * pow[j - i + 1]
 2024. 考试的最大困扰度 https://leetcode-cn.com/problems/maximize-the-confusion-of-an-exam/
 
 
+## kmp
+- PMT部分匹配表(Partial Match Table)： 字符串的前缀集合与后缀集合的交集中最长元素的长度  -> next数组
+PMT右移一位
+
+1392. 最长快乐前缀 https://leetcode-cn.com/problems/longest-happy-prefix/
+```c++
+class Solution {
+public:
+    string longestPrefix(string s) {
+        int n = s.size();
+        vector<int> next(n+1);
+
+        int j = 0, k = -1;
+        next[0] = -1;
+        while (j < n){
+            if (k == -1 || s[j] == s[k]) {
+                j++;
+                k++;
+                next[j] = k;
+            } else {
+                k = next[k];
+            }
+        }
+
+        return s.substr(0, next[n]);
+    }
+};
+```
 
 # 排列， 组合， 子集
 
@@ -273,3 +306,29 @@ for (int mask = 0;  mask < (1 << m); mask++) {
 
 技巧
 - 在一维数组中对每一个数找到第一个比自己小/大的元素
+
+
+# 数学
+
+## 最大公约数gcd
+```c++
+// 辗转相除法
+int gcd(int a, int b) {
+    while (b != 0) {
+        int t = b;
+        b = a % b;
+        a = t;
+    }
+    return a;
+}
+```
+gcd(a,0)=a
+gcd(a,1)=1
+因此当两个数中有一个为0时，gcd是不为0的那个整数
+
+## 最小公倍数lcm
+```
+int lcm(int a, int b) {
+    return a * b / gcd(a, b);
+}
+```

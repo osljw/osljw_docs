@@ -18,7 +18,7 @@ Wavenet -> Tacotron
 
 # SV2TTS (Real-Time-Voice-Cloning)
 
-- encoder: 3层lstm
+- encoder: 获得表达声音特征的embedding, 3层lstm
 - synthesizer: Tacotron
 - vocoder: WaveRNN
 
