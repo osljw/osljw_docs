@@ -8,6 +8,11 @@
 - 服务端验证token是否被篡改，如果是有效token，那么从token中提取用户id信息
 
 
+JWT字符串，由三段字符串构成，通过'.'进行拼接
+- header
+- payload
+- signature
+
 # cookie token
 - cookie：用户点击了链接，cookie未失效，导致发起请求后后端以为是用户正常操作，于是进行扣款操作。
 - token：用户点击链接，由于浏览器不会自动带上token，所以即使发了请求，后端的token验证不会通过，所以不会进行扣款操作。

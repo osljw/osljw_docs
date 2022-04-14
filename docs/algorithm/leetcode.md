@@ -131,10 +131,41 @@ prefix[j + 1] - prefix[i] * pow[j - i + 1]
 - 给定窗口长度求解符合要求的窗口， 求解最大/小连续时一般滑动窗口
 - [left, right] 闭区间维护窗口， while (right < n) 窗口向右移动
 当right - left + 1 大于窗口长度时， 收缩左侧窗口
+- 窗口还原
 
+- 窗口限制条件
+  - 限制最多操作k次
+    - （2024. 考试的最大困扰度 https://leetcode-cn.com/problems/maximize-the-confusion-of-an-exam/）
+  - 最小覆盖字串
+    - （76. 最小覆盖子串 https://leetcode-cn.com/problems/minimum-window-substring/）
+    - （1234. 替换子串得到平衡字符串 https://leetcode-cn.com/problems/replace-the-substring-for-balanced-string/）
+    -  窗口还原（992. K 个不同整数的子数组 https://leetcode-cn.com/problems/subarrays-with-k-different-integers/） 
 
-2024. 考试的最大困扰度 https://leetcode-cn.com/problems/maximize-the-confusion-of-an-exam/
+```c++
+int find(string& s, unordered_map<char, int>& tlb, int total) {
+    // 找到s中满足tlb计数的最小子串, total为tlb中次数的和
+    int n = s.size();
+    int left = 0;
+    int right = 0;
+    int match_len = 0;
+    int ans = INT_MAX;
 
+    while (right < n) {
+        tlb[s[right]]--;
+        if (tlb[s[right]] >= 0) match_len++;
+
+        while (match_len == total) {
+            ans = min(ans, right - left + 1);
+            tlb[s[left]]++;
+            if (tlb[s[left]] > 0) match_len--;
+            left++;
+        }
+
+        right++;
+    }
+    return ans;
+}
+```
 
 ## kmp
 - PMT部分匹配表(Partial Match Table)： 字符串的前缀集合与后缀集合的交集中最长元素的长度  -> next数组
@@ -171,9 +202,13 @@ public:
 - 子集问题， 可以用回溯法和枚举法， 
 - 排列问题回溯时使用for循环， 子集问题不用for循环， 子集问题回溯两次， 放入和不放入
 
+- 回文数的生成
+  - （564. 寻找最近的回文数 https://leetcode-cn.com/problems/find-the-closest-palindrome/）
+
 
 
 ## 下一个排列 
+
 
 下一个大的排列 eg:  47632
 - 双指针
@@ -198,7 +233,7 @@ public:
 2.  全排列 II https://leetcode-cn.com/problems/permutations-ii/
 
 ```c++
-// 全排列 II
+// 全排列 II （有重复元素）
 class Solution {
 public:
     vector<vector<int>> permuteUnique(vector<int>& nums) {
@@ -238,7 +273,7 @@ public:
 90. 子集 II https://leetcode-cn.com/problems/subsets-ii/
 
 ```c++
-// 子集 II
+// 子集 II （有重复元素）
 class Solution {
 public:
     vector<vector<int>> subsetsWithDup(vector<int>& nums) {
@@ -272,7 +307,7 @@ public:
 # 排序
 
 技巧
-- 逆序对的数量， 归并排序， 当合并有序左区间和有序右区间时， 从左区间选择最小元素时， 该元素对应的逆序对数量为p2 - (mid + 1) （mid+1为右区间的起始索引， p2为右区间下一个待归并的索引）
+- 逆序对的数量， 归并排序， 当合并有序左区间和有序右区间时， 从左区间选择最小元素时， 该元素对应的逆序对数量为p2 - (mid + 1) （mid+1为右区间的起始索引， p2为右区间下一个待归并元素的索引）
 - 临位交换的最小次数等于逆序对数量
 
 

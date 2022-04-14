@@ -16,9 +16,28 @@
 - v-on 事件处理, 简写为@
 - v-once 一次数据绑定
 - v-html
+- v-slot:one 具名插槽，可以简写为 #one
+```
+父组件中
+<template v-slot:one> 插入到one插槽的内容 </template>
+
+<template #one> 插入到one插槽的内容 </template>
+```
 
 # 组件
 单文件组件(.vue文件) https://www.cnblogs.com/SamWeb/p/6391373.html
+
+# 路由
+
+设置路由表项的component时，使用箭头函数导入组件
+```
+const routes = [
+  {
+    'path': '/login',
+    component: () => import('@/views/login/Login.vue')
+  },
+]
+```
 
 
 # Hook

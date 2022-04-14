@@ -120,3 +120,19 @@ CREATE TABLE IF NOT EXISTS convert_back (
 delete from cpi
  where (countryid, year) in (('AD', 2010), ('AF', 2009), ('AG', 1992))
 ```
+
+# 分组统计
+
+- group_concat
+
+```sql
+SELECT sell_date AS 'sell_date',
+    COUNT(DISTINCT product) AS 'num_sold',
+    GROUP_CONCAT(DISTINCT product 
+        ORDER BY product ASC    #按照字典序排列，升序
+        SEPARATOR ',')          #用','分隔
+        AS 'products'    #组内拼接
+FROM Activities
+GROUP BY sell_date
+ORDER BY sell_date;
+```
