@@ -1,6 +1,7 @@
 
 # mkdocs
 
+github page 部署
 ```
 pip install mkdocs mkdocs-material
 mkdocs gh-deploy

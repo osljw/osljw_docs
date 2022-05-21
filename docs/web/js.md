@@ -1,4 +1,26 @@
 
+# javascript
+
+## Promise
+
+异步函数的返回结果为Promise对象
+
+一个 Promise 必然处于以下几种状态之一
+- 待定（pending）: 初始状态，既没有被兑现，也没有被拒绝。
+- 已兑现（fulfilled）: 意味着操作成功完成。
+- 已拒绝（rejected）: 意味着操作失败。
+
+
+```
+const promise = doSomething();
+const promise2 = promise.then(successCallback, failureCallback);
+```
+
+`catch(failureCallback)` 是 `then(null, failureCallback)` 的缩略形式
+
+
+
+# canvas
 canvas 获取图片
 ```
 var canvas = document.getElementById("alpha");

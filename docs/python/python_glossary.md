@@ -30,6 +30,7 @@ python -m site
 ```
 
 PYTHONPATH 会被追加到`sys.path`中， python从`sys.path`指定的列表搜表模块位置
+`python.exe path/to/script.py` 当执行脚本时, 脚本所在的目录（path/to)会被添加到sys.path
 
 # Token
 

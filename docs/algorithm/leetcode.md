@@ -2,6 +2,8 @@
 
 - [leetcode](#leetcode)
 - [二分法](#二分法)
+  - [按索引进行二分](#按索引进行二分)
+  - [按值进行二分](#按值进行二分)
 - [链表类](#链表类)
 - [字符串类](#字符串类)
   - [字符串前缀hash](#字符串前缀hash)
@@ -16,6 +18,14 @@
 - [数学](#数学)
   - [最大公约数gcd](#最大公约数gcd)
   - [最小公倍数lcm](#最小公倍数lcm)
+  - [序列最大公约数](#序列最大公约数)
+  - [向量运算](#向量运算)
+  - [信息论](#信息论)
+  - [约瑟夫环](#约瑟夫环)
+- [图算法](#图算法)
+  - [floyd算法](#floyd算法)
+- [区间算法](#区间算法)
+  - [区间合并](#区间合并)
 
 
 # leetcode
@@ -25,8 +35,9 @@
 技巧
 - 取mid防止溢出 int mid = left + (right - left) / 2
 - left, right取闭区间
+- 按照索引进行二分，还是按照值进行二分
 
-
+## 按索引进行二分
 旋转数组和二分法
 - 求最小，最大（while使用left < right比较，返回left）
 - 搜索特定值存在 （while 使用left <= right比较， while中等于时return）
@@ -82,6 +93,10 @@ public:
     }
 };
 ```
+
+## 按值进行二分
+668. 乘法表中第k小的数 https://leetcode.cn/problems/kth-smallest-number-in-multiplication-table/
+
 
 # 链表类
 
@@ -366,4 +381,139 @@ gcd(a,1)=1
 int lcm(int a, int b) {
     return a * b / gcd(a, b);
 }
+```
+
+## 序列最大公约数
+
+gcd（a，b，c）=gcd（a，gcd（b，c））
+
+https://leetcode.cn/problems/number-of-different-subsequences-gcds/solution/kao-lu-mei-yi-ge-shu-shi-fou-ke-yi-cheng-2sb2/
+
+
+
+
+## 向量运算
+
+向量叉积
+$$
+\begin{aligned} 
+\vec{pq}  \times \vec{qr} 
+&= (q_x - p_x, q_y - p_y) \times (r_x - q_x, r_y - q_y)\\
+&= (q_x - p_x) * (r_y - p_y) - (q_y - p_y) * (r_x - q_x)\\
+\end{aligned}
+$$
+
+- $ \vec{pq} $ x $ \vec {qr} $ > 0, 点r位于直线pq的左侧
+- $ \vec{pq} $ x $ \vec {qr} $ < 0, 点r位于直线pq的右侧
+​
+  
+![](media/cross.png)
+
+- 凸包问题
+  - （587. 安装栅栏 https://leetcode-cn.com/problems/erect-the-fence/）
+
+## 信息论
+
+n轮实验， 每个对象能测出的信息量为base（例如base=n+1）， 则m个对象能测出的最大信息量为$ m^{base}$
+
+实验方案：
+    1. 可以将m个对象分别视为m维空间的一个轴
+    2. 每个对象每轮实验对base个混合物进行测量 
+
+- （458. 可怜的小猪 https://leetcode-cn.com/problems/poor-pigs/）
+  - 题解： https://leetcode-cn.com/problems/poor-pigs/solution/hua-jie-suan-fa-458-ke-lian-de-xiao-zhu-by-guanpen/
+
+
+## 约瑟夫环
+
+1823. 找出游戏的获胜者 https://leetcode-cn.com/problems/find-the-winner-of-the-circular-game/
+
+```c++
+class Solution {
+public:
+    int findTheWinner(int n, int k) {
+        // 最后剩一人时， 索引为0
+        int idx = 0;
+
+        for(int i = 2; i <= n; i++) {
+            idx = ((idx + k) % i);
+        }
+
+        // 人的编号为索引idx+1
+        return idx + 1;
+    }
+};
+```
+
+
+# 图算法
+
+## floyd算法
+
+- dp[i][j] 的关系由dp[i][mid]和dp[mid][j]确定， mid的循环放在外层
+
+```c++
+for (int mid = 0; mid < numCourses; mid++) {
+    for (int i = 0; i < numCourses; i++) {
+        for (int j = 0; j < numCourses; j++) {
+            dp[i][j] = dp[i][j] || (dp[i][mid] && dp[mid][j]);
+        }
+    }
+}
+```
+1.    课程表 IV （https://leetcode-cn.com/problems/course-schedule-iv/）
+
+
+
+# 区间算法
+
+## 区间合并
+
+- 通过map或者set来存储区间， 存储[r, l]格式的区间
+- 添加新区间[left, right]
+  - lower_bound(left - 1) 寻找到第一个可能有交集的区间
+  - 循环合并区间， 计算区间的并集， 擦除已经被合并的区间
+
+```c++
+class CountIntervals {
+public:
+    CountIntervals() {
+
+    }
+    
+    void add(int left, int right) {
+        // 可能存在交集的区间
+        auto it = range.lower_bound(left - 1);
+
+        // 存储等待合并的区间[l, r]
+        int l = left;
+        int r = right;
+        while (it != range.end()) {
+            // Note： [it->first, it->second] 为[右边界, 左边界]格式
+            if (r + 1 < it->second) {
+                // it表示的区间 与[l, r] 无法合并或拼接
+                break;
+            }
+
+            // 当前区间it 与[l, r] 合并或拼接
+            l = min(l, it->second);
+            r = max(r, it->first);
+            
+            cnt -= it->first - it->second + 1;
+            //range.erase(it++);
+            it = range.erase(it);
+        }
+
+        range[r] = l;
+        cnt += r - l + 1;
+    }
+    
+    int count() {
+        return cnt;
+    }
+
+    map<int, int> range;    // 存储[right, left]格式
+    int cnt = 0;
+};
+
 ```

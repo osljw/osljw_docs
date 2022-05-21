@@ -115,13 +115,13 @@ CREATE TABLE IF NOT EXISTS convert_back (
 );
 ```
 
-# 删除数据
+# sql 删除数据
 ```
 delete from cpi
  where (countryid, year) in (('AD', 2010), ('AF', 2009), ('AG', 1992))
 ```
 
-# 分组统计
+# sql 分组统计
 
 - group_concat
 
@@ -136,3 +136,12 @@ FROM Activities
 GROUP BY sell_date
 ORDER BY sell_date;
 ```
+
+# sql 外键（Foreign Key）
+一个表的外键用来指向另一个表的主键（Primary Key）
+作用： 
+- 用于将两个表连接在一起，让两个表的数据保持同步，
+- 外键约束能够防止非法数据进入外键字段，因为它的值必须存在于它指向的主键中
+- 删除/更新主表记录时，可以选择同时删除/更新从表中的相关记录，也可以选择不删除/更新，您可以在定义外键时对此进行设置。
+- 删除主表记录时，必须先删除从表中的关联记录，否则主表中的记录将无法删除。
+- 删除主表时，必须先删除从表，否则主表将无法删除。

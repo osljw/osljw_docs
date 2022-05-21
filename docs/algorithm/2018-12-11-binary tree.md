@@ -9,7 +9,9 @@ tags:
     - 算法
 ---
 
-# 226. Invert Binary Tree
+# 二叉搜索树
+- (226. Invert Binary Tree)
+  
 使用栈
 ```c++
 /**

@@ -27,7 +27,7 @@
 # 组件
 单文件组件(.vue文件) https://www.cnblogs.com/SamWeb/p/6391373.html
 
-# 路由
+# vue 路由
 
 设置路由表项的component时，使用箭头函数导入组件
 ```
@@ -38,6 +38,12 @@ const routes = [
   },
 ]
 ```
+
+- router-link 站内链接
+```html
+<router-link to="/home">Go to Home</router-link>
+```
+- router-view 页面局部刷新
 
 
 # Hook
@@ -56,7 +62,9 @@ const routes = [
 
 https://wdd.js.org/vue-vue-router-elementui-stupid-simple-dashboard.html
 
+# vue webpack
 
+webpack的作用： 让js和html进行分离， 对js进行模块化，管理js相互之间的依赖，对js进行打包
 
 
 # Vue django
