@@ -284,9 +284,23 @@ Present之前的数据 RGB ？  RGBA？， dxgi的swapchain
 D3D12_VIEWPORT 视口的形状描述
 
 
-## shader
+## shader（着色）
+
+- vertex-shader （per-vertex operations）
+  - transformations
+  - skinning
+  - morphing
 
 
+## texture 
+
+- D3D texture
+    - SRV 只读
+    - RTV 可写
+
+mipmaps： 贴图
+
+LOD (level-of-detail) 
 
 # 渲染
 
@@ -301,3 +315,8 @@ application stage -> geometry stage ->
 - 屏幕映射： 3D坐标 -> 屏幕2D坐标 
 
 ## 光栅化阶段
+
+
+
+## 录屏
+https://gist.github.com/mmozeiko/80989aa8f46901b2d7a323f3f3165790

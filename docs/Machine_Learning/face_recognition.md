@@ -2,8 +2,16 @@
 
 # 人脸检测
 
+
 - mtcnn 人脸检测
+- s3fd
 - facenet 人脸特征抽取
+
+# 人脸数据集
+
+CelebA: http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html
+widerface： http://shuoyang1213.me/WIDERFACE/index.html
+
 
 
 # OpenFaceSwap

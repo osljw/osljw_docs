@@ -34,3 +34,18 @@ ImGui::Text(u8"你好");
 
 - ImGuiPlatformIO
   - Backend interface/functions
+
+- ImDrawList
+
+绘制三角形 （屏幕坐标， 三角形顶点为顺时针）
+```
+ImVec2 pos = ImGui::GetCursorScreenPos();
+ImDrawList* list = ImGui::GetWindowDrawList();
+list->AddTriangleFilled(pos, ImVec2(pos.x + 100, pos.y), ImVec2(pos.x + 100, pos.y + 100), IM_COL32(255, 0, 0, 255));
+```
+
+- ImDrawData
+ImGui将所有的渲染数据保存在ImDrawData中
+```
+ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+```

@@ -6,6 +6,7 @@
 	- [IDA PRO](#ida-pro)
 	- [spy++](#spy)
 	- [Process Monitor](#process-monitor)
+	- [Process Explorer](#process-explorer)
 - [Cheat Engine](#cheat-engine-1)
 	- [Find what accesses this address](#find-what-accesses-this-address)
 - [detour](#detour)
@@ -14,13 +15,13 @@
 - [AssaultCube](#assaultcube)
 	- [main](#main)
 - [API HOOK D3D12 HOOK](#api-hook-d3d12-hook)
-	- [CSGOSimple 分析](#csgosimple-分析)
 	- [Pointer-to-Member Function](#pointer-to-member-function)
-		- [PatternScan 获取全局对象地址](#patternscan-获取全局对象地址)
-		- [vfunc_hook](#vfunc_hook)
+	- [获取全局对象地址](#获取全局对象地址)
+	- [获取虚函数地址](#获取虚函数地址)
+	- [获取dll导出函数接口](#获取dll导出函数接口)
 - [entity](#entity)
-- [Signature Scanning](#signature-scanning)
-- [Win API](#win-api)
+- [CSGO hack](#csgo-hack)
+- [Debug 调试](#debug-调试)
 
 # Inject DLL
 - OpenProcess
@@ -28,6 +29,17 @@
 - WriteProcessMemory
 - GetProcAddress
 - CreateRemoteThread
+
+
+manual mapping injector
+实现dll的隐藏加载，下述方式无法检测到这种方式加载的dll
+- ToolHelp32Snapshot() 
+- walking the module linked list in the PEB 
+- using NtQueryVirtualMemory.
+
+
+https://guidedhacking.com/threads/manual-mapping-dll-injection-tutorial-how-to-manual-map.10009/
+https://guidedhacking.com/threads/memanualmapper-bypass-hooks-allocation-detections.14567/
 
 
 ## 获取基址 base addr
@@ -49,6 +61,10 @@ visual studio -> Tool -> spy++
 
 
 ## Process Monitor
+
+
+## Process Explorer
+https://docs.microsoft.com/en-us/sysinternals/downloads/process-explorer
 
 
 # Cheat Engine
@@ -321,7 +337,8 @@ x86 变长指令集
 绘制GUI
 
 
-## CSGOSimple 分析
+
+
 
 ## Pointer-to-Member Function
 
@@ -340,17 +357,17 @@ pointer_name:  a name we'd like to call the pointer variable.
 成员函数指针和普通指针不能相互转换
 
 
-### PatternScan 获取全局对象地址
+## 获取全局对象地址
 获取d3d devecie, 通过代码扫描定位地址
 CSGOSimple/valve_sdk/sdk.cpp
 ```c++
+IDirect3DDevice9*     g_D3DDevice9     = nullptr;
+
 auto dx9api = GetModuleHandleW(L"shaderapidx9.dll");
 g_D3DDevice9 = **(IDirect3DDevice9***)(Utils::PatternScan(dx9api, "A1 ? ? ? ? 50 8B 08 FF 51 0C") + 1);
 ```
-g_D3DDevice9 是IDirect3DDevice9类对象的地址
 
-
-
+Utils::PatternScan 代码扫描获取到的地址为三级指针，  `**(IDirect3DDevice9***)`解析得到`IDirect3DDevice9*`指针
 
 `PatternScan`: 在某个模块代码中搜索匹配的模式字节码， 模块地址通过`GetModuleHandleW`获取， 模式字节码一般通过IDA等工具定位获取到
 ```c++
@@ -408,7 +425,9 @@ g_D3DDevice9 是IDirect3DDevice9类对象的地址
     }
 ```
 
-### vfunc_hook
+## 获取虚函数地址
+
+vfunc_hook
 
 CSGOSimple/hooks.hpp
 ```c++
@@ -443,18 +462,21 @@ vfunc_hook 为class
 - vfunc_hook类中保存了旧虚表的地址和新虚表的地址，在hook之后的新函数中通过get_original方法得到原来函数的地址
 
 
+## 获取dll导出函数接口
 
+csgo的engine.dll， client.dll等模块均导出了"CreateInterface"函数， 该函数可以用来获取对象
+
+https://guidedhacking.com/threads/csgo-createinterface-tutorial-how-to-get-interfaces.14701/
 
 
 
 # entity
 
 
-# Signature Scanning
-https://wiki.alliedmods.net/Signature_Scanning
 
 
-# Win API
+
+
 
 ```
 HMODULE module = GetModuleHandleW(L"engine.dll");
@@ -462,3 +484,27 @@ void* func_ptr = GetProcAddress(module, "CreateInterface");
 ```
 
 `GetProcAddress`: Retrieves the address of an exported function or variable from the specified dynamic-link library (DLL).
+
+
+
+
+# CSGO hack
+
+csgo反作弊
+- anti-loadlibrary protection： 使用LoadLibraryW注入csgo失败， CS:GO hooks NtOpenFile (ntdll.dll) from within csgo.exe.
+- Thread creation detection： DllMain function of client.dll contains code that on DLL_THREAD_ATTACH calls NtQueryInformationThread function from ntdll.dll to get start address of newly created thread
+  - DisableThreadLibraryCalls
+
+
+vac bypass https://github.com/zyhp/vac3_inhibitor
+
+
+# Debug 调试
+
+如何调试dll
+
+1. Debug编译dll， 并准备好dll注入工具
+2. Debug->Attach to Process 选择dll准备注入的目标进程，例如csgo.exe
+3. 在dll源码上设置断点
+4. 启动dll注入工具，将dll注入到目标进程
+5. 如果dll源码有设置断点，且注入dll成功，程序会自动停在断点上

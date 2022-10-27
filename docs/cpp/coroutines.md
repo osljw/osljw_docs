@@ -14,6 +14,22 @@
 
 # coroutines
 
+- 有栈（stackful）协程
+  - 在堆上提前分配内存，存储协程上下文
+- 无栈协程
+  - C++20 为无栈协程
+
+
+协程帧(coroutine frame)
+- 协程参数
+- 局部变量
+- promise 对象
+
+caller和协程交互
+- caller通过 std::coroutine_handle访问呢协程帧相关数据
+- 
+
+
 一个函数成为一个coroutine， 当这个函数有使用`co_`前缀操作符时
 - co_await 挂起协程
 - co_yield 挂起协程执行并返回值
@@ -41,38 +57,83 @@ https://marvinsblog.net/post/2019-08-20-cpp20-coroutine-02/
 https://github.com/CppCon/CppCon2016/blob/master/Presentations/Introduction%20to%20C%2B%2B%20Coroutines/Introduction%20to%20C%2B%2B%20Coroutines%20-%20James%20McNellis%20-%20CppCon%202016.pdf
 
 
-协程何时挂起返回， 返回的是什么？
+## 协程何时挂起返回， 返回的是什么？
 - 在协程函数开始，编译器自动插入代码，使用co_await调用promise对象的initial_suspend方法，决定是否挂起协程
 - 在协程函数末尾，使用co_await调用promise对象的final_suspend方法，决定是否挂起协程
+- 当前协程第一次挂起并返回到调用者时，返回给调用者的是promise.get_return_object()的结果
 
-
+- 协程函数中不能使用return
 
 https://blog.panicsoftware.com/co_awaiting-coroutines/
 
+
+## awaiter type
+awaiter类型： 实现await_ready、await_suspend、await_resume三个方法的类型
+例如： std::suspend_never 和 std::suspend_always
+```c++
+struct suspend_never {
+  bool await_ready() const noexcept { return true; }
+  void await_suspend(coroutine_handle<>) const noexcept {}
+  void await_resume() const noexcept {}
+};
+
+struct suspend_always {
+  bool await_ready() const noexcept { return false; }
+  void await_suspend(coroutine_handle<>) const noexcept {}
+  void await_resume() const noexcept {}
+}
 ```
-co_await expression;
+
+
+## co_await
+
 ```
-`expression`的需要能够转换为Awaitable
-- 定义 `operator co_await`
-
-co_await表达式的值
-- expression形成的Awaiter对象的await_resume方法的返回值
-
-co_await语句执行时发生的情况：
-- Awaiter对象的await_ready方法返回true
-  - 运行Awaiter对象的await_resume方法，并将await_resume方法的返回值作为协程的返回值
-- Awaiter对象的await_ready方法返回false
-  - co_await语句所在的协程函数被挂起， Coroutine suspension, 协程挂起并不是返回协程调用者，只是将一些局部变量保存到堆中
-  - Awaiter对象的await_suspend方法返回void
-    - 当前协程处于暂停状态，返回到当前
-  - Awaiter对象的await_suspend方法返回bool
-    - false：运行Awaiter对象的await_resume方法，并将await_resume方法的返回值作为协程的返回值
-    - true：
-  - Awaiter对象的await_suspend方法返回coroutine_handle
+auto ret = co_await expr;
+```
+`expr`需要能够转换为Awaitable对象, Awaitable对象会被编译器转换为awaiter对象，如果不能转换会编译失败
+编译器会插入代码调用awaiter对象上的await_ready、await_suspend、await_resume方法
 
 
+伪代码
+```
+auto awaitable = expr;
+auto awaiter = convert(awaitable);
+if (awaiter.await_ready() == false) {
+  current_coroutine_suspension();
+  if (awaiter.await_suspend(handle) return void) {
 
-co_await expression => Awaitable  => Awaiter
+  } else if (awaiter.await_suspend(handle) return bool) {
+
+  } else if (awaiter.await_suspend(handle) return handle) {
+    handle.resume()
+  }
+}
+
+auto ret = awaiter.await_resume()
+```
+
+## `expr` 转换为awaitable对象
+
+- 当前协程的promise_type中定义了await_transform方法，调用promise.await_transform(expr)得到awaitable对象
+- 当前协程的promise_type中没有定义await_transform方法，expr本身必须是awaitable对象
+
+## awaitable对象转换为awaiter对象
+
+- Awaitable对象有operator co_await 操作符重载， 调用该方法获得awaiter对象
+
+## co_await语句执行过程
+- 调用`awaiter.await_ready()`
+  - 返回false
+    - co_await语句所在的协程函数被挂起（Coroutine suspension, 局部变量等保存到协程状态中，此时只是保存好协程上下文，还未返回协程调用者）
+    - 调用`awaiter.await_suspend(handle)`
+      - 返回void：当前协程处于暂停状态，返回到当前协程的调用者
+      - 返回bool
+        - true：返回到当前协程的调用者
+        - false：恢复当前协程
+      - 返回coroutine_handle（来自其他协程）： 在该coroutine_handle上执行resume
+- 调用`awaiter.await_resume()`, 无论当前线程是否被挂起，都会进行此次调用， 返回值也会作为`co_await expr`的结果
+
+
 
 
 
@@ -103,9 +164,9 @@ objdump -x86-asm-syntax=intel -d a.out  (mac llvm)
 
 
 
-函数调用分析
+## 函数调用分析
 
-### 示例一： 正常调用函数
+### 示例一：
 源码：
 ```c++
 int func() {
@@ -150,7 +211,7 @@ objdump -M intel -dS a.out
  804852b:       c3                      ret 
 ```
 
-子函数未分配局部变量， esp未改变， ret前不需要leave指令, 仅需要恢复父函数的ebp即可
+子函数func未分配局部变量， esp未改变， ret前不需要leave指令, 仅需要恢复父函数的ebp即可
 
 ### 示例二：
 
@@ -193,7 +254,7 @@ int main()
 
 ### 函数调用过程分析
 
-栈： 从栈顶入元素， 从栈顶出元素
+栈： 从栈顶入元素， 从栈顶出元素; 栈在内存中是从高地址向低地址生长的
 
 刚进入子程序时， 栈内存的布局：
 ```
@@ -261,7 +322,7 @@ __fastcall: 通过寄存器来传送参数的（实际上，它用ECX和EDX传�
 push arg1 
 push arg2 
 push arg3 
-call function // no stack cleanup - callee does this
+call function // callee does stack cleanup
 ```
 
 ```
