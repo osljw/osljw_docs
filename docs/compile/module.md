@@ -22,4 +22,7 @@ html中使用ES6 module
 <script>
 ```
 
+副作用： type=“module“的script标签内的变量，是这个script标签的私有变量， 会导致在浏览器DevTools JavaScript console中不可调试 （可以将变量在模块内部赋给window进行导出）
+
+
 ## 
