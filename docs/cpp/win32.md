@@ -3,6 +3,31 @@
 
 https://docs.microsoft.com/en-us/windows/win32/learnwin32/learn-to-program-for-windows
 
+## 消息队列
+
+- UI线程消息队列(Thread message queue)
+    - 一个UI线程拥有一个消息队列
+    - 一个UI线程可以创建多个窗口， 所有窗口共用UI线程的消息队列，每个窗口有相应的窗口过程函数（Window Procedure）
+    - 从线程消息队列取消息并送到窗口过程函数，需要用户调用相应的API实现（消息循环）
+    - 一个进程只能有一个UI线程
+- 系统消息队列（system message queue）： 用户输入等事件会被操作系统内核存储到系统消息队列中， 操作系统有专门线程负责从系统消息队列中取出消息分发到创建UI的线程的消息队列中。
+
+
+消息循环 
+```c++
+    MSG msg;
+    while (::PeekMessage(&msg, NULL, 0U, 0U, PM_REMOVE))
+    {
+        ::TranslateMessage(&msg);
+        ::DispatchMessage(&msg);
+        if (msg.message == WM_QUIT)
+            done = true;
+    }
+```
+- TranslateMessage会翻译 WM_KEYDOWN, WM_KEYUP, WM_SYSKEYDOWN, or WM_SYSKEYUP为virtual-key messages，不会影响其他类型的消息
+- DispatchMessage会根据msg调用相应的Window Procedure窗口过程函数
+
+
 ## 基础概念
 
 窗口类型 https://docs.microsoft.com/en-us/windows/win32/winmsg/window-features
@@ -22,6 +47,11 @@ https://docs.microsoft.com/en-us/windows/win32/learnwin32/learn-to-program-for-w
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "d3d12.lib")
 ```
+
+## win32 封装imgui
+- imgui初始化需要一个窗口HWND， 应用程序先初始化一个透明窗口，在这个窗口上对imgui进行初始化
+- imgui在初始化win32时， `ImGui_ImplWin32_Init`函数调用`ImGui_ImplWin32_InitPlatformInterface`会注册窗口类，设置窗口过程函数为`ImGui_ImplWin32_WndProcHandler_PlatformWindow`
+
 
 # win32 console debug
 
@@ -320,3 +350,16 @@ application stage -> geometry stage ->
 
 ## 录屏
 https://gist.github.com/mmozeiko/80989aa8f46901b2d7a323f3f3165790
+
+
+
+# win32 序列号
+
+serial number
+- 获取序列号
+    - 序列号如何生成
+- 通过序列号获取license.dat文件
+
+
+
+

@@ -110,3 +110,29 @@ M = K [R T]
 - Essential matrix
     - 3 ×3 matrix 
     - captures the geometric relationship between two calibrated cameras or between two locations of a single moving camera.
+
+
+
+# image registration
+
+- 图像是否来自同一个相机， 图像内容是否为同一个静态空间的不同视角呈现
+
+应用
+
+- 全景图片拼接
+
+
+# 仿射变换 （affine transform）
+
+
+- 二维图像的旋转和平移
+- 仿射变换矩阵大小为2*3, 有6个参数
+- 一对像素点提供两个方程， 需要三对像素点计算仿射变换矩阵
+
+# 透视变换 （perspective transform)
+- 将一个平面通过一个投影矩阵投影到指定平面上
+- 透视变换后，物体图像会发生形变
+- 透视变换矩阵大小为3*3， 有8个参数(和Z轴相关的3个参数不需要)
+- 一对像素点提供两个方程， 需要四对像素点计算透视变换矩阵
+
+![](media/perspective_transform.png)

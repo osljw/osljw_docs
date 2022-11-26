@@ -1,9 +1,39 @@
 
 
-# 服务器模式
+# unreal 服务器模式
 
-- Listen Server
+- Listen Server(服务器在某个玩家的客户端上创建)
 - Delicated Server
+
+
+## Delicated Server（专用服务器打包）
+https://docs.unrealengine.com/4.27/zh-CN/InteractiveExperiences/Networking/HowTo/DedicatedServers/
+
+- 需要从源码编译得到UnrealEngine，才能编译出Delicated Server
+
+
+# 游戏开发
+
+- GameInstance （每个游戏客户端和服务器都会有这个对象）
+  - client 调用创建初始化UI，让玩家能够选择创建游戏，或者加入游戏
+    - Create Widget
+    - Add to Viewport
+    - Set Show Mouse Cursor
+  - 创建游戏房间功能 （ UI可以通过事件调用该功能）
+    - Create Session
+    - Open Level
+  - 刷新游戏房间功能
+    - Find Session
+    - 
+  - 加入游戏房间功能
+    - Join Session
+
+Session的Server Name， LAN局域网时为计算机名， online subsystem steam联网时为Steam ID
+
+`注意`： online subsystem steam在同一台电脑上无法启动两个Player client, 需要使用两台不同的电脑和两个不同的steam账号
+
+- Use LAN 时， 两台计算机需要处在相同的局域网。
+- No Use LAN时， Create Session的主机需要位于公网， 或者对局域网的端口进行NAT。
 
 
 # 多关卡切换
@@ -22,10 +52,40 @@ old big level -> travel level -> new big level
 ```
 
 # 网络系统
-- Replication
+
+## 运行网络模式
+- Net Mode
+  - Play As Listen Server （其中一个client会作为服务器）
+  - Play As Client (会自动启动一个无UI的服务器， client会连接到该服务器)
+  - Play Standalone (多个standalone没有网络通信)
+
+
+## 网络数据同步
+
+- 要同步的Actor，在Details面板设置`Replicates`为true， `Replicate Movement`为true
+- 涉及到同步Actor的代码，要确保在服务器上执行， 通过`UFUNCTION(Server, Reliable, WithValidation)`将代码变成RPC调用
+
+- Events Replicates
+  - Not Replicated：默认值，只会在当前调用的客户端或服务器上执行
+  - Multicast：如果在服务器上调用，会同步调用所有连接的客户端；如果客户端调用，将会视为 Not Replicated，只会在当前客户端上执行
+  - Run On Server：如果在服务端调用，只会在服务端上执行；如果在客户端调用，将会远程调用到服务器上的这个方法，这是比较基础的向服务器发送数据的方法。
+  - Run On Owning Client：如果在服务端调用，会在拥有该Actor的客户端上调用；如果在客户端调用，将会视为 Not Replicated，只会在当前客户端上执行
+
+`注意`：客户端如果想调用一个方法然后同步调用其他所有客户端和服务器，不能直接调用一个 Multicast 方法，必须先调用一个服务器上的方法 Run On Server，然后在调用 Multicast 方法
+
+## Replicating Actors
+
+## Replicating Variables
+> Variables that are important to gameplay should only be modified on the Network Authority (Server) and then replicated to Remote Machines (Clients) on a need-to-know basis
+- replicated Variable的修改需要在Server上进行，然后同步到客户端
+- Switch Has Authority 可以选择让代码只运行在服务器上或者只运行在客户端上
+- replicated Variable所在的Actor是否需要Replicated呢？
+
+- Replication 方式
   - Replicated
   - RepNotify （会创建一个函数， 当变量改变时调用这个函数）
 
+网络连接
 - 服务端
   - 创建服务 -> Create Session -> Open Level
 - 客户端
@@ -64,9 +124,24 @@ BP Structure 维护玩家信息
 - PlayerCharacter ClassReference 玩家角色
 
 
-AI角色
-- Pawn Sensing 组件
+## AI角色
+- 继承Character类， 使用AI感知组件
+  - Pawn Sensing 组件
+    - 视觉 （On Seen Pawn)
+      - 感知视角（Peripheral Vision Angle)
+      - 
+    - 听觉 (On Hear Noise)
+      - 听觉（有遮挡距离） Hearing Threshold
+      - 听觉（无遮挡距离） LOSHearing Threshold
+      - 被感知的对象需要设置PawnNoiseEmitterComponent， 和调用Pawn Make Noise
+    - 当On Seen Pawn工作时， unreal的优化机制不再继续调用On Hear Noise
+- AI 逻辑运行在服务器上， 通过GetLocalRole()是否等于ROLE_Authority判断是否位于服务器上
+
 - <project>.Build.cs 文件PublicDependency添加"AIModule"
-- 听觉感知： 可以被感知的人物需要设置PawnNoiseEmitter组件和调用Pawn Make Noise， AI人物通过OnHearNoise捕获
+
+- Make Noise的使用
+  - Make Noise需要依赖一个Pawn来负责制造Noise， 人拿武器开火击中地面， 一般让人（Pawn）作为Noise Instigator，而且人必须拥有PawnNoiseEmitterComponent， 击中的地方Hit Actor作为Make Noise函数的Target
 
 # 聊天系统
+
+

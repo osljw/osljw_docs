@@ -62,3 +62,12 @@ librosa.feature.melspectrogram
 
 输入音频： 时长为t秒
 输出大小（n_mels, t*sr/hop_length)
+
+
+
+# windows 音频api
+
+https://www.jianshu.com/p/709f7eb2bd75
+
+
+

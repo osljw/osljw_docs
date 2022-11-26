@@ -35,6 +35,10 @@ ImGui::Text(u8"你好");
 - ImGuiPlatformIO
   - Backend interface/functions
 
+
+- ImGuiWindowSettings
+  - 保存窗口信息，如位置，大小等
+
 - ImDrawList
 
 绘制三角形 （屏幕坐标， 三角形顶点为顺时针）

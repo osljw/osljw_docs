@@ -1,4 +1,9 @@
 
+# 线性代数
+
+- 矩阵
+    - 结合律 ABC = (AB)C
+
 # 计算机图形学
 
 
@@ -76,6 +81,93 @@ $$ \left(
 
 
 # 投影变换
+透视投影： 将三维点投影到相机成像平面上
+
+- 计算机视觉中的透视投影
+    - 投影结果为照相机的虚像平面
+
+$$ 
+\left(
+    \begin{array}
+    {}
+    x' \\
+    y' \\
+    z  \\
+    \end{array}
+\right)
+
+=
+
+\left(
+    \begin{matrix}
+    {}
+    \alpha & -\alpha cot(\theta) & width/2 & 0 \\
+    0 & \beta/sin(\theta) & height/2 & 0 \\
+    0 & 0 & 1 & 0 \\
+    \end{matrix}
+\right)
+
+
+\left(
+    \begin{array}
+    {}
+    x \\
+    y \\
+    z \\
+    1
+    \end{array}
+\right)
+
+$$
+
+
+![](media/透视投影.png)
+
+- 计算机图形学中的透视投影： 分两步进行
+    - frustum -> cuboid(n->n, f->f)
+    - orthographic projection（投影结果为$[-1, 1]^3$的立方体）
+
+![](media/透视投影-计算机图形学.png)
+
+$M_{persp->ortho}$完成frustum -> cuboid(n->n, f->f)的变换
+$$
+M_{persp->ortho}=
+
+\left(
+    \begin{matrix}
+    {}
+    n & 0 & 0 & 0 \\
+    0 & n & 0 & 0 \\
+    0 & 0 & n+f & -nf \\
+    0 & 0 & 1 & 0 \\
+    \end{matrix}
+\right)
+$$
+
+$M_{ortho}$ 需要先平移后缩放
+$$
+M_{ortho}=
+
+\left(
+    \begin{matrix}
+    {}
+    2/(r-l) & 0 & 0 & 0 \\
+    0 & 2/(t-b) & 0 & 0 \\
+    0 & 0 & 2/(n-f) & 0 \\
+    0 & 0 & 0 & 1 \\
+    \end{matrix}
+\right)
+
+\left(
+    \begin{matrix}
+    {}
+    1 & 0 & 0 & -(r+l)/2 \\
+    0 & 1 & 0 & -(t+b)/2 \\
+    0 & 0 & 1 & -(n+f)/2 \\
+    0 & 0 & 0 & 1 \\
+    \end{matrix}
+\right)
+$$
 
 
 
