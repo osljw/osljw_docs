@@ -29,3 +29,19 @@ https://github.com/rttrorg/rttr
 
 
 # 自动注册工厂模式
+
+
+# unreal 反射
+
+
+unreal 反射借助了哪些工具？
+- UnrealHeaderTool
+- UnrealBuildTool
+
+一个类和其成员是否需要反射？
+
+通过宏来控制， 例如UCLASS()、USTRUCT()、UFUNCTION()、UPROPERTY()
+
+新增的反射代码怎么生成？
+
+每个需要反射的类会由UBT和UHT在编译时生成代码，例如filename.generated.h和filename.gen.cpp

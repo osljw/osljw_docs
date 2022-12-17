@@ -62,6 +62,8 @@ https://www.youtube.com/watch?v=gQmiqmxJMtA&list=PLKPWwh_viQMGQkQfKKD5lF96efA3_R
 跑酷项目
 https://www.youtube.com/watch?v=9qHRQF3YXZs&list=PLX2_v3fTeazrzhJcnEMvgpMPCghfy1H8p&index=3
 
+- location单位是厘米
+- scale单位是米
 
 # 编辑器
 
@@ -127,6 +129,9 @@ Pawn->GetController() // Only set when the pawn is currently ‘possessed’ (ie
 
 关卡蓝图中动态生成对象
 Spawn Actor from Class
+
+### Event On Possess
+PlayerController的Event On Possess只会在服务器端执行
 
 ## GameMode and GameStateBase
 
@@ -215,6 +220,20 @@ https://www.bilibili.com/video/BV1pb41177pn?p=27&vd_source=05b9e112882cf3fe73886
 
 # 碰撞系统
 
+Trace Channel
+
+
+## HitResult
+
+https://blog.csdn.net/tkokof1/article/details/118065681
+
+- Trace Start： 碰撞检测的起点位置
+- Trace End：碰撞检测的终点位置
+- Location：Trace Start与Trace End构成的线段与首次碰撞面的交点
+- Impact Point：碰撞接触点
+
+- Impact Normal：碰撞接触点的法线方向
+
 # 碰撞系统 和 物理模拟
 
 - FCollisionQueryParams
@@ -250,12 +269,14 @@ https://www.bilibili.com/video/BV1pb41177pn?p=27&vd_source=05b9e112882cf3fe73886
 
 Controller -> Camera
 - 第三人称的FollowCamera组件通常使用Spring Arm Component
-- Use Pawn Control Rotation 可以控制Controller和Camera的旋转变换进行同步
+- Spring Arm Component：Use Pawn Control Rotation 可以控制Controller和Camera的旋转变换进行同步
+但是当Camera的Forward Direction和人物的Forward Direction不一致时， 
 
 Camera -> Character
 Character Class Defaults 中，Pawn是否使用Controller的Roll/Yaw/Pitch
 - Use Controller Rotation Yaw 设置后可以让人物和Camera的相机的Yaw进行同步
 - 用按键设置Use Controller Rotation Yaw的值可以实现自由转动视角和固定视角的切换
+- Character Movement Component的Orient Rotation To Movement设置为True时， 会影响摄像机Camera的旋转
 
 
 人物移动控制
@@ -268,10 +289,20 @@ Character Class Defaults 中，Pawn是否使用Controller的Roll/Yaw/Pitch
   - Character->Pawn->Use Controller Rotation
 
 
-### 8向移动方式
+### 8向移动
 
+以摄像机的Forward方向为正北方向， 玩家可以用WASD控制在正北方向相匹配的8个方向上移动
+
+
+实现方式一：
 - Character类的Use Controller Rotation Yaw 设置为true
-- Character Movement Component的Orient Rotation To Movement设置为false
+- Character Movement Component的Orient Rotation To Movement（是否将人物正面朝向移动方向）设置为false
+
+问题： 原地转向没有动画
+
+
+## 原地转向
+
 
 
 ## 伤害系统
@@ -295,6 +326,7 @@ CharacterBP
 
 - CharacterMesh (绑定人物mesh)
 - Animation (绑定人物动画蓝图BP)
+
 
 
 ## 人物骨架
@@ -353,7 +385,34 @@ Actor 自定义事件，接收伤害数值
   - Set Simulate Physics
     - Set Collision Profile Name (Ragdoll)
 
-# 调试
+# AI系统
+
+AIController只存在于服务端
+
+AIController一般在Event On Possess时，通过RunBehaviorTree执行行为树来控制AI Pawn的行为
+
+## Behavior Tree
+
+- selector: 从左到右执行， 
+
+
+BTTask_BlueprintBase
+
+
+
+## 自动寻路
+
+Navmesh
+
+- PathFollowingComponent： 调用AIController::RequestMove来请求PathFollowingComponent执行一次移动
+
+## AI调试
+
+```
+p.VisualizeMovement 1
+```
+
+# 调试系统
 
 - DrawDebugLine
 
@@ -409,6 +468,61 @@ set_active
 # UE4 网络游戏
 
 https://docs.unrealengine.com/en-US/Gameplay/Networking/Overview/index.html
+
+![](media/gameplay-actor-replicate.png)
+
+1. GameInstance各自存在，没有复制
+2. GameMode只存在于server上， clent上不存在 (通过AGameModeBase的bNetLoadOnClient = false实现)
+3. PlayerController在其他玩家的client上不存在
+4. Hud相关API不能再server上调用
+
+例如： PlayerController的BeginPlay事件中调用Add to Viewport会报错
+```
+Only Local Player Controllers can be assigned to widgets. My_Player_Controller_C_1 is not a Local Player Controller.
+```
+这是因为Add to Viewport只能在客户端上运行。
+
+解决办法：
+
+方法一： 使用Is Local Player Controller， 当为true时， 才执行UI逻辑代码
+
+方法二：
+1. 将UI逻辑相关代码封装在Run On Owning Client类型的事件中， 在PlayerController的BeginPlay中调用该事件
+2. 当服务端调用这个事件时， 代码仅仅会运行在该PlayerController所Own的那个客户端上，这样保证了UI只出现在玩家自己的屏幕上
+3. 当客户端上运行PlayerController的BeginPlay代码时，调用这个事件的代码什么也不做。
+
+## listen server 和 delicated server
+
+
+
+delicated server模式， num_player=2 
+服务器日志：
+```
+LogBlueprintUserMessages: [Player_Controller_C_0] PlayerController BeginPlay
+LogBlueprintUserMessages: [Player_Controller_C_1] PlayerController BeginPlay
+```
+client 1日志：
+```
+LogBlueprintUserMessages: [Player_Controller_C_0] PlayerController BeginPlay
+```
+client 2日志
+```
+LogBlueprintUserMessages: [Player_Controller_C_0] PlayerController BeginPlay
+```
+
+listen server模式， num_player=2 
+
+服务器日志：
+```
+LogBlueprintUserMessages: [Player_Controller_C_0] PlayerController BeginPlay
+LogBlueprintUserMessages: [Player_Controller_C_1] PlayerController BeginPlay
+```
+客户端日志：
+```
+LogBlueprintUserMessages: [Player_Controller_C_0] PlayerController BeginPlay
+```
+
+结论： PlayerController BeginPlay 在server上会执行两次， 在client上会执行一次, 这意味着server上那个玩家的PlayerController只有一份，是比较特殊的存在。
 
 ## Actor Replication
 
@@ -468,19 +582,40 @@ UFUNCTION(Server, Reliable, WithValidation)
 
 # 动画系统
 
+## 基础概念
 
-
-skeleton (人体结构)
+skeleton (骨骼)： Skeleton Tree 树形层级定义
 
 - skeleton tree
   - retarget （迁移动画）
 
-skeleton mesh （人体皮肤）
+skeletal mesh （网格体）： 可以设置Material， 相当于皮肤
 
-pyhsics（人体物理约束）
+pyhsics asset（人体物理约束）： 可以设置物理约束
 
 PoseAsset
   Curve
+
+同步组： 解决动画时间长度不同， 进行混合时造成的问题
+曲线：通过曲线控制动画序列
+1. 控制材质和变形
+2. AnimGraph中常用曲线控制动画混合
+动画通知： 在动画的关键帧上驱动粒子，音效，布料等外部事物的运行
+
+## 动画序列 Animation Sequence
+时间序列，每个时间点保存一帧动画，
+
+## additive anim 叠加动画
+
+- zero pose
+- additive Anim Type： Mesh space 和 Local Space的区别是什么？(瞄准偏移必须使用Mesh space 确保朝向始终一致)
+
+
+叠加动画本身也是Animation Sequence， Asset Details -> Additive Anim Type中一般选择为Local Space 或者 Mesh Space， 叠加动画保存的是相对于基础姿势的增量数据，基础动画+叠加动画可以形成动作增量改变。
+
+叠加动画混合节点
+- Apply Additive
+- Apply Mesh Space Additive
 
 ## 动画蓝图 （Animation Blueprint）
 Character类 -> CharacterMesh -> Anim Class 给人物选择动画蓝图
@@ -489,6 +624,22 @@ Character类 -> CharacterMesh -> Anim Class 给人物选择动画蓝图
   - Event Graph (蓝图初始化和更新事件， 用于获取人物状态)
   - Anim Graph （Animation State Machine）用于评估当前帧的骨架网格体最终姿势
 
+常用节点
+
+- Apply Additive
+  - 使用示例： 瞄准偏移
+
+- make dynamic additive
+  - additive pose - base pose
+  - mesh space vs local space
+  - 输出的pose得到的就是additive动画， 在后续通过apply additive节点来进一步使用
+
+- Inertialization 惯性化
+  -
+
+- Modify Curve
+
+- Control Rig
 
 UE5 动画蓝图
 
@@ -533,26 +684,24 @@ Lyra示例：
 - 在接口工具类（ABP_Mannequin_Base）中定义函数， 设置为纯函数（Pure）， 和线程安全
 - 返回值设置为ReturnValue（这样才能在属性存取中显示）
 
-## Lyra动画迁移
-https://www.bilibili.com/video/BV1dT41157pS/?p=1&vd_source=05b9e112882cf3fe738863375b088e4c
 
-https://www.bilibili.com/video/BV1Da411n71c/?spm_id_from=333.999.0.0&vd_source=05b9e112882cf3fe738863375b088e4c
+Linked Anim Layer 使用流程
+1. 约定接口方法
+2. 动画蓝图接口工具类的Blueprint Thread Safe Update Animation函数中Property Access获取数据
+3. 动画蓝图接口工具类的AnimGraph中使用Linked Anim Layer节点调用接口， 可以向接口传递参数
+4. 动画蓝图接口实现公共类中实现约定的接口方法
 
-- RootMotion
-  - 不开启RootMotion： 人物会叠加actor的移动和动画的移动，导致人物和Camera不是固定距离
-  - 开启RootMotion：实现原地奔跑的状态
-  - 造成的问题： 奔跑速度和人物步幅不匹配
-- Distance Matching （距离匹配）
-  - Locomotion Library
-  - 动画蓝图基类中计算人物当前帧和上一帧的移动距离，并导出到属性存取系统
-  - 动画序列通过Locomotion Library插件的DistanceCurveModifier修饰符生成动画曲线（计算出动画本身的位移数据）
-  - 使用序列求值器计算动画帧，通过Advance Time by Distance Matching计算位移到序列显示时间的映射
-  - 两种方式实现距离匹配
-    - 通过位移速度调整动画播放速率实现， 如奔跑循环动画。
-    - 通过位移来调整显示时间实现， 如启动奔跑的加速过程。
+
 
 ## 动画重定向（retarget）
 
+使用骨骼自身的平移数据（这样能保障骨骼结构不发生变化）， 仅仅迁移动画中的旋转数据
+
+递归设置平移重定向：
+- 骨骼： 表示动画的平移数据从骨骼中获得
+
+
+重定向过程
 - 一个带动画的skeleton A， 一个无动画的skeleton B， 将A的动画迁移到B
 - 原理： 将A和B的skeleton 映射对齐， 就能将A的动画自动迁移到B上
 - 在A的Retarget Manager界面中， Select Rig -> Select Humanoid Rig,  相当于将A的skeleton和标准skeleton对齐
@@ -560,11 +709,17 @@ https://www.bilibili.com/video/BV1Da411n71c/?spm_id_from=333.999.0.0&vd_source=0
 - 在A的动画蓝图（Animation Blueprint）上执行Retarget Anim Blueprints，  选择Target 为B， 就能为B生成动画蓝图了
 
 ## 兼容骨骼（Compatible Skeleton）
-skeleton窗口 -> 窗口菜单(window) -> 资产详情（Asset Details） -> 添加兼容骨骼
+新角色 -> skeleton窗口 -> 窗口菜单(window) -> 资产详情（Asset Details） -> 添加兼容骨骼 -> 选择SK_Mannequin（UE5 Lyra） 
+
+新角色就可以使用SK_Mannequin（UE5 Lyra） 的动画蓝图了
+
 
 ## 动画混合空间 （Blend Space)
 
 ## 动画蒙太奇 （Animation Montage）
+- 剪辑： 蒙太奇可以包括多个剪辑片段
+- 可以通过程序控制播放哪个片段
+- 停止蒙太奇播放
 
 - Animation Sequence 右键可以创建Animation Montage
 - Play Montage要借助Anim Slot才能播放， 在Anim Graph中添加Anim Slot， 在Montage中选择Slot后， Montage的pose才会在Anim Graph中生效， 通常还要使用Layered Blend Per Bone对Montage的动画进行混合。
@@ -573,6 +728,13 @@ skeleton窗口 -> 窗口菜单(window) -> 资产详情（Asset Details） -> 添
 - Play Montage (可以设置多个回调， Notify, Blend事件)
 - Play Anim Montage
 
+
+## AnimNotify 动画通知
+
+- Received_Notify
+
+## 动画修改器 AnimationModifier
+帮助生成动画曲线
 
 ## 逆向运动学（Inverse Kinematics）  IK vs FK
 
@@ -587,6 +749,13 @@ skeleton窗口 -> 窗口菜单(window) -> 资产详情（Asset Details） -> 添
 3. IK的计算
 
 ## Aim Offset 瞄准偏移
+
+瞄准偏移使用叠加动画实现，本质上是Blend Space
+
+![](media/local_spaceVSmesh_space.png)
+选择 网格体空间（Mesh Space） ，而非局部空间（Local Space） 的原因在于，选择网格体空间后，可以在 骨骼网格体组件（Skeletal Mesh Component） 的空间中应用其叠加效果。这能确保无论骨骼网格体中前一个骨骼的朝向如何，旋转都朝同一方向移动。这对于瞄准偏移很重要，因为在某些情况下，无论角色的当前基础姿势如何，你可能希望来自混合空间的旋转得到一致的应用。
+
+
 axis setting： pitch [-90, 90]
 aim offset 本质上是asset，
 常驻动画（如奔跑， 跳跃） 用状态机进行控制
@@ -606,20 +775,47 @@ aim offset 本质上是asset，
 构建上肢动画： cache default pose -> upper slot -> upper pose
 混合： base pose 使用cached default pose， pose 0 使用upper pose, layer setup中对base pose设置过滤条件branch filter（ 设置的bone表示不要修改该bone下对应的动画）
 
-## additive anim 叠加动画
 
-- zero pose
-- additive Anim Type： Mesh space
+## 骨骼控制
 
-## IK
+Transform（Modify）Bone
 
-## two bone IK
+
+## IK IK骨骼 虚拟骨骼
+
+IK骨骼层级是独立的， 可以让武器位置在动画迁移后位置保持不变
+
+问题： 如果源骨架和目标骨架高度不同， IK骨架只是让武器位置在Mesh Space位置保持不变，重定向后会导致握武器的位置过高（矮角色使用高角色的动画）或者过低（高角色使用低角色的动画）
+
+虚拟骨骼会自动计算目标骨骼和IK骨骼之间的平移偏量， 这样虚拟骨骼挂载在目标骨骼层级下时，可以将武器绑定到虚拟骨骼上。
+
+## 脚部IK
+
+适应场景
+- 楼梯平面
+  - 计算脚底和碰撞点距离偏差
+- 斜面
+  - 脚底和碰撞点距离， 脚部旋转量
+- 曲面
+  - 
+
+何时进行脚部IK
+root位置Z轴高度为判断平面T， 检查左脚后跟位置， 右脚后跟位置的地形高度相对于平面T是否有变化
+
+修改骨骼位置Transform（Modify）Bone
+
+缺点： 可能会产生骨骼分离的现象
+
+
+### two bone IK
 
 IK bone  要控制的目标关节
 
-Effector Target （参照目标关节？）
+Effector Location （目标关节想要达到的位置）
 
-Joint Target 关节点
+Joint Target 限制关节
+
+控制原理： 例如以控制右手（hand_r)位置为目标， 上臂关节（UpperArm_R）和右手（hand_r)的位置是确定的， 人的上臂和下臂距离是确定的， 因此肘关节（lowerarm_r）的位置可以在一个平面上活动， 通过三点共面原理来确定到底要位于哪个平面， 因此存在一个Joint Target Location参数来确定平面
 
 例如：左手臂骨骼结构
 
@@ -642,6 +838,9 @@ https://www.youtube.com/playlist?list=PLL0cLF8gjBpqpCGt9ayn4Ip1p6kvgXYi2
 https://www.youtube.com/watch?v=92rag3qStI4
 
 UE5 Lyra动画 https://www.bilibili.com/video/BV1X34y1p76u/?spm_id_from=333.999.0.0&vd_source=05b9e112882cf3fe738863375b088e4c
+
+
+虚幻4（UE4） 动画技术 深入浅出 高级运动系统 https://www.bilibili.com/video/BV12f4y1r71N?p=17&vd_source=05b9e112882cf3fe738863375b088e4c
 
 # UI系统
 
@@ -772,6 +971,7 @@ LogSteamShared: Warning: Steam Dedicated Server API failed to initialize.
 
 Login request: ?Name= xxx_name: userId: STEAM:xxx_id platform: STEAM
 ```
+commandline启动带有listen的服务器
 
 客户端日志会出现：
 ```
@@ -880,3 +1080,127 @@ create session, open level使用`listen?bIsLanMatch=1`
 
 问题： 局域网联机找不到会话， 多网卡，广播没有在所有网卡上进行探测导致的
 解决： 安装WinIPBroadcast服务，https://github.com/dechamps/WinIPBroadcast
+
+
+# Gameplay Ability System（GAS）
+
+## GameplayTag
+
+GameplayTag独立于GAS插件， 但GAS中使用了GameplayTag
+https://zhuanlan.zhihu.com/p/459572003
+
+
+## AbilitySystemComponent（ASC）
+
+- AbilitySystemComponent
+  - InitAbilityActorInfo 通过ASC能找到Owner Actor和AvatarActor
+  - ASC的初始化InitAbilityActorInfo位置较为关键
+
+- Owner Actor和Avatar Actor
+  - Owner Actor： 当前ASC组件所挂载的Actor
+  - Avatar Actor： 物理呈现ASC功能的Actor
+  - 示例： PlayerState实现对玩家Character的重生能力， ASC组件挂载到PlayerState上，Owner Actor为PlayerState， Avatar Actor为玩家的Character。 
+  - 当Owner Actor 和 Avatar Actor不同时， 两个Actor应该实现IAbilitySystemInterface接口，以让双方进行交互
+
+## GameplayAbility（GA）
+- GameplayAbility
+  - GiveAbility函数完成能力的赋予
+    - ActivatableAbilities： ASC将能力存储在这个变量中
+    - GameplayAbilitySpec：服务器将GameplayAbilitySpec赋值给owning client
+
+## AbilityTask
+
+- PlayMontageandWaitForEvent 
+
+Dynamic Multicast Delegate
+
+
+GAS 执行流程
+输入事件 -> Owner Actor call Try Activate Ability
+
+GA技能实现 
+Event ActivateAbility -> Play Montage And Wait -> Wait Gameplay Event
+(Montage -> AnimNotify -> Received Notify -> Send Gameplay Event to Actor(ASC Owner Actor))
+
+## GameplayEffect(GE)
+
+- ApplyGameplayEffectToTarget (谁（ASC）对谁（ASC）使用了什么样的GE)
+
+
+## 相关链接
+
+【Unreal】虚幻GAS系统快速入门 https://zhuanlan.zhihu.com/p/486808688
+
+https://nerivec.github.io/old-ue4-wiki/pages/gameplayabilities-and-you.html
+
+GASDocumentation https://github.com/tranek/GASDocumentation
+
+
+
+# unreal physics
+
+- simulate physics and collision
+  - 开启了模拟物理，模型必须要添加有碰撞器；没有碰撞器，无法开启模拟物理。
+
+
+StaticMesh自带刚体(RigidBody)，并能执行碰撞(Collision)相关逻辑
+
+
+Character 模拟物理
+- mesh组件设置Simulate Physics为true
+- Collision Presets： 可以选择为Ragdoll，确保Collision Enabled为Query and Physics
+
+
+
+# unreal Material 材质
+
+- Texture
+  - RenderTarget
+
+- Material
+  - Material Function （eg: 从 World Position -> UV)
+  - Material Parameter Collection (material 和 actor通信通过MPC进行中转)
+
+Material通过TextureSample使用Texture
+
+
+Mask and Lerp
+
+- Render Target
+  - Begin Draw Canvas to Render Target
+  - End Draw Canvas to Render Target
+
+
+- Material Parameter Collection
+  - Set Vector Parameter Value
+
+
+材质Debug
+- Shading Model
+  - Unlit
+  - Emissive Color： green
+  - Wireframe： true
+
+
+# 摄像机系统
+
+## 摄像机
+延迟： 位置延迟和旋转延迟
+
+UE会以AGameMode中设置DefaultPawnClass对象中摄影机作为默认摄影机
+
+PlayerController中可以设置PlayerCameraManager
+
+
+
+PlayerCameraManager的BlueprintUpdateCamera在每帧运行
+
+优点： 相比在Character蓝图中使用Spring Arm的方式， Camera可以更加通用， 让不同的玩家使用公用的Camera控制逻辑。
+
+想要Camera对不同角色有不同效果怎么办？
+1. 可以通过接口来获取玩家数据
+
+- PlayerCameraManager
+  - Use Client Side Camera Updates： true表示camera的update由client处理，然后同步给服务器
+
+

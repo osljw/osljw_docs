@@ -5,7 +5,15 @@
     - Shift + Alt + O  搜索文件位置，定位头文件
 
 
-# UPROPERTY, UFUNCTION
+# UCLASS, UPROPERTY, UFUNCTION
+
+UCLASS代码示例
+```
+UCLASS(Blueprintable)
+
+UCLASS(Abstract, HideCategories = Input, Meta = (ShortTooltip = "The base gameplay ability class used by this project."))
+```
+
 
 ```
 	UPROPERTY(VisibleAnywhere, Category = "Components")
@@ -14,6 +22,12 @@
 
 - EditInstanceOnly:  选中放置在word中的actor， detail面板中可进行编辑 
 - meta = (EditCondition = "boolvar")  编辑依赖
+
+定义蓝图可调用函数
+```
+UFUNCTION(BlueprintCallable, Category = "Lyra|Character")
+ULyraAbilitySystemComponent* GetLyraAbilitySystemComponent() const;
+```
 
 定义事件
 ```
@@ -66,3 +80,6 @@ UGameplayStatics::SpawnEmitterAtLocation(this, PickupFX, GetActorLocation());
 1. Single-cast  Delegate
 2. Multi-cast  Delegate
 3. Dynamic  Delegate
+
+
+

@@ -11,6 +11,9 @@ https://docs.unrealengine.com/4.27/zh-CN/InteractiveExperiences/Networking/HowTo
 
 - 需要从源码编译得到UnrealEngine，才能编译出Delicated Server
 
+使用ue4_ds服务器实现房间功能(一个delicated server进程相当于一个Room)
+http://www.imrcao.com/2021/12/30/%e4%bd%bf%e7%94%a8ue4_ds%e6%9c%8d%e5%8a%a1%e5%99%a8%e5%ae%9e%e7%8e%b0%e6%88%bf%e9%97%b4%e5%8a%9f%e8%83%bd/
+
 
 # 游戏开发
 
@@ -73,6 +76,71 @@ old big level -> travel level -> new big level
 
 `注意`：客户端如果想调用一个方法然后同步调用其他所有客户端和服务器，不能直接调用一个 Multicast 方法，必须先调用一个服务器上的方法 Run On Server，然后在调用 Multicast 方法
 
+## Run On Server + Multicast
+示例：  按住数字键1，切换到主武器功能， 并让动画在所有服务器上同步。
+
+1. 人物蓝图捕获按键1（MainWeapon）事件后， 调用Switch Main Weapon On Server这个RPC之前，逻辑都是仅仅运行在本地client上的
+![](media/run-on-local-client.png)
+2. Switch Main Weapon On Server事件Replicates设置为Run on Server， 在调用Switch Main Weapon on All Client之前的逻辑都只会运行在服务器上
+![](media/only-run-on-server.png)
+3. Switch Main Weapon on All Client事件Replicates设置为Multicast, 该事件的逻辑会运行在server上和所有client上
+![](media/run-on-all-client.png)
+
+## Run On Server + 变量Replicated
+
+
+## 
+
+## ROLE_Authority 运行在服务器上 +  OnRep_xxx 通知客户端
+
+例如Pawn和Actor碰撞的OnOverlapBegin函数中， 通过判断`GetLocalRole() == ROLE_Authority`为真来保障碰撞之后的逻辑只运行在服务器上
+
+```c++
+// OnOverlapBegin函数
+if (GetLocalRole() == ROLE_Authority && bIsWeaponAvailable && OverlappingPawn != nullptr)
+{
+  AttemptPickUpWeapon(OverlappingPawn);
+}
+```
+
+bIsWeaponAvailable变量的replicated设置为OnRep方式
+```
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, ReplicatedUsing = OnRep_WeaponAvailability, Category = "Lyra|WeaponPickup")
+	bool bIsWeaponAvailable;
+```
+当服务器修改了bIsWeaponAvailable变量后， 通过网络同步给客户端，客户端上会调用
+OnRep_WeaponAvailability函数处理相应的效果
+
+```
+void ALyraWeaponSpawner::OnRep_WeaponAvailability()
+{
+	if (bIsWeaponAvailable)
+	{
+		PlayRespawnEffects();
+		SetWeaponPickupVisibility(true);
+	}
+	else
+	{
+		SetWeaponPickupVisibility(false);
+		StartCoolDown();
+		PlayPickupEffects();
+	}	
+}
+```
+
+
+## Switch Has Authority
+
+- GameMode的运行
+  - Play As Client 运行时， 命令行控制台窗口（delicated server）会运行GameMode的逻辑， client默认不会运行GameMode的逻辑。 如果有client选择Create Session， Open Level时则会在该client上，运行该Level设置的GameMode。 
+
+
+- Switch Has Authority
+  - 服务端（执行Authorith路线）
+    1. Play As Client 中的dedicated server 
+    2. Play As Client 但是client使用了Create Session后从client变成了client and server同时具备的角色
+    3. Play As Listen Server中的server
+
 ## Replicating Actors
 
 ## Replicating Variables
@@ -124,6 +192,15 @@ BP Structure 维护玩家信息
 - PlayerCharacter ClassReference 玩家角色
 
 
+## 不同的玩家角色
+
+https://www.cnblogs.com/AnKen/p/7897076.html
+
+- GameModeBase
+  - override GetDefaultPawnClassForController
+  -
+
+  
 ## AI角色
 - 继承Character类， 使用AI感知组件
   - Pawn Sensing 组件
