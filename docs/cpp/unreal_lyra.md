@@ -455,7 +455,7 @@ LyraEquipmentDefinition 定义武器捡起后获得的能力/装备位置
 - ULyraEquipmentInstance
     - ULyraWeaponInstance
         - LyraRangedWeaponInstance
-            - B_WeaponInstance_Base
+            - B_WeaponInstance_Base (负责link animation layers， 支持动画动态加载)
                 - B_WeaponInstance_Pistol
                     - Blueprint'/ShooterCore/Weapons/Pistol/B_WeaponInstance_Pistol.B_WeaponInstance_Pistol'
                     - 定义武器装备/卸载人物动画， 拿起武器后的动画集，移除武器后的动画集
@@ -506,6 +506,10 @@ B_Pistol（父类B_Weapon)
         - attach Socket等信息
 
 
+武器动画配置
+- 继承ABP_ItemAnimLayerBase，新建动画层ABP_PistolAnimLayers
+- 配置B_WeaponInstance_Pistol中的Equipped Anim Set->Default Layer为ABP_PistolAnimLayers， 这样当人物捡起武器Pistol时，就会使用该动画集。
+- 
 
 
 ### 武器开火
@@ -1049,3 +1053,7 @@ ModularGameplayActors通过UGameFrameworkComponentManager实现组件模块化�
     - AModularPawn （ModularGameplayActors插件代码）
         - ALyraPawn
 
+# 相关链接
+
+lyra 应用开发
+https://www.youtube.com/playlist?list=PL-jx4EbCWgg-qzuGZJbbhDwf3UWWMRACS
