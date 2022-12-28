@@ -1,0 +1,34 @@
+<mxfile host="65bd71144e">
+    <diagram id="9PyEDG0tIH-zuTy5EoLg" name="Page-1">
+        <mxGraphModel dx="1807" dy="592" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="2" value="&lt;div style=&quot;color: rgb(187 , 187 , 187) ; background-color: rgb(48 , 56 , 69) ; font-family: &amp;#34;consolas&amp;#34; , &amp;#34;courier new&amp;#34; , monospace ; font-size: 14px ; line-height: 19px&quot;&gt;ULyraHealthComponent&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="110" y="130" width="170" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="3" value="&lt;div style=&quot;color: rgb(187 , 187 , 187) ; background-color: rgb(48 , 56 , 69) ; font-family: &amp;#34;consolas&amp;#34; , &amp;#34;courier new&amp;#34; , monospace ; font-size: 14px ; line-height: 19px&quot;&gt;ULyraHealthSet&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="-260" y="120" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="4" value="GameplayEffect(GE)" style="swimlane;" vertex="1" parent="1">
+                    <mxGeometry x="490" y="90" width="300" height="510" as="geometry"/>
+                </mxCell>
+                <mxCell id="5" value="&lt;div style=&quot;color: rgb(187 , 187 , 187) ; background-color: rgb(48 , 56 , 69) ; font-family: &amp;#34;consolas&amp;#34; , &amp;#34;courier new&amp;#34; , monospace ; font-size: 14px ; line-height: 19px&quot;&gt;&lt;div style=&quot;font-family: &amp;#34;consolas&amp;#34; , &amp;#34;courier new&amp;#34; , monospace ; line-height: 19px&quot;&gt;GE_Damage_Melee&lt;/div&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="4">
+                    <mxGeometry x="90" y="70" width="140" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="6" value="Component" style="swimlane;" vertex="1" parent="1">
+                    <mxGeometry x="70" y="90" width="245" height="490" as="geometry"/>
+                </mxCell>
+                <mxCell id="7" value="GameplayAbility(GA)" style="swimlane;startSize=23;" vertex="1" parent="1">
+                    <mxGeometry x="1200" y="90" width="280" height="510" as="geometry"/>
+                </mxCell>
+                <mxCell id="8" value="&lt;div style=&quot;color: rgb(187 , 187 , 187) ; background-color: rgb(48 , 56 , 69) ; font-family: &amp;#34;consolas&amp;#34; , &amp;#34;courier new&amp;#34; , monospace ; font-size: 14px ; line-height: 19px&quot;&gt;GA_Melee&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="7">
+                    <mxGeometry x="90" y="80" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="9" value="&lt;div style=&quot;color: rgb(187 , 187 , 187) ; background-color: rgb(48 , 56 , 69) ; font-family: &amp;#34;consolas&amp;#34; , &amp;#34;courier new&amp;#34; , monospace ; font-size: 14px ; line-height: 19px&quot;&gt;&lt;div style=&quot;font-family: &amp;#34;consolas&amp;#34; , &amp;#34;courier new&amp;#34; , monospace ; line-height: 19px&quot;&gt;&lt;span style=&quot;color: #dbb979&quot;&gt;ULyraCombatSet&lt;/span&gt;&lt;/div&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="-260" y="290" width="120" height="60" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

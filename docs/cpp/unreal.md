@@ -604,6 +604,7 @@ PoseAsset
 
 ## 动画序列 Animation Sequence
 时间序列，每个时间点保存一帧动画，
+- 每个动画序列资源专门针对一个特定 骨架，且只能在该骨架上播放
 
 ## additive anim 叠加动画
 
@@ -616,6 +617,18 @@ PoseAsset
 叠加动画混合节点
 - Apply Additive
 - Apply Mesh Space Additive
+
+## 根运动 Root Motion
+
+- 启用根运动（Enable Root Motion）
+  - 动画实际驱动碰撞胶囊体， 胶囊体会跟着动画有位移
+- 未启用根运动
+  - 弹回胶囊体位置
+
+根运动模式（Root Motion Mode）
+
+
+调试： 视口中选择 显示 > 骨骼（Show > Bones）， 红线表示根运动
 
 ## 动画蓝图 （Animation Blueprint）
 Character类 -> CharacterMesh -> Anim Class 给人物选择动画蓝图
@@ -697,22 +710,47 @@ Linked Anim Layer 使用流程
 
 使用骨骼自身的平移数据（这样能保障骨骼结构不发生变化）， 仅仅迁移动画中的旋转数据
 
+新骨骼的位置/缩放数据 + 旧骨骼动画的旋转数据 => 新的动画序列
+
 递归设置平移重定向：
 - 骨骼： 表示动画的平移数据从骨骼中获得
 
 
-重定向过程
+重定向过程（UE4 方式）
 - 一个带动画的skeleton A， 一个无动画的skeleton B， 将A的动画迁移到B
 - 原理： 将A和B的skeleton 映射对齐， 就能将A的动画自动迁移到B上
 - 在A的Retarget Manager界面中， Select Rig -> Select Humanoid Rig,  相当于将A的skeleton和标准skeleton对齐
 - 在B的Retarget Manager界面中， Select Rig -> Select Humanoid Rig,  相当于将B的skeleton和标准skeleton对齐
 - 在A的动画蓝图（Animation Blueprint）上执行Retarget Anim Blueprints，  选择Target 为B， 就能为B生成动画蓝图了
 
+
+https://www.bilibili.com/video/BV1kA4y1Z7Vk/?spm_id_from=333.999.0.0&vd_source=05b9e112882cf3fe738863375b088e4c
+
 ## 兼容骨骼（Compatible Skeleton）
 新角色 -> skeleton窗口 -> 窗口菜单(window) -> 资产详情（Asset Details） -> 添加兼容骨骼 -> 选择SK_Mannequin（UE5 Lyra） 
 
+兼容骨骼的注意事项：
+- 骨骼层级和名称一致（部分不一致也是可以的）
+- 骨骼的参考姿势Pose需要接近，通过Pose Asset调整角色参考姿势
+- 动画迁移模式：设置Bone Translation Retargeting Mode
+
+
+Bone Translation Retargeting Mode （在skeleton编辑器中）
+- Animation： 表示目标骨骼的动画完全使用来源骨骼的动画数据， 身高会和来源骨骼一致
+- skeleton： 使用目标骨骼的位置数据
+- Animation Scaled
+
+
+一般设置方式：
+root： Animation
+pelvis： Animation Scaled
+其他： Skeleton
+
+
 新角色就可以使用SK_Mannequin（UE5 Lyra） 的动画蓝图了
 
+
+IK
 
 ## 动画混合空间 （Blend Space)
 
@@ -797,7 +835,6 @@ IK骨骼层级是独立的， 可以让武器位置在动画迁移后位置保�
 - 斜面
   - 脚底和碰撞点距离， 脚部旋转量
 - 曲面
-  - 
 
 何时进行脚部IK
 root位置Z轴高度为判断平面T， 检查左脚后跟位置， 右脚后跟位置的地形高度相对于平面T是否有变化
@@ -995,6 +1032,7 @@ LogNet: Game client on port 17777, rate 100000
 
 - MMO （massively multiplayer online）大型多人在线
 - RPG（role-playing game） 角色扮演游戏
+  - ARPG（action role-playing game）动作角色扮演游戏
 
 # 游戏逻辑
 
@@ -1126,6 +1164,27 @@ Event ActivateAbility -> Play Montage And Wait -> Wait Gameplay Event
 
 - ApplyGameplayEffectToTarget (谁（ASC）对谁（ASC）使用了什么样的GE)
 
+
+## FGameplayEventData
+
+通过gameplay event激活能力
+```c++
+	AddTag(GameplayEvent_Death, "GameplayEvent.Death", "Event that fires on death. This event only fires on the server.");
+```
+```c++
+FGameplayEventData Payload;
+Payload.EventTag = FLyraGameplayTags::Get().GameplayEvent_Death; // 设置
+Payload.Instigator = DamageInstigator;
+Payload.Target = AbilitySystemComponent->GetAvatarActor();
+Payload.OptionalObject = DamageEffectSpec.Def;
+Payload.ContextHandle = DamageEffectSpec.GetEffectContext();
+Payload.InstigatorTags = *DamageEffectSpec.CapturedSourceTags.GetAggregatedTags();
+Payload.TargetTags = *DamageEffectSpec.CapturedTargetTags.GetAggregatedTags();
+Payload.EventMagnitude = DamageMagnitude;
+
+FScopedPredictionWindow NewScopedWindow(AbilitySystemComponent, true);
+AbilitySystemComponent->HandleGameplayEvent(Payload.EventTag, &Payload);
+```
 
 ## 相关链接
 
