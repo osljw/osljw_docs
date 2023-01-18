@@ -157,7 +157,7 @@ void ULyraHeroComponent::OnPawnReadyToInitialize() {
 
 ### 能力系统
 - 跳跃
-- 瞄准ADS
+- 瞄准ADS (Aim Down Sight) 瞄准视线
 - 扔武器
 - 近战 melee
 
@@ -270,6 +270,12 @@ LyraAbilityTagRelationshipMapping'/ShooterCore/Game/TagRelationships_ShooterHero
     - ULyraDamageExecution
         - 从FLyraGameplayEffectContext中获取HitResult
 
+
+血条UI
+WidgetBlueprint'/Game/UI/Hud/W_Healthbar.W_Healthbar'
+
+W_Healthbar的创建过程
+Experience -> LAS_ShooterGame_StandardHUD(Layout和Widgets) -> W_ShooterHUDLayout -> W_Healthbar
 
 
 ### 近战技能
@@ -461,11 +467,17 @@ LyraEquipmentDefinition 定义武器捡起后获得的能力/装备位置
                     - 定义武器装备/卸载人物动画， 拿起武器后的动画集，移除武器后的动画集
                     - 定义武器射击距离
 
-B_Pistol（父类B_Weapon)
-    - Blueprint'/ShooterCore/Weapons/Pistol/B_Pistol.B_Pistol'
-    - 定义了拿在手上的武器模型（SkeletalMesh）
-    - 定义了抛弹壳相关
+- Actor
+    - B_Weapon
+        - B_Pistol
+            - Blueprint'/ShooterCore/Weapons/Pistol/B_Pistol.B_Pistol'
+            - 定义了拿在手上的武器模型（SkeletalMesh）
+            - SkeletalMesh组件的Anim Class设置武器动画蓝图为： ABP_Weap_Pistol
+                - AnimBlueprint'/Game/Weapons/Pistol/Animations/ABP_Weap_Pistol.ABP_Weap_Pistol'
+            - Shell Eject System： 定义了抛弹壳相关
+            - Muzzle Flash System: NS_WeaponFire (粒子系统 子弹)
 
+B_Pistol执行父类B_Weapon定义的Fire事件时， 
 
 
 ### 实现武器流程
@@ -514,17 +526,53 @@ B_Pistol（父类B_Weapon)
 
 ### 武器开火
 
-- GA_Weapon_Fire 
-    - GA_Weapon_Fire_Pistol （装备武器时，自动获得的技能）
-        - Character Fire Montage 可以自定义武器开火动画
-        - GE Damage： GE_Damage_Pistol 设置武器伤害GE
+- ULyraGameplayAbility
+    - ULyraGameplayAbility_FromEquipment
+        - ULyraGameplayAbility_RangedWeapon
+            - GA_Weapon_Fire 
+                - GA_Weapon_Fire_Pistol （装备武器时，自动获得的技能）
+                    - Character Fire Montage 可以自定义武器开火动画
+                    - GE Damage： GE_Damage_Pistol 设置武器伤害GE
+                    - Gameplay Cue TagFiring 开火特效
 
+#### 开火动画
+
+GA_Weapon_Fire_Pistol技能触发时， 会播放Character Fire Montage设置的AM_MM_Pistol_Fire动画，在瞄准之前的slot上播放蒙太奇。
+
+AM_MM_Pistol_Fire蒙太奇通过Anim Notify触发AN_PlayWeaponMontage的执行， 来播放武器动画AM_Weap_Pistol_Fire， 并同步人物动画和武器动画的播放。
+
+总结： AM_MM_Pistol_Fire -> AN_PlayWeaponMontage -> AM_Weap_Pistol_Fire
+
+Blueprint'/Game/Characters/Heroes/Mannequin/Animations/AnimNotifies/AN_PlayWeaponMontage.AN_PlayWeaponMontage'
+
+
+#### 开火特效
+
+GA_Weapon_Fire 在On Ranged Weapon Target Data Ready后， 调用Execute GameplayCueWithParams On Owner触发Gameplay Cue TagFiring变量绑定的GameplayCue， 
+
+GA_Weapon_Fire_Pistol配置Gameplay Cue TagFiring变量为GameplayCue.Weapon.Pistol.Fire
+
+GameplayCue.Weapon.Pistol.Fire 触发GCN_Weapon_Pistol_Fire的执行
+
+GCN_Weapon_Pistol_Fire在OnBrust时调用B_Weapon的Fire事件
+
+B_Weapon的Fire事件接收的输入参数为
+- ImpactPositions 命中位置
+- Impact Normals 命中方向
+- ImpactSurfaceTypes 命中材质
+
+主要功能
+- B_WeaponFire 处理开火效果
+- B_WeaponImpacts 处理niagara particle
+- B_WeaponDecals
 
 武器伤害
 - GameplayEffect
     - GameplayEffectParent_Damage_Basic（蓝图）
         - GE_Damage_Basic_Instant
             - GE_Damage_Pistol
+
+
 
 
 ### 医疗包捡起功能
@@ -682,6 +730,15 @@ Experience 配置中添加
 - dynamic方式， 通过函数动态决定要使用的动画资产
 
 
+## LocomotionSM
+- Idle -> Start
+    - HasAcceleration OR (GameplayTag_IsMelee AND HasVelocity)
+    - HasVelocity 使用LocalVelocity生成， 
+    
+如果人物站在移动载具上，人物本身没有运动时， GetVelocity返回的仍然为零
+
+GetVelocity： 返回向量表示在世界坐标系上的速度分量
+LocalVelocity： 人物本地坐标系上的速度分量（人物面向的方向始终为X轴）
 
 Lyra Idle状态实现
 - idle状态
@@ -693,13 +750,21 @@ Lyra Idle状态实现
     - Ouput Animation Pose
         - Update Idle State
 
+
+
 ## Control Rig
 
-Anim Graph 中使用 Control Rig节点
+- Anim Graph 中使用 Control Rig节点
+    - Control Rig Class 设置
+        - CR_Mannequin_FootPlant
+            - ControlRigBlueprint'/Game/Characters/Heroes/Mannequin/Rig/CR_Mannequin_Procedural.CR_Mannequin_Procedural'
+
+- control rig
+    - Rig Graph
+        - Forwards Solve
 
 - Alpha Input Type 控制是否使用Control Rig
 
-Control Rig Class
 
 ## CopyPose and IK Retarget
 
@@ -853,6 +918,35 @@ https://docs.unrealengine.com/5.0/zh-CN/pose-warping-in-unreal-engine/
     - 是否瞄准
     - 与 Local Velocity Direction有关
 
+
+## turn in-place system 原地转身
+
+上半身瞄准偏移实时跟随camera， 当上半身和下半身角度超过一定阈值时，播放原地转身动画旋转下半身
+
+
+
+
+GetActorRotation 计算帧旋转差量YawDeltaSinceLastUpdate
+
+旋转方式
+- 下身不动，旋转脊柱
+- 脊柱不动，旋转下身
+
+武器瞄准和camera观察一致
+
+曲线
+TurnYawWeight
+
+Root Yaw Offset Mode
+
+- Accumulate 人物mesh旋转和Actor
+
+
+Idle -> TurnInPlaceRotation
+
+### 相关链接
+
+https://dev.epicgames.com/community/learning/tutorials/nOJx/unreal-engine-implemening-character-turn-in-place-animation
 
 ## 回转运动 （pivot）
 

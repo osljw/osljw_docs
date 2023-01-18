@@ -1,5 +1,12 @@
 # django
 
+```
+django-admin startproject <project name>
+django-admin startapp <app name>
+```
+
+
+
 ## django CORS 
 
 用户可以访问网站A和网站B， 网站B的页面上有javascript向网站A发起http请求， 如果网站A没有开启CORS（返回给浏览器的header未设置字段Access-Control-Allow-Origin）， 浏览器会拒绝将网站A的响应内容返回给网站B的请求，从而保护用户在网站A的响应不被网站B窃取
@@ -55,6 +62,16 @@ class Banner(models.Model):
         return self.title
 ```
 
+```py
+models.CharField(max_length=8, default='', unique=True)
+models.DateTimeField(auto_now_add=True, verbose_name='create_time')
+```
+- CharField
+    - max_length 最大字符长度
+    - default 默认值
+    - unique
+- DateTimeField
+    - auto_now_add=True 
 
 更新models对应的数据库
 ```

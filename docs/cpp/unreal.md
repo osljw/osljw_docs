@@ -620,10 +620,15 @@ PoseAsset
 
 ## 根运动 Root Motion
 
+
 - 启用根运动（Enable Root Motion）
-  - 动画实际驱动碰撞胶囊体， 胶囊体会跟着动画有位移
-- 未启用根运动
-  - 弹回胶囊体位置
+  - 启用后， 会将动画中根骨骼（一般名称为Root）的运动数据剥离， 后续可以在动画蓝图中决定是否让剥离的根运动数据来驱动角色的胶囊体运动
+  - 在动画序列编辑器视口中， 启用根运动后， 骨架网格体会在原地运动， 由于动画序列编辑器中没有胶囊体， 所以不会显示根运动驱动胶囊体这部分功能
+  - 在动画蓝图class defaults -> Root Motion Mode中
+    - RootMotionFromMontagesOnly：  仅播放Montage动画时才会使用根运动驱动胶囊体运动
+
+动画序列编辑器中
+- 强制根锁（Force Root Lock）: 无论是否设置根运动（EnableRootMotion）， 勾选该项后， 骨骼网格体的根骨骼（一般名称为Root）不会运动，因此产生inplace播放动画的效果，这样能保证骨骼网格体和胶囊体不会分离。
 
 根运动模式（Root Motion Mode）
 
