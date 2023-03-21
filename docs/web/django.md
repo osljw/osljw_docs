@@ -38,6 +38,9 @@ CORS_ORIGIN_ALLOW_ALL = True
 注释掉'django.middleware.csrf.CsrfViewMiddleware'
 
 
+
+
+
 ## django models
 
 ORM
@@ -81,6 +84,11 @@ python manage.py migrate
 
 ## django views
 
+- GenericAPIView
+    - GenericViewSet
+        - ModelViewSet
+        - ReadOnlyModelViewSet
+    
 - ListAPIView 当需要返回list数据时，可以继承ListAPIView， 覆盖`query_set`和`serializer_class`
 ```python
 from rest_framework.generics import ListAPIView
@@ -90,6 +98,34 @@ from .serializers import BannerSerializer
 class BannerView(ListAPIView):
     queryset = Banner.objects.filter(is_show=True).order_by("orders")
     serializer_class = BannerSerializer
+```
+
+### ModelViewSet
+
+A viewset that provides default `create()`, `retrieve()`, `update()`, `partial_update()`, `destroy()` and `list()` actions
+
+views.py
+```py
+from rest_framework.viewsets import ReadOnlyModelViewSet
+from .models import Article
+from .serializers import ArticleSerializer
+
+class ArticleModelViewSet(ReadOnlyModelViewSet):
+    queryset = Article.objects.filter(is_show=True)
+    serializer_class = ArticleSerializer
+```
+
+urls.py
+```py
+from rest_framework.routers import DefaultRouter
+from .views import ArticleModelViewSet
+
+urlpatterns = [
+]
+
+router = DefaultRouter()
+router.register('article', ArticleModelViewSet)
+urlpatterns += router.urls
 ```
 
 
@@ -112,7 +148,7 @@ python manage.py createsuperuser
 ```
 
 
-# ASGI vs WSGI
+# ASGI vs WSGI websocket
 - CGI:（通用网关接口， Common Gateway Interface）
 - WSGI: (Web服务器网关接口, Web Server Gateway Interface)
 - ASGI: (异步网关协议接口) 支持HTTP, HTTP2, Websocket等协议
@@ -121,4 +157,163 @@ django框架为了同时支持HTTP协议和Websocket协议，引入了ASGI， AS
 
 ![](media/asgi.png)
 
+settings.py
+```py
+# 指定ASGI的路由地址
+ASGI_APPLICATION = 'django_backend.asgi.application'
 
+# CHANNEL后端，使用内存存储，默认是redis
+CHANNEL_LAYERS = {    
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
+```
+
+channel_layer: 可以实现广播/点对点功能
+
+
+views.py
+```py
+import json
+from channels.generic.websocket import WebsocketConsumer
+
+# Create your views here.
+class ChatConsumer(WebsocketConsumer):
+    def connect(self):
+        self.accept()
+
+    def disconnect(self, close_code):
+        pass
+
+    def receive(self, text_data):
+        print("websocket receive:", text_data)
+
+        d = {'test': 123}
+        self.send(json.dumps(d))
+```
+
+urls.py
+```py
+from user_chat.views import ChatConsumer
+websocket_urlpatterns = [
+    path('ws/chat', ChatConsumer.as_asgi()),
+]
+```
+
+
+# Django REST framework
+
+## 登录（jwt）
+
+settings.py
+```
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    )
+}
+```
+
+1. `DEFAULT_PERMISSION_CLASSES`配置`rest_framework.permissions.IsAuthenticated`， 表示访问所有接口时需要先通过AUTHENTICATION身份认证，即需要携带有效的认证信息token， 否则接口会直接返回`HTTP 401 Unauthorized`错误。
+2. 对于登录接口例如`obtain_jwt_token`, 其permission_classes设置为了空元组(), 因此不需要验证token。
+3. 如果想让其他接口避免AUTHENTICATION token检测， 同理可以在views类视图中设置`permission_classes=()`
+
+登录接口url
+```
+from rest_framework_jwt.views import obtain_jwt_token
+
+urlpatterns = [
+    path('api/login', obtain_jwt_token),
+]
+```
+
+使用登录接口
+
+1. 前端向后端发送Post /api/login请求，携带username和password， 后端返回jwt token给前端
+2. 前端保存jwt token， 并在访问其他接口时在header中携带jwt token信息， 如果未携带token信息，会出现`HTTP 401 Unauthorized`错误
+
+## 注册
+
+serializers.py
+```python
+from rest_framework.serializers import ModelSerializer
+
+from .models import User
+
+class UserSerializer(ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["username", "password"]
+```
+
+views.py
+```python
+
+from rest_framework.generics import CreateAPIView
+from rest_framework_jwt.serializers import jwt_payload_handler, jwt_encode_handler
+
+from .models import User
+from .serializers import UserSerializer
+
+class Register(CreateAPIView):
+    serializer_class = UserSerializer
+    permission_classes = []
+
+    def post(self,request, *args, **kwargs):
+        username = request.data.get('username')
+        password = request.data.get('password')
+        if User.objects.filter(username=username).exists():
+            resp = {
+                'status_code': -1,
+                'msg': '用户名【{}】已注册'.format(username)
+            }
+        else:
+            user = User.objects.create_user(username=username,password=password)
+            # token, created = Token.objects.get_or_create(user=user)
+            payload = jwt_payload_handler(user)
+            token = jwt_encode_handler(payload)
+            resp = {
+                'status_code': 0,
+                'user_id': user.pk,
+                'user_name': user.username,
+                'token': token,
+            }
+
+        return Response(resp)
+```
+`serializer_class`: 网页上访问接口时，可以出现表单界面，方便post字段的输入， `permission_classes = []`: 注册接口不需要登录验证
+
+
+urls.py
+```python
+from django.urls import path
+from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
+
+from .views import Register
+
+urlpatterns = [
+    path('login', obtain_jwt_token),
+    path('register', Register.as_view()),
+]
+```
+
+## 返回格式
+
+```
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': [
+        # 'utils.renderers.CustomRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+        'rest_framework.renderers.JSONRenderer'
+    ],
+}
+```
+
+
+# django 博客文章
+
+- django-taggit 文章标签

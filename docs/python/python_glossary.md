@@ -12,9 +12,16 @@ Python中 list，truple，str，dict这些都可以被迭代（Iterable），但
 - iterator对象需要__next__()方法， iterable object的__iter__()方法一般返回self，因此iterable object一般也需要实现__next__()方法
 
 ## iterator
+
+iterator is iterable
+
 迭代器用于控制遍历过程
 - 需要实现__next__()方法，当没有元素返回时，StopIteration异常
 - 需要实现__iter__()方法，返回self， 将自己变为iterable object
+
+# generator
+Every generator is an iterator
+
 
 # sequence
 

@@ -11,9 +11,18 @@ tensor
 
 
 
+
+
 https://pytorch.org/blog/computational-graphs-constructed-in-pytorch/
 
+memory-mapped tensor
+https://github.com/pytorch/pytorch/issues/24119
 
+
+查看模型参数量
+```py
+sum([param.nelement () for param in model.parameters ()])
+```
 
 # Engine
 

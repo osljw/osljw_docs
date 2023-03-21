@@ -51,3 +51,26 @@ game.tetris.grids # 历史grid状态
 
 # 脚本
 chrome -> dev console -> sources菜单 -> Snippets(用户自定义js脚本)
+
+
+# javascript debugger
+
+## chrome sources 面板
+
+VM（Virtual Machine）+ 数字：  js运行的独立虚拟环境
+
+debugger的运行
+
+1. settimeout延迟debugger、
+2. eval
+3. 代码混淆+debugger
+
+
+
+## fiddler web debugger
+
+- 可以快速了解请求了哪些接口和参数
+
+## reres
+
+- reres：替换js的插件， 绕过debugger

@@ -55,3 +55,30 @@ for i in tqdm(range(1000000), total=1000000):
 
 
 # python 工程
+
+
+
+# 描述符
+
+```py
+class Test:
+    a = 11
+
+t = Test()
+t.a = 22
+print("t.a = {}, Test.a = {}".format(t.a, Test.a))
+```
+
+```
+t.a = 22, Test.a = 11
+```
+对象属性和类属性不同
+
+对象属性的访问顺序：
+1. getattribute()， 无条件调用
+2. 数据描述符：由 ① 触发调用 （若人为的重载了该 getattribute() 方法，可能会调职无法调用描述符）
+3. 实例对象的字典（若与描述符对象同名，会被覆盖哦）
+4. 类的字典
+4. 非数据描述符
+5. 父类的字典
+6. getattr() 方法

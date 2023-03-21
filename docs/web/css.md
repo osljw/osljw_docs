@@ -250,4 +250,24 @@ float元素之间的关系
 # 分界线
 
 
-# 滚动视口
+# 滚动条
+
+滚动条样式
+```css
+::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: #adadaba4;
+
+}
+
+::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background-color: #fff;
+}
+```

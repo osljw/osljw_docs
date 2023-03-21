@@ -3,6 +3,7 @@
 # NLP
 
 # 语言模型
+- n-gram 概率语言模型
 - 上下文相关
   - 单向
     - GPT
@@ -19,6 +20,11 @@
 # 训练方式
 - Feature-based
 - Fine-tuning
+
+
+# 处理技巧
+
+## bpe (Byte Pair Encoding)
 
 
 
