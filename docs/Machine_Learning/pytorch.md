@@ -19,10 +19,25 @@ memory-mapped tensor
 https://github.com/pytorch/pytorch/issues/24119
 
 
+## accelerate
+> A simple way to train and use PyTorch models with multi-GPU, TPU, mixed-precision
+
+
 查看模型参数量
 ```py
 sum([param.nelement () for param in model.parameters ()])
 ```
+
+unet
+
+time_embed
+
+input: (N, 320)
+output: (N, 320*4)
+
+
+
+
 
 # Engine
 

@@ -22,6 +22,10 @@ DreamBooth
 LoRA
 customize (or personalize) the contents in the generated results using a small set of images with same topics or objects
 
+
+Codeformer 人脸修复
+https://github.com/sczhou/CodeFormer
+
 # Diffusion Models 论文
 
 
@@ -78,6 +82,10 @@ super resolution components
 language drift
 
 
+## run
+webui dreambooth： GPU 10GB
+
+
 # Reference
 
 https://zhuanlan.zhihu.com/p/605973097 学习过程
@@ -94,3 +102,9 @@ https://github.com/CompVis/stable-diffusion (latent text-to-image diffusion mode
 
 
 https://github.com/XavierXiao/Dreambooth-Stable-Diffusion
+
+
+# streamlit
+
+
+st.cache_resource
