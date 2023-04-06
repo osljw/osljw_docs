@@ -192,6 +192,31 @@ React-Router V6 使用详解 https://juejin.cn/post/7033313711947251743
     - 接收一个函数， React每次渲染后会执行该函数 
     - 接收的函数内部可以选择返回一个清除函数，清除函数会在组件更新或卸载时调用， 这样可以让逻辑代码放在一起
 
+# react markdown
+
+- 文章目录导航
+  - 容器大小 = min(目录长度, 窗口指定大小）
+
+```
+const NavItem = styled(Paper)(({ theme }) => ({
+    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
+    ...theme.typography.body2,
+    padding: theme.spacing(1),
+    textAlign: 'left',
+    color: theme.palette.text.secondary,
+    maxHeight: "80vh",
+    overflow: "auto",
+}));
+
+<NavItem>
+  <Toc> </Toc>
+</NavItem>
+```
+文章目录的父容器NavItem设置`maxHeight: "80vh"`,  实现目录容器NavItem的大小随目录自适应， 但不超过`80vh`高度,  `overflow: "auto"`实现目录超过`80vh`高度时，出现滚动条
+
+
+todo：
+- 文章页面滚动时， 是否自动滚动目录？
 
 # antd(Ant Design)
 

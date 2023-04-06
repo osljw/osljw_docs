@@ -28,6 +28,13 @@ https://github.com/pytorch/pytorch/issues/24119
 sum([param.nelement () for param in model.parameters ()])
 ```
 
+
+```py
+for name, layer in model.named_modules():
+    print(name, layer)
+```
+
+
 unet
 
 time_embed

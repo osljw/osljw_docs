@@ -107,4 +107,23 @@ https://github.com/XavierXiao/Dreambooth-Stable-Diffusion
 # streamlit
 
 
-st.cache_resource
+- st.cache_resource
+    - cache global resources,  across all users, sessions, and reruns
+    - ML models or database connections
+
+- st.cache_data
+    - creates a new copy of the data at each function call
+
+
+Session State: share variables between reruns, for each user session
+
+# Prompt
+
+prompt prefix
+
+
+文本摘要： TL;DR
+
+
+
+
