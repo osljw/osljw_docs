@@ -201,6 +201,34 @@ websocket_urlpatterns = [
 ]
 ```
 
+# APPEND_SLASH
+
+APPEND_SLASH默认为True
+
+
+django服务同时支持带'/'和不带'/'后缀的url
+
+末尾没有`/`的请求， 会被浏览器自动响应`301 Moved Permanently (from disk cache)`, 并重定向到带`/`的url，重新发起请求
+
+
+## 最佳实践：
+
+
+
+服务端url末尾都带`/`, django默认设置APPEND_SLASH=True, 当访问的url末尾没有`/`时，django不能匹配到路由上，会将url重定向到末尾带`/`的url上（这种情况post请求的数据会丢失）
+
+APPEND_SLASH=True （默认）
+
+应用的url设置， trailing_slash=True（默认）
+```python
+router = SimpleRouter()
+router.register(r'travel', TravelViewSet, basename='travel')
+urlpatterns = router.urls
+```
+
+
+- 约定服务端api url末尾不要带`/`
+
 
 # Django REST framework
 
@@ -223,7 +251,7 @@ REST_FRAMEWORK = {
 3. 如果想让其他接口避免AUTHENTICATION token检测， 同理可以在views类视图中设置`permission_classes=()`
 
 登录接口url
-```
+```python
 from rest_framework_jwt.views import obtain_jwt_token
 
 urlpatterns = [
@@ -317,3 +345,84 @@ REST_FRAMEWORK = {
 # django 博客文章
 
 - django-taggit 文章标签
+
+
+
+# django react 部署
+
+react编译得到的build文件， 拷贝到django工程所在根目录`BASE_DIR`下
+
+```py
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+            os.path.join(BASE_DIR, 'build'), # react index.html
+        ],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+```
+django渲染`index.html`入口网页时，会在`DjangoTemplates`配置`DIRS`目录下查找`index.html`文件
+
+
+> index.html 引用js文件： http://127.0.0.1:8000/static/js/main.82606b0e.js
+
+django settings 配置STATICFILES_DIRS，可以让index.html引用到静态文件
+```py
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'build', 'static'),
+]
+```
+
+django urls配置
+
+```python
+from django.views.generic import TemplateView
+
+urlpatterns = [
+    # Catch-all route to redirect to the frontend
+    re_path(r'^.*$', TemplateView.as_view(template_name='index.html')),
+]
+```
+
+## static 相关配置
+
+在 Django 中，可以通过 `collectstatic` 命令收集静态文件并将其复制到指定的目录以便于应用程序部署。默认情况下，Django 中使用的是 `STATIC_ROOT` 变量来存储所有的静态文件。为了指定 `collectstatic` 命令的输出目录，只需要设置 `STATIC_ROOT` 变量即可。
+
+例如，假设您的项目的根目录中有一个名为 `public` 的文件夹，您希望在其中放置所有静态文件。要完成这个目标，请将以下代码添加到项目的 settings.py 文件中：
+
+```python
+# settings.py
+import os
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'public', 'static')
+```
+
+上面的代码片段中，我们首先定义了 `BASE_DIR`，然后将 `STATIC_ROOT` 设置为公共文件夹 `public/static`。这会使得collectstatic命令把所有静态文件都复制到该目录下。
+
+一旦配置好了 STATIC_ROOT 之后，你就可以在控制台中运行 collectstatic 命令来归集所有的静态文件了：
+
+```
+python manage.py collectstatic
+```
+
+执行完这个命令后，您所有的静态文件都会被复制到指定的 `STATIC_ROOT` 目录下，然后就可以使用您喜欢的 Web 服务器和 CDN 来分发这些静态文件了。
+
+需要注意的是，`STATIC_ROOT` 变量指向的目录必须提前创建好，并且具有写入权限。
+
+
+## pythonanywhere.com 部署
+
+static配置
