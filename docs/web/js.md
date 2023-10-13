@@ -66,6 +66,14 @@ debugger的运行
 3. 代码混淆+debugger
 
 
+debugger在js源码文件中， 使用Never pause here进行绕过
+
+
+## 混淆 加密
+
+XHR断点
+
+
 
 ## fiddler web debugger
 
