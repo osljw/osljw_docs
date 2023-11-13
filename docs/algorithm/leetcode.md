@@ -36,11 +36,13 @@
 # c++ 
 
 ```c++
-#include <limits.h>
+#include <limits.h>  // INT_MAX  INT_MIN
+#include <cmath>
 
-INT_MAX
+#include <queue> // queue, priority_queue
+#include <stack> // stack
 
-INT_MIN
+#include <algorithm> // sort(), find(), binary_search()
 ```
 
 # 二分法
@@ -334,6 +336,11 @@ public:
 
 # 排序
 
+稳定排序算法包括插入排序、冒泡排序和归并排序等。
+
+不稳定排序算法包括快速排序、堆排序和希尔排序等
+
+
 技巧
 - 逆序对的数量， 归并排序， 当合并有序左区间和有序右区间时， 从左区间选择最小元素时， 该元素对应的逆序对数量为p2 - (mid + 1) （mid+1为右区间的起始索引， p2为右区间下一个待归并元素的索引）
 - 临位交换的最小次数等于逆序对数量
@@ -351,6 +358,7 @@ public:
 - 移除最低位的1: `n & (n - 1)`
 - __builtin_popcount(val) 统计val的二进制中1的个数
 - 长度为m， 从中选取n个进行判断， 可以进行枚举
+- 只保留最低为的一， lowbit， `x & -x`,  eg: lowbit(0b01011000) == 0b00001000
 
 
 ```c++
@@ -468,6 +476,23 @@ public:
 [start, end]的长度为len = end - start + 1
 [start, end]的和为 (start + end) * len / 2
 
+
+# 树
+
+
+## 哈夫曼树(Huffman Tree)
+
+哈夫曼树是带权路径长度最短的树，权值较大的结点离根较近
+
+
+结点的带权路径长度： 节点权重 * 路径长度
+树的带权路径长度： 所有叶子结点的带权路径长度之和
+
+### 参考资料
+https://zhuanlan.zhihu.com/p/415467000
+
+
+
 # 图算法
 
 ## floyd算法
@@ -539,6 +564,85 @@ public:
 };
 
 ```
+
+## 树状数组
+
+单点修改：更改数组中一个元素的值
+区间查询：查询一个区间内所有元素的和
+
+
+
+https://leetcode.cn/problems/range-sum-query-mutable/description/
+
+```c++
+class TreeArray {
+public:
+    TreeArray(int n):tree(n) {}
+
+
+    int lowbit(int x) {
+        return x & -x;
+    }
+
+    int prefixSum(int index) {
+        int sum = 0;
+        while (index > 0) {
+            sum += tree[index];
+            index -= lowbit(index);
+        }
+
+        return sum;
+    }
+
+    void add(int index, int val) {
+        int n = tree.size();
+        while (index < n) {
+            tree[index] += val;
+            index += lowbit(index);
+        }
+    }
+
+    vector<int> tree;
+};
+
+class NumArray {
+public:
+    NumArray(vector<int>& nums):nums(nums) {
+        int n = nums.size();
+        ta = new TreeArray(n + 1);
+
+        for (int i = 0; i < n; i++) {
+            ta->add(i + 1, nums[i]);
+        }
+    }
+    
+    void update(int index, int val) {
+        ta->add(index+1, val - nums[index]);
+        nums[index] = val;
+    }
+    
+    int sumRange(int left, int right) {
+        return ta->prefixSum(right + 1) - ta->prefixSum(left);
+    }
+
+
+    TreeArray* ta;
+    vector<int>& nums;
+};
+
+```
+
+
+## 珂朵莉树
+
+特点： 随机数据下 含区间赋值操作
+
+
+### 参考资料
+https://www.luogu.com.cn/blog/goodgod/ke-duo-li-shu
+
+
+
 
 
 # 博弈论
