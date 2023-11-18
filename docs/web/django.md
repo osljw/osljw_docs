@@ -228,6 +228,8 @@ urlpatterns = router.urls
 
 
 - 约定服务端api url末尾不要带`/`
+- APPEND_SLASH=False
+- 浏览器Network调试时，选择Disable cache
 
 
 # Django REST framework
