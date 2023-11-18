@@ -32,6 +32,17 @@
 
 # leetcode
 
+
+# c++ 
+
+```c++
+#include <limits.h>
+
+INT_MAX
+
+INT_MIN
+```
+
 # 二分法
 
 技巧
@@ -336,10 +347,12 @@ public:
 # 位运算
 
 技巧
-- 取最低位 n & 1
-- 移除最低位的1 n & (n - 1)
+- 取最低位: `n & 1`
+- 移除最低位的1: `n & (n - 1)`
 - __builtin_popcount(val) 统计val的二进制中1的个数
 - 长度为m， 从中选取n个进行判断， 可以进行枚举
+
+
 ```c++
 for (int mask = 0;  mask < (1 << m); mask++) {
     for (int i = 0; i < m; i++) {
@@ -361,6 +374,9 @@ for (int mask = 0;  mask < (1 << m); mask++) {
 
 
 # 数学
+
+## 质数
+质数是指在大于1的自然数中，除了1和它本身以外不再有其他因数的自然数。
 
 ## 最大公约数gcd
 ```c++
