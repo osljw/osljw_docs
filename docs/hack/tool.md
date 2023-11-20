@@ -6,6 +6,9 @@
 sqlmap.py: https://github.com/sqlmapproject/sqlmap
 
 
+https://github.com/sqlmapproject/sqlmap/wiki/Usage
+
+
 
 # 寻找机器
 

@@ -36,6 +36,10 @@ echo md5($password,true);
 ```
 
 # sql 注入
+
+- 判断是否为sql语句， 语句是否使用`'`或者`"`进行闭合
+- 使用`#` 注释语句
+
 # 登陆一下好吗??
 http://www.shiyanbar.com/ctf/1942
 

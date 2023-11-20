@@ -227,6 +227,10 @@ ProLayout
 # Mock
 
 - 随机模拟数据 mock.js
+- json-server
+
+
+
 
 # 网络请求 axios
 
@@ -286,4 +290,51 @@ npm run build
 ```
 npm install -g serve
 serve -s build
+```
+
+
+abc.test.cn 返回网站主页（由react编译得到）， abc.test.cn/api/* 返回后端数据（django开发）， 请问nginx如何配置
+
+Nginx 配置
+```
+
+server {
+    listen 80;
+    server_name abc.test.cn;
+
+    return 301 https://$server_name$request_uri;
+}
+
+
+server {
+    listen 443 ssl;
+    server_name abc.test.cn;
+
+    # 首页的 React 页面
+    location / {
+        root /path/to/your/react/app;
+        index index.html;
+        try_files $uri /index.html;
+    }
+
+    # 后端 API 接口
+    location /api/ {
+        proxy_pass http://django_server_ip:django_server_port/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Scheme $scheme;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+}
+```
+
+
+
+# react 二维码
+
+从摄像头扫描二维码，（移动端浏览器需要https网页环境下，才能使用摄像头）
+```js
+import QrScanner from 'react-qr-scanner';
+
+
 ```
