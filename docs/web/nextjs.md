@@ -7,6 +7,25 @@
 `postcss.config.js`: https://www.tailwindcss.cn/docs/installation/using-postcss
 
 
+# nextjs 
+
+
+layout
+
+https://blog.logrocket.com/guide-next-js-layouts-nested-layouts/
+
+
+
+## app router
+
+- layout
+  - shared between multiple pages
+  - On navigation, layouts preserve state, remain interactive, and do not re-render.
+
+  - Layouts are Server Components by default but can be set to a Client Component.
+
+- page
+  -  unique to a route
 
 ## 编译 部署
 
