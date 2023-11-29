@@ -37,7 +37,7 @@ next build
  # MDX
 
 
-mdx-bundler库
+## mdx-bundler库
 
 `bundleMDX`: 从文本source生成code, frontmatter,  bundleMDX运行在服务器端，负责将mdx文件或内容编译打包为code， code是string类型，包含组件打包代码
 
@@ -98,3 +98,48 @@ export default function BlogPost({ code, frontmatter }) {
 
 ## mdx-bundler 教程
 https://www.peterlunch.com/blog/mdx-bundler-beginners
+
+
+## @mdx-js/mdx
+
+
+```js
+import { VFile } from 'vfile'
+import { compile, nodeTypes, run } from '@mdx-js/mdx'
+import { Fragment, jsx, jsxs } from 'react/jsx-runtime'
+
+const runtime = { Fragment, jsx, jsxs }
+
+const file = new VFile({
+  basename: formatMarkdown ? 'example.md' : 'example.mdx',
+  value,
+})
+
+// Compile MDX to JS.
+await compile(file, {
+  development: show === 'result' ? false : development,
+  jsx: show === 'code' || show === 'esast' ? jsx : false,
+  outputFormat: show === 'result' || outputFormatFunctionBody ? 'function-body' : 'program',
+  recmaPlugins,
+  rehypePlugins,
+  remarkPlugins,
+})
+
+// Run code compiled with outputFormat: 'function-body'.
+const mod = await run(String(file), {
+  ...runtime,
+  baseUrl: window.location.href,
+})
+
+return (
+  <ErrorBoundary FallbackComponent={ErrorFallback} resetKeys={[value]}>
+    <div className="playground-result">{mod.default({})}</div>
+  </ErrorBoundary>
+)
+```
+
+# FAQ
+
+> app-index.js:32 Warning: Prop `id` did not match. Server: "tiny-react_56260481011700528269862" Client: "tiny-react_95895973821700528274024"
+
+
