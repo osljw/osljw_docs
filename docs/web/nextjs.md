@@ -103,6 +103,10 @@ https://www.peterlunch.com/blog/mdx-bundler-beginners
 ## @mdx-js/mdx
 
 
+- compile, run, evaluate
+  - https://mdxjs.com/guides/mdx-on-demand/  
+
+
 ```js
 import { VFile } from 'vfile'
 import { compile, nodeTypes, run } from '@mdx-js/mdx'

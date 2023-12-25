@@ -446,3 +446,10 @@ static配置
 # restful api
 
 
+
+# 权限系统
+
+
+role-based access control (RBAC) or attribute-based access control (ABAC)
+
+
