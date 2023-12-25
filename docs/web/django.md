@@ -426,5 +426,30 @@ python manage.py collectstatic
 
 
 ## pythonanywhere.com 部署
+bash: 
+
+```shell
+
+cd ~
+
+# clone指定分支
+git clone https://github.com/osljw/django_backend.git -b base
+```
+
+web 页面重新加载APP
 
 static配置
+
+
+
+
+# restful api
+
+
+
+# 权限系统
+
+
+role-based access control (RBAC) or attribute-based access control (ABAC)
+
+
