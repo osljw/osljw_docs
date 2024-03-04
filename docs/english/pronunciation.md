@@ -118,3 +118,22 @@
     - done
 
 
+/ɔ:/
+
+- au
+    - caught /kɔːt/
+    - bought /bɔ:t/
+- sw
+    - law 
+    - saw
+- oo
+    - door 
+- ou
+    - four
+
+
+/æ/
+- a
+    - bad /bæd/
+    - fat
+    - pat /pæt/
