@@ -137,3 +137,73 @@
     - bad /bæd/
     - fat
     - pat /pæt/
+
+
+# 字母对应的音标
+
+- a
+    - /ɑː/ （中文音 a）
+        - car
+        - far
+        - star
+    - /ə/ （中文音 e）
+        - about /ə'baʊt/
+        - away
+        - again
+        - aloud
+        - balloon /bəˈluːn/
+    - /æ/ (中文音 ai 大口型)
+        - bad /bæd/  bat
+        - cat
+        - fat
+        - hat 
+        - pat /pæt/  
+    - /e/ (中文音 ai 小口型)
+        - any
+        - many
+    - /ɔː/
+        - talk
+
+- e
+    - /ə/
+        - perhaps /pərˈhæps/
+    - 
+        - /ɜ:g/
+    - /e/
+        - bed /bed/
+        - else /els/
+        - pen /pen/
+        - desk /desk/
+        - letter /ˈletər/
+    - /ɪ/
+        - begin /bɪˈɡɪn/
+        - decide /dɪˈsaɪd/
+    - /i:/
+        - see /si:/
+        - meet /mi:t/
+        - eat /i:t/
+
+
+
+- s
+    -
+        - version /ˈvɜrʒ(ə)n/
+    - /z/
+        - designation /ˌdezɪɡˈneɪʃ(ə)n/
+
+
+
+# 常见组合字母发音
+
+- ph /f/
+    - prophet /ˈprɑfɪt/
+
+- th 
+    - /θ/
+        - think /θɪŋk/
+        - throne /θroʊn/
+    - /ð/
+        - those /ðəʊz/
+        - this
+        - that
+

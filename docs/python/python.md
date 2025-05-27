@@ -82,3 +82,10 @@ t.a = 22, Test.a = 11
 4. 非数据描述符
 5. 父类的字典
 6. getattr() 方法
+
+
+# python 打包
+
+Inno Setup 
+
+.iss 文件配置
