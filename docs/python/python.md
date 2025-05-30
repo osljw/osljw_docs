@@ -89,3 +89,5 @@ t.a = 22, Test.a = 11
 Inno Setup 
 
 .iss 文件配置
+
+Nuitka 是一个 ​​Python 编译器​​，可以将 Python 代码转换为高度优化的 ​​C/C++ 扩展模块​​ 或 ​​独立可执行文件​​（.exe、.app、.bin 等）。相比 PyInstaller、Py2exe 等打包工具，Nuitka 提供更好的性能、更小的体积和更强的兼容性。
