@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # tinymce
 
 
@@ -9,7 +8,6 @@ tinymce.init({
   selector: 'textarea',  // change this value according to your HTML
   menubar: false
 });
-=======
 # TinyMCE v6
 
 
@@ -43,5 +41,4 @@ https://microsoft.github.io/monaco-editor/
 npm install monaco-editor
 
 npm install react-monaco-editor
->>>>>>> e63323f903ab79c34f7abb85f09379e893b48a16
 ```
