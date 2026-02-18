@@ -53,7 +53,7 @@ game.tetris.grids # 历史grid状态
 chrome -> dev console -> sources菜单 -> Snippets(用户自定义js脚本)
 
 
-# javascript debugger
+# javascript debugger js逆向
 
 ## chrome sources 面板
 
@@ -69,16 +69,35 @@ debugger的运行
 debugger在js源码文件中， 使用Never pause here进行绕过
 
 
+js hook
+
+```js
+_Function = Function
+Function = function(a) {
+    if (a === "debugger") {
+        return;
+    } else {
+        return _Function(a);
+    }
+
+}
+```
+console 运行上述代码， 然后继续执行
+
 ## 混淆 加密
 
 XHR断点
 
 
 
-## fiddler web debugger
+## 工具
 
-- 可以快速了解请求了哪些接口和参数
+- fiddler web debugger
+    - 可以快速了解请求了哪些接口和参数
 
-## reres
+- playwright
 
-- reres：替换js的插件， 绕过debugger
+
+- reres chrome 拓展：替换js的插件， 绕过debugger （ 使用F12 控制台-> Source -> Overrides 替换和修改源码文件， 可以不用这个拓展）
+
+

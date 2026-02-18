@@ -51,12 +51,16 @@ attention
 - V: value-vec
 
 I为(word_len, embedding_size), WQ, WK, WV的大小为embedding_size * v, Q,K,V的大小为(word_len, v)
-Q = I * WQ
+
+Q = I * WQ 
+
 K = I * WK
+
 V = I * WV
+
 词的embedding共享Q，K，V的权重矩阵
 
-1. `Q * K^T`: (word_len, word_len) 通过点积得到两个词之间的关联度
+1. `Q * K^T`: (word_len, word_len) 两个词通过点积得到之间的关联度
 2. `Q * K^T / sqrt(d_k)`: 通过sqrt(d_k) 对关联度进行缩放， 数值梯度的稳定
 3. `softmax(Q * K^T / sqrt(d_k))`:  (word_len) 用softmax归一化权重
 4. `softmax(Q * K^T / sqrt(d_k)) * V`: （word_len, v)

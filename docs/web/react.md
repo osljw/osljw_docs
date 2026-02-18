@@ -292,6 +292,11 @@ npm install -g serve
 serve -s build
 ```
 
+## 一个域名， 一台机器， 部署多个不同网站
+
+- 通过端口区分不同的网站
+- 通过子域名区分不同的网站
+- 通过api路径区分不同的网络
 
 abc.test.cn 返回网站主页（由react编译得到）， abc.test.cn/api/* 返回后端数据（django开发）， 请问nginx如何配置
 
