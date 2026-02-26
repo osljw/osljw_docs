@@ -3,6 +3,28 @@
 
 figure.ai  Helix
 
+## 国内外研究团队
+
+
+## 公司 
+
+硬件运动控制
+
+- 宇树
+- 众擎： https://www.engineai.com.cn/
+- 智元：https://www.zhiyuan-robot.com/
+
+
+## 模型
+
+vla 模型
+
+
+-  英伟达
+    - SONIC，
+    - DreamZero： https://dreamzero0.github.io/
+- Physical Intelligence (π)
+
 
 # 零件 和 材料
 
