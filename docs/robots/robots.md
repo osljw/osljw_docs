@@ -15,6 +15,13 @@ figure.ai  Helix
 - 智元：https://www.zhiyuan-robot.com/
 
 
+硬件运动控制
+
+- 宇树
+- 众擎： https://www.engineai.com.cn/
+- 智元：https://www.zhiyuan-robot.com/
+
+
 ## 模型
 
 vla 模型
@@ -25,6 +32,28 @@ vla 模型
     - DreamZero： https://dreamzero0.github.io/
 - Physical Intelligence (π)
 
+# 关节电机
+
+关节电机（一体化关节模组）： 电机 + 减速器 + 编码器
+
+减速器： 降低电机转速，提高力矩。 杠杆原理，通过齿轮减速，力矩直接放大 50～100 倍
+
+机器人关节里最常用的减速器：谐波减速器
+
+谐波减速器特点：
+- 体积小
+- 减速比巨大（50～100 倍）
+- 精度极高
+- 适合机器人手臂、腿、手腕
+
+
+谐波减速机原理:  https://v.douyin.com/mTmxb2wNKjo/ 
+
+谐波减速器： 波发生器（内侧） + 柔轮（中间） + 钢轮（外侧） 
+
+波发生器：椭圆形
+
+柔轮比钢轮少两个齿， 柔轮可以弹性形变
 
 # 零件 和 材料
 
@@ -65,6 +94,44 @@ TPE（热塑性弹性体）是一种兼具橡胶弹性和塑料加工性能的�
 
 `Mujoco`
 
+关节角度 / 速度的单位都是弧度（rad） 或 弧度 / 秒（rad/s）
+
+| 数组索引范围                                             | 字段名称                | 物理含义                    | 预处理方式                            |
+|----------------------------------------------------|---------------------|-------------------------|----------------------------------|
+| obs[:3]                                            | omega               | 机器人基座的角速度（绕 x/y/z 轴）    | 乘以 ang_vel_scale 缩放              |
+| obs[3:6]                                           | gravity_orientation | 由基座四元数计算出的重力方向（表征机器人姿态） | 无额外缩放，直接使用四元数转换结果                |
+| obs[6:9]                                           | cmd                 | 机器人的控制指令（如速度指令等）        | 乘以 cmd_scale 缩放                  |
+| obs[9 : 9 + num_actions]                           | qj                  | 关节位置（实际值 - 默认值）         | 乘以 dof_pos_scale 缩放              |
+| obs[9 + num_actions : 9 + 2 * num_actions]         | dqj                 | 关节速度                    | 乘以 dof_vel_scale 缩放              |
+| obs[9 + 2 * num_actions : 9 + 3 * num_actions]     | action              | 上一时刻策略输出的动作             | 无额外缩放，直接使用                       |
+| obs[9 + 3 * num_actions : 9 + 3 * num_actions + 2] | sin_phase/cos_phase | 周期相位信号（正弦 / 余弦）         | 由 counter * simulation_dt 计算周期相位 |
+
+
+dof_pos_scale=1.0 是因为机器人关节角度物理限位本身接近 [-1, 1] rad，无需额外缩放；
+
+dof_vel_scale=0.05 是将约 ±20 rad/s 的原始关节速度缩放到 ±1 区间的理论值，也是工程验证后的经验最优值；
+
+调整这两个参数时，需以机器人实际物理限位为基础，结合训练稳定性验证，核心目标是让缩放后的关节状态落在 [-1, 1] 区间。
+
+
+
+```py
+def quat_rotate_inverse(quat, vec_world):
+    """
+    核心函数：将世界坐标系的向量转换为本体坐标系的向量
+    :param quat: 单位四元数 (qw, qx, qy, qz)，描述本体相对于世界的旋转
+    :param vec_world: 世界坐标系中的3维向量
+    :return: 本体坐标系中的3维向量
+    """
+    # 步骤1：计算四元数的共轭（逆）
+    q_inv = quat_conjugate(quat)
+    # 步骤2：把世界向量转成纯四元数
+    v_quat = vec_to_quat(vec_world)
+    # 步骤3：执行逆旋转公式：v_body = q_inv × v_world × q
+    v_body_quat = quat_multiply(quat_multiply(q_inv, v_quat), quat)
+    # 步骤4：转回3维向量
+    return quat_to_vec(v_body_quat)
+```
 
 
 
